@@ -4,6 +4,7 @@
 
 include( cmut_parse_functions )
 include( cmut_determine_lib_postfix )
+include( cmut_define_install_dirs )
 
 
 # Prototype : 
@@ -16,33 +17,26 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
     set( TYPES_NAME_ARG_LIST INCLUDE_DIRS INCLUDE_FILES INSTALL_PDB)
 
     
-    if( NOT DEFINED LIB_POSTFIX )
-        determine_lib_postfix()
+    if( NOT DEFINED CMUT_LIB_POSTFIX )
+        cmut_determine_lib_postfix()
     endif()
     
     #-----------------------------------------------------------------------------
     # define install directory
     #-----------------------------------------------------------------------------
-    set( INSTALL_INCDIR include )
-    set( INSTALL_BINDIR bin )
-    if(WIN32)
-        set(INSTALL_LIBDIR ${INSTALL_BINDIR})
-        set(INSTALL_ARCHIVEDIR lib)
-    else()
-        set(INSTALL_LIBDIR lib${LIB_POSTFIX})
-        set(INSTALL_ARCHIVEDIR lib${LIB_POSTFIX})
+    if( NOT CMUT_DEFINE_INSTALL_DIRS_DONE )
+        cmut_define_install_dirs()
     endif()
 
-    
-    
+
     #-----------------------------------------------------------------------------
     # install target
     #-----------------------------------------------------------------------------
     install(
         TARGETS ${TARGET_NAME}
-        RUNTIME DESTINATION ${INSTALL_BINDIR}
-        LIBRARY DESTINATION ${INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${INSTALL_ARCHIVEDIR}
+        RUNTIME DESTINATION ${CMUT_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMUT_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMUT_INSTALL_ARCHIVEDIR}
     )
 
     
@@ -52,7 +46,7 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
     cmut_parse_args( INCLUDE_DIRS ARG_LIST TYPES_NAME_ARG_LIST INCLUDE_DIRS_TO_INSTALL )
     list( LENGTH INCLUDE_DIRS_TO_INSTALL NUM_INCLUDE_DIRS_TO_INSTALL )
     if( NUM_INCLUDE_DIRS_TO_INSTALL GREATER 0 )
-        install( DIRECTORY ${INCLUDE_DIRS_TO_INSTALL} DESTINATION ${INSTALL_INCDIR} )
+        install( DIRECTORY ${INCLUDE_DIRS_TO_INSTALL} DESTINATION ${CMUT_INSTALL_INCDIR} )
     endif()
     
     
@@ -68,7 +62,7 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
     
     list( LENGTH INCLUDE_FILES_TO_INSTALL NUM_INCLUDE_FILES_TO_INSTALL )
     if( NUM_INCLUDE_FILES_TO_INSTALL GREATER 0 )
-        set(DESTINATION_DIR ${INSTALL_INCDIR})
+        set(DESTINATION_DIR ${CMUT_INSTALL_INCDIR})
         if(CUSTOM_DESTINATION_DIR_NAME)
             set(DESTINATION_DIR ${DESTINATION_DIR}/${CUSTOM_DESTINATION_DIR_NAME})
         endif()
@@ -90,7 +84,7 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
             # can't use property PDB_NAME because it is not set with NMake Makefile Generator ...
             install(
                 FILES $<TARGET_FILE_DIR:${TARGET_NAME}>/$<TARGET_PROPERTY:${TARGET_NAME},NAME>$<TARGET_PROPERTY:${TARGET_NAME},DEBUG_POSTFIX>.pdb
-                DESTINATION ${INSTALL_BINDIR}
+                DESTINATION ${CMUT_INSTALL_BINDIR}
                 CONFIGURATIONS Debug
             )
         endif()
@@ -110,7 +104,9 @@ function( CMUT_INSTALL_EXECUTABLE TARGET_NAME )
     #-----------------------------------------------------------------------------
     # define install directory
     #-----------------------------------------------------------------------------
-    set( INSTALL_BINDIR bin )
+    if( NOT CMUT_DEFINE_INSTALL_DIRS_DONE )
+        cmut_define_install_dirs()
+    endif()
 
     
     #-----------------------------------------------------------------------------
@@ -118,7 +114,7 @@ function( CMUT_INSTALL_EXECUTABLE TARGET_NAME )
     #-----------------------------------------------------------------------------
     install(
         TARGETS ${TARGET_NAME}
-        RUNTIME DESTINATION ${INSTALL_BINDIR}
+        RUNTIME DESTINATION ${CMUT_INSTALL_BINDIR}
     )
     
         
@@ -135,7 +131,7 @@ function( CMUT_INSTALL_EXECUTABLE TARGET_NAME )
             #MESSAGE("DEBUG_PDB_FILE_LOCATION = ${DEBUG_PDB_FILE_LOCATION}")
             install(
                 FILES $<TARGET_FILE_DIR:${TARGET_NAME}>/$<TARGET_PROPERTY:${TARGET_NAME},NAME>$<TARGET_PROPERTY:${TARGET_NAME},DEBUG_POSTFIX>.pdb
-                DESTINATION ${INSTALL_BINDIR}
+                DESTINATION ${CMUT_INSTALL_BINDIR}
                 CONFIGURATIONS Debug
             )
         endif()
@@ -148,26 +144,24 @@ endfunction()
 # INSTALL_LIBRARY_FILE( FILENAME )
 function( CMUT_INSTALL_LIBRARY_FILE FILENAME )
 
-    if( NOT DEFINED LIB_POSTFIX )
-        determine_lib_postfix()
+    if( NOT DEFINED CMUT_LIB_POSTFIX )
+        cmut_determine_lib_postfix()
     endif()
 
     #-----------------------------------------------------------------------------
     # define install directory
     #-----------------------------------------------------------------------------
-    set( INSTALL_BINDIR bin )
-    if(WIN32)
-        set(INSTALL_LIBDIR ${INSTALL_BINDIR})
-    else()
-        set(INSTALL_LIBDIR lib${LIB_POSTFIX})
+    if( NOT CMUT_DEFINE_INSTALL_DIRS_DONE )
+        cmut_define_install_dirs()
     endif()
+
 
     #-----------------------------------------------------------------------------
     # install target
     #-----------------------------------------------------------------------------
     install(
         FILES ${FILENAME}
-        DESTINATION ${INSTALL_LIBDIR}
+        DESTINATION ${CMUT_INSTALL_LIBDIR}
     )
 
 endfunction()
