@@ -5,6 +5,8 @@
 ###############################################################################
 
 
+
+
 # define common variable for any gcc compatible flags, like clang 
 set(__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER "-W -Wall")
 set(__CMUT_WARNING_PATTERN_GNU_COMPAT_COMPILER "-W[a-zA-Z0-9]*")
@@ -32,7 +34,7 @@ set(CMUT_CXX_FLAGS_WARNING ${__CMUT_WARNING_FLAGS} CACHE STRING "Flags use by th
 string(REGEX REPLACE ${__CMUT_WARNING_FLAGS_PATTERN} "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
 # add CMUT_CXX_FLAGS_WARNING to CMAKE_CXX_FLAGS
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${__CMUT_WARNING_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMUT_CXX_FLAGS_WARNING}")
 
 # debug only
 #message("CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
