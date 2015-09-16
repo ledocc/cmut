@@ -12,18 +12,15 @@
 
 
 
-if(MSVC)
-    function(cmut_is_release_bin result bin)
+function(cmut_is_release_bin result bin)
+    if(MSVC)
         execute_process( COMMAND dumpbin /DEPENDENTS "${bin}"
                          COMMAND findstr /I "msvcp[0-9]*d.dll"
                          RESULT_VARIABLE __intenal_result
                          OUTPUT_QUIET
                          ERROR_QUIET )
-         set(${result} ${__intenal_result} PARENT_SCOPE)
-    endfunction()
-
-else()
-    function(cmut_is_release_bin result bin)
+        set(${result} ${__intenal_result} PARENT_SCOPE)
+    else()
         set(${result} ${result}-NOTFOUND PARENT_SCOPE)
-    endfunction()
-endif()
+    endif()
+endfunction()
