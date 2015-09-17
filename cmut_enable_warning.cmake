@@ -27,6 +27,7 @@ endif()
 
 # add CMUT_CXX_FLAGS_WARNING in cache
 set(CMUT_CXX_FLAGS_WARNING ${__CMUT_WARNING_FLAGS} CACHE STRING "Flags use by the compiler to enable warning.")
+message(STATUS "Use C++ flags for warning : ${CMUT_CXX_FLAGS_WARNING}.")
 
 # remove warning flag provide by cmake
 string(REGEX REPLACE ${__CMUT_WARNING_FLAGS_PATTERN} "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
