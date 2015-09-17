@@ -28,3 +28,18 @@ macro( cmut_define_install_dirs )
     mark_as_advanced(CMUT_DEFINE_INSTALL_DIRS_DONE)
 
 endmacro()
+
+
+function( cmut_define_install_app_bundle_dirs target)
+    if(CMAKE_HOST_APPLE)
+        set(BUNDLE_ROOT_DIR ${target}.app/Contents)
+        set(CMUT_INSTALL_BUNDLE_BINDIR           ${BUNDLE_ROOT_DIR}/MacOS         PARENT_SCOPE)
+        set(CMUT_INSTALL_BINDIR                  ${CMUT_INSTALL_BUNDLE_BINDIR}    PARENT_SCOPE)
+        set(CMUT_INSTALL_BUNDLE_LIBDIR           ${BUNDLE_ROOT_DIR}/Frameworks    PARENT_SCOPE)
+        set(CMUT_INSTALL_LIBDIR                  ${CMUT_INSTALL_BUNDLE_LIBDIR}    PARENT_SCOPE)
+        set(CMUT_INSTALL_BUNDLE_RESOURCESDIR     ${BUNDLE_ROOT_DIR}/Resources     PARENT_SCOPE)
+        set(CMUT_INSTALL_BUNDLE_PLUGINSDIR       ${BUNDLE_ROOT_DIR}/PlugIns       PARENT_SCOPE)
+        set(CMUT_INSTALL_BUNDLE_SHAREDSUPPORTDIR ${BUNDLE_ROOT_DIR}/SharedSupport PARENT_SCOPE)
+        set(CMUT_INSTALL_BUNDLE_INFO_PLISTDIR    ${BUNDLE_ROOT_DIR}               PARENT_SCOPE)
+    endif()
+endfunction()
