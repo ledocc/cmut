@@ -7,6 +7,7 @@ function(cmut_get_git_revision_count revisionCount)
         RESULT_VARIABLE result
         OUTPUT_VARIABLE output
         ERROR_VARIABLE error
+	OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     
     if(error)
@@ -28,6 +29,7 @@ function(cmut_get_git_revision_hash revisionHash)
         RESULT_VARIABLE result
         OUTPUT_VARIABLE output
         ERROR_VARIABLE error
+	OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
     if(error)
