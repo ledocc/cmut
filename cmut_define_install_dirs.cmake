@@ -36,7 +36,7 @@ function( cmut_define_install_app_bundle_dirs target)
           cmut_define_install_dirs()
       endif()
 
-      set(BUNDLE_ROOTDIR          ${CMUT_INSTALL_BINDIR}/${target}.app)
+      set(BUNDLE_ROOTDIR          ${target}.app)
       set(BUNDLE_CONTENTSDIR      ${BUNDLE_ROOTDIR}/Contents)
 
 
