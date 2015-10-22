@@ -5,13 +5,20 @@
 
 include( cmut_determine_lib_postfix )
 
+
+# TODO on MacOS, define function for bundle, Framework and regular bin
 macro( cmut_define_output_dirs )
 
     if( NOT DEFINED CMUT_LIB_POSTFIX )
         cmut_determine_lib_postfix()
     endif()
 
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    if(CMAKE_HOST_APPLE)
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+    else()
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    endif()
+
     if(WIN32)
         set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
     else()
