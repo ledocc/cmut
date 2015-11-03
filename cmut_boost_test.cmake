@@ -4,12 +4,12 @@
 # conveniant function to add boost test
 
 
-function(add_boost_test SOURCE_FILE_NAME DEPENDENCY_LIB)
+function(add_boost_test SOURCE_FILE_NAME DEPENDENCY_LIBS)
     get_filename_component(TEST_EXECUTABLE_NAME ${SOURCE_FILE_NAME} NAME_WE)
 
     add_executable(${TEST_EXECUTABLE_NAME} ${SOURCE_FILE_NAME})
     target_link_libraries(${TEST_EXECUTABLE_NAME}
-        ${DEPENDENCY_LIB} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+        ${${DEPENDENCY_LIBS}} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
     file(READ "${SOURCE_FILE_NAME}" SOURCE_FILE_CONTENTS)
     string(REGEX MATCHALL "BOOST_AUTO_TEST_CASE\\( *([A-Za-z_0-9]+) *\\)"
