@@ -10,12 +10,12 @@ endif()
 
 
 include(ProcessorCount)
-ProcessorCount(CMUT_NUM_CORE_AVAILABLE)
+ProcessorCount(__cmut_num_core_available)
 
-if( (CMUT_NUM_CORE_AVAILABLE EQUAL 0) OR (CMUT_NUM_CORE_AVAILABLE LESS 0) )
-    set(CMUT_NUM_CORE_AVAILABLE 1)
+if( (__cmut_num_core_available EQUAL 0) OR (__cmut_num_core_available LESS 0) )
+    set(__cmut_num_core_available 1)
 endif()
 
-
+set(CMUT_NUM_CORE_AVAILABLE ${__cmut_num_core_available} CACHE STRING "number of parallel job used to build")
 
 set(__cmut_define_num_core_available__defined 1)
