@@ -4,7 +4,7 @@
 # conveniant function to add boost test
 
 
-function(add_boost_test SOURCE_FILE_NAME DEPENDENCY_LIBS)
+function(cmut_add_boost_test SOURCE_FILE_NAME DEPENDENCY_LIBS)
     get_filename_component(TEST_EXECUTABLE_NAME ${SOURCE_FILE_NAME} NAME_WE)
 
     add_executable(${TEST_EXECUTABLE_NAME} ${SOURCE_FILE_NAME})
