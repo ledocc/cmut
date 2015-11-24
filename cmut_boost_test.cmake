@@ -3,24 +3,27 @@
 
 # conveniant function to add boost test
 
+include(CMakePrintHelpers)
+function(cmut_add_boost_test test_src_file dependency_lib_list)
 
-function(cmut_add_boost_test SOURCE_FILE_NAME DEPENDENCY_LIBS)
-    get_filename_component(TEST_EXECUTABLE_NAME ${SOURCE_FILE_NAME} NAME_WE)
+    get_filename_component(_test_exec_name ${test_src_file} NAME_WE)
 
-    add_executable(${TEST_EXECUTABLE_NAME} ${SOURCE_FILE_NAME})
-    target_link_libraries(${TEST_EXECUTABLE_NAME}
-        ${${DEPENDENCY_LIBS}} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
-
-    file(READ "${SOURCE_FILE_NAME}" SOURCE_FILE_CONTENTS)
+    add_executable(${_test_exec_name} ${test_src_file})
+    
+    target_link_libraries(${_test_exec_name}
+        ${${dependency_lib_list}} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+    
+    file(READ "${test_src_file}" _contents)
     string(REGEX MATCHALL "BOOST_AUTO_TEST_CASE\\( *([A-Za-z_0-9]+) *\\)"
-        FOUND_TESTS ${SOURCE_FILE_CONTENTS})
+        _test_instances ${_contents})
 
-    foreach(HIT ${FOUND_TESTS})
-        string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+) *\\).*" "\\1" TEST_NAME ${HIT})
+    foreach(_test ${_test_instances})
 
-        add_test(NAME "${TEST_EXECUTABLE_NAME}.${TEST_NAME}"
-            COMMAND ${TEST_EXECUTABLE_NAME}
-            --run_test=${TEST_NAME} --catch_system_error=yes)
+        string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+) *\\).*" "\\1" test_name ${_test})
+
+        add_test(NAME "${_test_exec_name}.${test_name}"
+            COMMAND ${_test_exec_name}
+            --run_test=${test_name} --catch_system_error=yes)
     endforeach()
 
 endfunction()
