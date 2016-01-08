@@ -14,12 +14,12 @@ function(cmut_add_boost_test test_src_file dependency_lib_list)
         ${${dependency_lib_list}} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
     
     file(READ "${test_src_file}" _contents)
-    string(REGEX MATCHALL "BOOST_AUTO_TEST_CASE\\( *([A-Za-z_0-9]+) *\\)"
+    string(REGEX MATCHALL "BOOST_[A-Z]+_TEST_CASE\\([*, A-Za-z_0-9]+\\)"
         _test_instances ${_contents})
 
     foreach(_test ${_test_instances})
 
-        string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+) *\\).*" "\\1" test_name ${_test})
+        string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+).*\\).*" "\\1" test_name ${_test})
 
         add_test(NAME "${_test_exec_name}.${test_name}"
             COMMAND ${_test_exec_name}
