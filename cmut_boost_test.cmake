@@ -37,3 +37,11 @@ function(cmut_add_boost_test test_src_file dependency_lib_list)
     endforeach()
 
 endfunction()
+
+function(cmut_add_boost_tests test_src_files dependency_libs)
+
+    foreach(file ${{test_src_files}})
+        cmut_add_boost_test(${file} dependency_libs)
+    endforeach()
+
+endfunction()
