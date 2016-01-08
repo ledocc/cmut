@@ -40,7 +40,7 @@ endfunction()
 
 function(cmut_add_boost_tests test_src_files dependency_libs)
 
-    foreach(file ${{test_src_files}})
+    foreach(file ${${test_src_files}})
         cmut_add_boost_test(${file} dependency_libs)
     endforeach()
 
