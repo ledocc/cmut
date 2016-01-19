@@ -24,7 +24,7 @@ function(cmut_add_boost_test test_src_file dependency_lib_list)
     )
 
     file(READ "${test_src_file}" _contents)
-    string(REGEX MATCHALL "BOOST_[A-Z]+_TEST_CASE\\([*, A-Za-z_0-9]+\\)"
+    string(REGEX MATCHALL "BOOST_[A-Z]+_TEST_CASE\\([:*, A-Za-z_0-9]+\\)"
         _test_instances ${_contents})
 
     foreach(_test ${_test_instances})
