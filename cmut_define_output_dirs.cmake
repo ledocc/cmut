@@ -11,7 +11,7 @@ macro( cmut_define_output_dirs )
 
     set(BASE_DIR ${CMAKE_BINARY_DIR})
     if(${ARGC} GREATER 0)
-        set(BASE_DIR ${BASE_DIR}/${ARGV0})
+        set(BASE_DIR ${ARGV0})
     endif()
 
     if( NOT DEFINED CMUT_LIB_POSTFIX )
