@@ -4,44 +4,62 @@
 # conveniant function to add boost test
 
 include(CMakePrintHelpers)
-function(cmut_add_boost_test test_src_file dependency_lib_list)
+
+macro(cmut_test__find_boost_test version)
+
+    find_package(
+        Boost ${version} REQUIRED
+        COMPONENTS
+        chrono
+        timer
+        unit_test_framework
+    )
+
+    add_definitions(-DBOOST_TEST_DYN_LINK)
+
+    link_libraries(
+        Boost::chrono
+        Boost::timer
+        Boost::unit_test_framework
+        )
+
+endmacro()
+
+
+function(cmut_add_boost_test test_src_file)
 
     get_filename_component(_test_exec_name ${test_src_file} NAME_WE)
 
+
     add_executable(${_test_exec_name} ${test_src_file})
 
-    target_include_directories(
-        ${_test_exec_name} SYSTEM
-        PUBLIC ${BOOST_INCLUDE_DIR}
-    )
 
-    target_link_libraries(
-        ${_test_exec_name}
-        ${${dependency_lib_list}}
-        ${Boost_CHRONO_LIBRARIES}
-        ${Boost_TIMER_LIBRARIES}
-        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-    )
+    target_compile_definitions(${_test_exec_name} PUBLIC BOOST_TEST_DYN_LINK)
 
-    file(READ "${test_src_file}" _contents)
-    string(REGEX MATCHALL "BOOST_[A-Z]+_TEST_CASE\\([:*, A-Za-z_0-9]+\\)"
-        _test_instances ${_contents})
+    add_test(NAME "${_test_exec_name}" COMMAND ${_test_exec_name})
 
-    foreach(_test ${_test_instances})
 
-        string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+).*\\).*" "\\1" test_name ${_test})
+#    file(READ "${test_src_file}" _contents)
+#    string(REGEX MATCHALL "BOOST_[A-Z]+_TEST_CASE\\([:*, A-Za-z_0-9]+\\)"
+#        _test_instances ${_contents})
 
-        add_test(NAME "${_test_exec_name}.${test_name}"
-            COMMAND ${_test_exec_name}
-            --run_test=${test_name} --catch_system_error=yes)
-    endforeach()
+#    foreach(_test ${_test_instances})
+
+#        string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+).*\\).*" "\\1" test_name ${_test})
+
+#        add_test(NAME "${_test_exec_name}.${test_name}"
+#            COMMAND ${_test_exec_name}
+#            --run_test=${test_name} --catch_system_error=yes)
+#    endforeach()
 
 endfunction()
 
-function(cmut_add_boost_tests test_src_files dependency_libs)
+function(cmut_add_boost_tests test_src_files)
 
-    foreach(file ${${test_src_files}})
-        cmut_add_boost_test(${file} dependency_libs)
+    math(EXPR num_files "${ARGC} - 1")
+
+    foreach(index RANGE ${num_files})
+        cmut_add_boost_test(${ARGV${index}})
     endforeach()
 
 endfunction()
