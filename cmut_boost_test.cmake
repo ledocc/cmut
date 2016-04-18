@@ -15,8 +15,6 @@ macro(cmut_test__find_boost_test version)
         unit_test_framework
     )
 
-    add_definitions(-DBOOST_TEST_DYN_LINK)
-
     link_libraries(
         Boost::chrono
         Boost::timer
@@ -30,11 +28,7 @@ function(cmut_add_boost_test test_src_file)
 
     get_filename_component(_test_exec_name ${test_src_file} NAME_WE)
 
-
     add_executable(${_test_exec_name} ${test_src_file})
-
-
-    target_compile_definitions(${_test_exec_name} PUBLIC BOOST_TEST_DYN_LINK)
 
     add_test(NAME "${_test_exec_name}" COMMAND ${_test_exec_name})
 
