@@ -34,3 +34,9 @@ macro(cmut_define_EP_final_install_prefix LibName)
     endif()
 
 endmacro()
+
+macro(cmut_EP_add_variable_if_defined __list __variable)
+    if(${__variable})
+        list(APPEND ${__list} "-D${__variable}=${${__variable}}")
+    endif()
+endmacro()
