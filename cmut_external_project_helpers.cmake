@@ -40,3 +40,19 @@ macro(cmut_EP_add_variable_if_defined __list __variable)
         list(APPEND ${__list} "-D${__variable}=${${__variable}}")
     endif()
 endmacro()
+
+
+function(cmut_EP_collect_cmake_variable resultVariable)
+
+    set(__cmake_vars)
+
+    cmut_EP_add_variable_if_defined(__cmake_vars BUILD_SHARED_LIBS)
+    cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_INSTALL_PREFIX)
+    cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_BUILD_TYPE)
+    cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_PREFIX_PATH)
+    cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_VERBOSE_MAKEFILE)
+    cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_INSTALL_RPATH)
+
+    set(${resultVariable} ${__cmake_vars} PARENT_SCOPE)
+
+endfunction()
