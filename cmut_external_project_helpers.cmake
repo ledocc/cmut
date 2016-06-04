@@ -197,4 +197,23 @@ function(cmut_EP_collect_cmake_variable resultVariable)
 endfunction()
 
 
+
+macro(cmut_EP_add_config_arg arg)
+    if(NOT module)
+        cmut_error("\"module\" variable not defined. Can't use cmut_EP_* macro.")
+    endif()
+    list(APPEND CMUT_EP_${module}_CONFIG_ARG "${args}")
+endmacro()
+
+macro(cmut_EP_add_config_arg_if test true_arg false_arg)
+    if(${TEST})
+        cmut_EP_add_config_arg("${true_arg}")
+    else()
+        cmut_EP_add_config_arg("${false_arg}")
+    endif()
+endmacro()
+
+
+
+
 endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
