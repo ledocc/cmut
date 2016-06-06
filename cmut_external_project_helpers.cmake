@@ -1,6 +1,7 @@
 if(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
 set(${CMAKE_CURRENT_LIST_FILE}_include "1")
-    
+
+include(cmut_define_num_core_available)
 
 cmake_policy(VERSION 3.5.2)
 
@@ -202,17 +203,44 @@ macro(cmut_EP_add_config_arg arg)
     if(NOT module)
         cmut_error("\"module\" variable not defined. Can't use cmut_EP_* macro.")
     endif()
-    list(APPEND CMUT_EP_${module}_CONFIG_ARG "${args}")
+    cmut_debug("arg = ${arg}")
+    list(APPEND CMUT_EP_${module}_CONFIG_ARG "${arg}")
 endmacro()
 
 macro(cmut_EP_add_config_arg_if test true_arg false_arg)
-    if(${TEST})
+    if(${test})
         cmut_EP_add_config_arg("${true_arg}")
     else()
         cmut_EP_add_config_arg("${false_arg}")
     endif()
 endmacro()
 
+
+
+macro(cmut_EP_autotools_adapt_cmake_var)
+   cmut_EP_add_config_arg("--prefix=${CMAKE_INSTALL_PREFIX}")
+   cmut_EP_add_config_arg_if(BUILD_SHARED_LIBS "--enable-shared;--disable-static" "--disable-shared;--enable-static")
+endmacro() 
+
+
+
+
+set(CMUT_EP_AUTOTOOLS_CONFIGURE_CMD configure)
+macro(cmut_EP_autotools_define_command)
+    set(CMUT_EP_${module}_CONFIGURE_CMD export PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX} && ../${module}/${CMUT_EP_AUTOTOOLS_CONFIGURE_CMD} "${CMUT_EP_${module}_CONFIG_ARG}")
+    set(CMUT_EP_${module}_BUILD_CMD     ${CMAKE_MAKE_PROGRAM} -j${CMUT_NUM_CORE_AVAILABLE})
+    set(CMUT_EP_${module}_INSTALL_CMD   ${CMAKE_MAKE_PROGRAM} install)
+
+    set(CMUT_EP_${module}_AUTOTOOLS_CONFIG_BUILD_INSTALL
+        CONFIGURE_COMMAND
+            ${CMUT_EP_${module}_CONFIGURE_CMD}
+        BUILD_COMMAND
+            ${CMUT_EP_${module}_BUILD_CMD}
+        INSTALL_COMMAND
+            ${CMUT_EP_${module}_INSTALL_CMD}
+        )
+    
+endmacro()
 
 
 
