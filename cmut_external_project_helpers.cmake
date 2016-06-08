@@ -12,9 +12,9 @@ include(cmut_message)
 set(__CMUT_EP_TO_BUILD_PREFIX CMUT_EP_)
 
 macro(__cmut_EP_add_module_to_build_list name)
-    list(APPEND __CMUT_EP_MODULE_TO_BUILD ${name}) 
+    list(APPEND __CMUT_EP_MODULE_TO_BUILD ${name})
 endmacro()
-    
+
 macro(cmut_EP_add_optional_module name)
     option(${__CMUT_EP_TO_BUILD_PREFIX}${name} OFF "Enable build of ${name}")
     __cmut_EP_add_module_to_build_list(${name})
@@ -43,7 +43,7 @@ function(cmut_EP_define_dependencies name)
             FULL_DOCS  "list of module that ${name} depend")
     endif()
     set_property(GLOBAL PROPERTY CMUT_EP_${name}_DEPENDENCIES ${__depends})
-    
+
     cmut_debug("cmut_EP_define_dependencies : result = ${__depends}")
     cmut_debug("cmut_EP_define_dependencies(${name}) -- end")
 endfunction()
@@ -51,7 +51,7 @@ endfunction()
 function(__cmut_EP_is_dependencies_defined name result)
     get_property(__result GLOBAL PROPERTY CMUT_EP_${name}_DEPENDENCIES SET)
     set(${result} ${__result} PARENT_SCOPE)
-endfunction()    
+endfunction()
 
 function(cmut_EP_make_depends name)
 
@@ -80,7 +80,7 @@ function(cmut_EP_make_depends name)
         endif()
     endforeach()
 
-    
+
     set(CMUT_EP_${name}_DEPENDS ${__depends} PARENT_SCOPE)
 
     cmut_debug("cmut_EP_make_depends(${name}) -- end")
@@ -91,7 +91,7 @@ endfunction()
 macro(__cmut_EP_include_module_dependencies name)
 
     set(__dependencies_file ${CMAKE_SOURCE_DIR}/${CMUT_MODULE_PREFIX}/${name}/dependencies.cmake)
-    
+
     if (EXISTS ${__dependencies_file})
         cmut_debug("${name} dependencies file : ${__dependencies_file} found")
         cmut_info("include ${name} dependencies file")
@@ -104,10 +104,10 @@ endmacro()
 
 
 
-macro(__cmut_EP_build_module name)  
+macro(__cmut_EP_build_module name)
 
     cmut_debug("__cmut_EP_build_module(${name})")
-    
+
     # check loop dependency
     if(${name} IN_LIST __cmut_EP_build_module_stack)
         cmut_info("__cmut_EP_build_module : loop dependency detected.\n"
@@ -116,16 +116,16 @@ macro(__cmut_EP_build_module name)
             cmut_info(${module})
         endforeach()
         message(FATAL_ERROR "loop dependency detected !!! ")
-    endif()    
+    endif()
 
-    
+
     # if already done, return
     if(NOT ${name} IN_LIST __cmut_EP_build_module_done_list)
-    
+
         # add to build_stack
         list(APPEND __cmut_EP_build_module_stack ${name})
         cmut_debug("__cmut_EP_build_module : build_module_stack ${__cmut_EP_build_module_stack}")
-        
+
         if(${__CMUT_EP_TO_BUILD_PREFIX}${module})
 
             # load and add dependencies
@@ -142,7 +142,7 @@ macro(__cmut_EP_build_module name)
         else()
             cmut_info("__cmut_EP_build_module : module ${name} not added (disable).")
         endif()
-    
+
         # remove from build_stack
         list(REMOVE_ITEM __cmut_EP_build_module_stack ${name})
         cmut_debug("__cmut_EP_build_module : build_module_stack ${__cmut_EP_build_module_stack}")
@@ -157,7 +157,7 @@ macro(__cmut_EP_build_module_dependencies name)
     cmut_EP_make_depends(${name})
     foreach(module ${CMUT_EP_${name}_DEPENDS})
         __cmut_EP_build_module(${module})
-    endforeach() 
+    endforeach()
 endmacro()
 
 
@@ -220,18 +220,22 @@ endmacro()
 macro(cmut_EP_autotools_adapt_cmake_var)
    cmut_EP_add_config_arg("--prefix=${CMAKE_INSTALL_PREFIX}")
    cmut_EP_add_config_arg_if(BUILD_SHARED_LIBS "--enable-shared;--disable-static" "--disable-shared;--enable-static")
-endmacro() 
+endmacro()
 
 
 
 
 set(CMUT_EP_AUTOTOOLS_CONFIGURE_CMD configure)
-macro(cmut_EP_autotools_define_command)
+macro(cmut_EP_autotools_config_build_install_command)
     set(CMUT_EP_${module}_CONFIGURE_CMD export PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX} && ../${module}/${CMUT_EP_AUTOTOOLS_CONFIGURE_CMD} "${CMUT_EP_${module}_CONFIG_ARG}")
     set(CMUT_EP_${module}_BUILD_CMD     ${CMAKE_MAKE_PROGRAM} -j${CMUT_NUM_CORE_AVAILABLE})
     set(CMUT_EP_${module}_INSTALL_CMD   ${CMAKE_MAKE_PROGRAM} install)
 
-    set(CMUT_EP_${module}_AUTOTOOLS_CONFIG_BUILD_INSTALL
+endmacro()
+
+macro(cmut_EP_assemble_config_build_install_command)
+
+    set(CMUT_EP_${module}_CONFIG_BUILD_INSTALL
         CONFIGURE_COMMAND
             ${CMUT_EP_${module}_CONFIGURE_CMD}
         BUILD_COMMAND
@@ -239,7 +243,7 @@ macro(cmut_EP_autotools_define_command)
         INSTALL_COMMAND
             ${CMUT_EP_${module}_INSTALL_CMD}
         )
-    
+
 endmacro()
 
 
