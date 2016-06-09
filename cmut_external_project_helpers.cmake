@@ -203,7 +203,7 @@ macro(cmut_EP_add_config_arg)
     if(NOT module)
         cmut_error("\"module\" variable not defined. Can't use cmut_EP_* macro.")
     endif()
-    cmut_debug("arg = ${ARGN}")
+    cmut_debug("cmut_EP_add_config_arg( ${ARGN} )")
     list(APPEND CMUT_EP_${module}_CONFIG_ARG "${ARGN}")
 endmacro()
 
