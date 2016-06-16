@@ -186,6 +186,8 @@ function(cmut_EP_collect_cmake_variable resultVariable)
 
     set(__cmake_vars)
 
+    cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_TOOLCHAIN_FILE)
+    
     cmut_EP_add_variable_if_defined(__cmake_vars BUILD_SHARED_LIBS)
     cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_INSTALL_PREFIX)
     cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_BUILD_TYPE)
@@ -224,6 +226,13 @@ endmacro()
 macro(cmut_EP_autotools_adapt_cmake_var)
    cmut_EP_add_config_arg("--prefix=${CMAKE_INSTALL_PREFIX}")
    cmut_EP_add_config_arg_if(BUILD_SHARED_LIBS "--enable-shared;--disable-static" "--disable-shared;--enable-static")
+
+   if(CMAKE_CROSSCOMPILING)
+       if(NOT CMAKE_CROSSCOMPILE_TRIPLET)
+           cmut_fatal("cross compiling detected but \"CMAKE_CROSSCOMPILE_TRIPLET\" not defined. CMAKE_CROSSCOMPILE_TRIPLET is required to build autotools base project.")
+           cmut_EP_add_config_arg("--host=${CMAKE_CROSSCOMPILE_TRIPLET}")
+       endif()
+   endif()
 endmacro()
 
 
