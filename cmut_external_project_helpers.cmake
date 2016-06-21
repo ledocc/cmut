@@ -11,18 +11,49 @@ include(cmut_message)
 
 set(__CMUT_EP_TO_BUILD_PREFIX CMUT_EP_)
 
+
+# Transform version string to string acceptable as variable name by cmake
+# replace any non alphanum character by '_'
+function(__cmut_EP_version_to_name version result)
+    string(REGEX REPLACE "[^0-9a-zA-Z]" "_" __version_result ${version})
+    set(${result} ${__version_result} PARENT_SCOPE)
+endfunction()
+
+
 macro(__cmut_EP_add_module_to_build_list name)
     list(APPEND __CMUT_EP_MODULE_TO_BUILD ${name})
 endmacro()
 
 macro(cmut_EP_add_optional_module name)
-    option(${__CMUT_EP_TO_BUILD_PREFIX}${name} OFF "Enable build of ${name}")
+    option(CMUT_EP_${name} OFF "Enable build of ${name}")
     __cmut_EP_add_module_to_build_list(${name})
 endmacro()
 
 macro(cmut_EP_add_module name)
-    set(${__CMUT_EP_TO_BUILD_PREFIX}${name} ON)
+    set(CMUT_EP_${name} ON)
     __cmut_EP_add_module_to_build_list(${name})
+
+
+    set(options "")
+    set(oneValueArgs VERSION)
+    set(multiValueArgs OPTIONS)
+    cmake_parse_arguments(
+        __CMUT_EP_ADD_MODULE
+        "${options}" "${oneValueArgs}" "${multiValueArgs}"
+        ${ARGN}
+    )
+
+    
+    if(__CMUT_EP_ADD_MODULE_VERSION)
+        cmut_define_EP_version(${name} ${__CMUT_EP_ADD_MODULE_VERSION})
+    endif()
+
+endmacro()
+
+macro(cmut_define_EP_version name version)
+    set(CMUT_EP_${name}_VERSION ${version} CACHE STRING "${name} version to build")
+    __cmut_ep_version_to_name(${CMUT_EP_${name}_VERSION} CMUT_EP_${name}_VERSION_NAME)
+    variable_watch(CMUT_EP_${name}_VERSION __cmut_EP__on_change_version_name)
 endmacro()
 
 
@@ -68,8 +99,8 @@ function(cmut_EP_make_depends name)
 
 
     foreach(dependency ${dependencies})
-        if(DEFINED ${__CMUT_EP_TO_BUILD_PREFIX}${dependency})
-            if(${__CMUT_EP_TO_BUILD_PREFIX}${dependency})
+        if(DEFINED CMUT_EP_${dependency})
+            if(CMUT_EP_${dependency})
                 cmut_debug("cmut_EP_make_depends : add dependency \"${dependency}\"")
                 list(APPEND __depends ${dependency})
             else()
@@ -126,7 +157,7 @@ macro(__cmut_EP_build_module name)
         list(APPEND __cmut_EP_build_module_stack ${name})
         cmut_debug("__cmut_EP_build_module : build_module_stack ${__cmut_EP_build_module_stack}")
 
-        if(${__CMUT_EP_TO_BUILD_PREFIX}${module})
+        if(CMUT_EP_${module})
 
             # load and add dependencies
             __cmut_EP_include_module_dependencies(${name})
@@ -168,9 +199,22 @@ function(cmut_EP_run)
 endfunction()
 
 
-macro(cmut_define_EP_version name version)
-    set(CMUT_EP_${name}_VERSION ${version} CACHE STRING "${name} version to build")
-endmacro()
+
+
+function(__cmut_EP__on_change_version_name variable access value current_list_file stack)
+    
+    if(${access} STREQUAL "MODIFIED_ACCESS")
+    message(WARNING "variable = ${variable}")
+    message(WARNING "access = ${access}")
+    message(WARNING "value = ${value}")
+    message(WARNING "current_list_file = ${current_list_file}")
+    message(WARNING "stack = ${stack}")
+        set(${variable}_save "toto" CACHE STRING "${name} version to build")
+        __cmut_ep_version_to_name(${value} CMUT_EP_${name}_VERSION_NAME)
+    endif()
+endfunction()
+
+
 
 
 
@@ -248,6 +292,12 @@ endmacro()
 
 macro(cmut_EP_assemble_config_build_install_command)
 
+    __cmut_EP_test_variable(module)
+    __cmut_EP_test_variable(CMUT_EP_${module}_CONFIGURE_CMD)
+    __cmut_EP_test_variable(CMUT_EP_${module}_BUILD_CMD)
+    __cmut_EP_test_variable(CMUT_EP_${module}_INSTALL_CMD)
+
+    
     set(CMUT_EP_${module}_CONFIG_BUILD_INSTALL
         CONFIGURE_COMMAND
             ${CMUT_EP_${module}_CONFIGURE_CMD}
@@ -259,6 +309,42 @@ macro(cmut_EP_assemble_config_build_install_command)
 
 endmacro()
 
+
+
+
+
+
+
+function(cmut_EP_add_version name version)
+
+    __cmut_EP_version_to_name(${version} version_name)
+    
+    set(CMUT_EP_${name}_${version_name}_DOWNLOAD_CMD "${ARGN}" PARENT_SCOPE)
+    
+endfunction()
+
+
+
+function(__cmut_EP_test_variable var)
+
+    if (NOT ${var})
+        cmut_fatal("cmake variable \"${var}\" not defined. abort.")
+    endif()
+endfunction()
+
+
+function(cmut_EP_assemble_download_command)
+
+    __cmut_EP_test_variable(module)
+    __cmut_EP_test_variable(CMUT_EP_${module}_VERSION_NAME)
+    __cmut_EP_test_variable(CMUT_EP_${module}_${CMUT_EP_${module}_VERSION_NAME}_DOWNLOAD_CMD)
+    
+        
+    set(CMUT_EP_${module}_DOWNLOAD_CMD
+        ${CMUT_EP_${module}_${CMUT_EP_${module}_VERSION_NAME}_DOWNLOAD_CMD}
+        PARENT_SCOPE)
+
+endfunction()
 
 
 endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
