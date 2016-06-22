@@ -358,6 +358,7 @@ function(cmut_EP_assemble_log_command)
         LOG_BUILD 1
         LOG_TEST 1
         LOG_INSTALL 1
+	PARENT_SCOPE
     )
 
 endfunction()
