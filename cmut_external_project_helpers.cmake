@@ -346,5 +346,21 @@ function(cmut_EP_assemble_download_command)
 
 endfunction()
 
+function(cmut_EP_assemble_log_command)
+
+    __cmut_EP_test_variable(module)
+    
+    set(
+        CMUT_EP_${module}_LOG_CMD
+        LOG_DOWNLOAD 1
+        LOG_UPDATE 1
+        LOG_CONFIGURE 1
+        LOG_BUILD 1
+        LOG_TEST 1
+        LOG_INSTALL 1
+    )
+
+endfunction()
+
 
 endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
