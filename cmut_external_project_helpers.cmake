@@ -351,7 +351,7 @@ function(cmut_EP_assemble_log_command)
     __cmut_EP_test_variable(module)
     
     set(
-        CMUT_EP_${module}_LOG_CMD
+        CMUT_EP_${module}_LOG_CMD___disable
         LOG_DOWNLOAD 1
         LOG_UPDATE 1
         LOG_CONFIGURE 1
