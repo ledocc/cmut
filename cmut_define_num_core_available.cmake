@@ -3,19 +3,18 @@
 # CMUT_NUM_CORE_AVAILABLE is guarantee to be at least equal to 1 
 
 
-
-if(__cmut_define_num_core_available__defined)
+if(DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
     return()
 endif()
+set(${CMAKE_CURRENT_LIST_FILE}_include "1")
 
 
 include(ProcessorCount)
 ProcessorCount(__cmut_num_core_available)
 
-if( (__cmut_num_core_available EQUAL 0) OR (__cmut_num_core_available LESS 0) )
+if(__cmut_num_core_available LESS 1)
     set(__cmut_num_core_available 1)
 endif()
 
 set(CMUT_NUM_CORE_AVAILABLE ${__cmut_num_core_available} CACHE STRING "number of parallel job used to build")
 
-set(__cmut_define_num_core_available__defined 1)
