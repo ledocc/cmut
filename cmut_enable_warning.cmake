@@ -6,7 +6,7 @@
 
 
 # define common variable for any gcc compatible flags, like clang
-set(__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER "-Wall -Wextra")
+set(__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER "-Wextra -Wall -Wpedantic")
 set(__CMUT_WARNING_PATTERN_GNU_COMPAT_COMPILER "-W[a-zA-Z0-9]*")
 
 
