@@ -21,16 +21,22 @@ macro(cmut_test__find_boost_test version)
         Boost::unit_test_framework
         )
 
+    get_target_property(BUILD_TYPE Boost::unit_test_framework TYPE)
+    if(${BUILD_TYPE} STREQUAL SHARED_LIBRARY)
+        add_definitions(-DBOOST_TEST_DYN_LINK)
+    endif()
+
 endmacro()
 
 
-function(cmut_add_boost_test test_src_file)
+function(cmut_add_boost_test namespace test_src_file)
 
     get_filename_component(_test_exec_name ${test_src_file} NAME_WE)
+    set(name ${namespace}_${_test_exec_name})
 
-    add_executable(${_test_exec_name} ${test_src_file})
+    add_executable(${name} ${test_src_file})
 
-    add_test(NAME "${_test_exec_name}" COMMAND ${_test_exec_name})
+    add_test(NAME "${name}" COMMAND ${name})
 
 
 #    file(READ "${test_src_file}" _contents)
@@ -48,12 +54,11 @@ function(cmut_add_boost_test test_src_file)
 
 endfunction()
 
-function(cmut_add_boost_tests test_src_files)
+function(cmut_add_boost_tests namespace)
 
-    math(EXPR num_files "${ARGC} - 1")
-
-    foreach(index RANGE ${num_files})
-        cmut_add_boost_test(${ARGV${index}})
+    foreach(file ${ARGN})
+        #message("add test ${file}")
+        cmut_add_boost_test(${namespace} ${file})
     endforeach()
 
 endfunction()
