@@ -22,7 +22,7 @@ macro(cmut_test__find_boost_test version)
         )
 
     get_target_property(BUILD_TYPE Boost::unit_test_framework TYPE)
-    if(${BUILD_TYPE} STREQUAL SHARED_LIBRARY)
+    if(NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY)
         add_definitions(-DBOOST_TEST_DYN_LINK)
     endif()
 
