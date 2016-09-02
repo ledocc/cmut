@@ -5,22 +5,37 @@
 
 include(CMakePrintHelpers)
 
+set(CMUT_TEST__HUNTER_BOOST_TEST_COMPONENTS
+    chrono
+    timer
+    test
+    )
+
+set(CMUT_TEST__BOOST_TEST_COMPONENTS
+    chrono
+    timer
+    unit_test_framework
+    )
+
+if(HUNTER_ENABLED)
+    set(__cmut_test__boost_search_mode CONFIG)
+endif()
+
 macro(cmut_test__find_boost_test version)
 
     find_package(
-        Boost ${version} REQUIRED
-        COMPONENTS
-        chrono
-        timer
-        unit_test_framework
-    )
-
-    link_libraries(
-        Boost::chrono
-        Boost::timer
-        Boost::unit_test_framework
+        Boost ${version}
+        REQUIRED COMPONENTS
+            ${CMUT_TEST__BOOST_TEST_COMPONENTS}
+        ${__cmut_test__boost_search_mode}
         )
 
+    foreach(component ${CMUT_TEST__BOOST_TEST_COMPONENTS})
+        link_libraries(
+            Boost::${component}
+            )
+    endforeach()
+    
     get_target_property(BUILD_TYPE Boost::unit_test_framework TYPE)
     if(NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY)
         add_definitions(-DBOOST_TEST_DYN_LINK)
