@@ -1,13 +1,13 @@
-if(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
-set(${CMAKE_CURRENT_LIST_FILE}_include "1")
-    
+include(${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__header_guard.cmake)
+cmut__utils__define_header_guard()
+
 
 
 set(ENV{__cmut_message_count} 0)
 function(cmut_message status severity message)
-    
-    string(TIMESTAMP timestamp)        
-    message(${status} "cmut [${timestamp}] $ENV{__cmut_message_count}  <${severity}> : ${message}")
+
+    string(TIMESTAMP timestamp)
+    message(${status} "[cmut] [${timestamp}] $ENV{__cmut_message_count}  <${severity}> : ${message}")
 
     math(EXPR result "$ENV{__cmut_message_count} + 1")
     set(ENV{__cmut_message_count} ${result})
@@ -35,8 +35,3 @@ endfunction()
 function(cmut_fatal message)
     cmut_message(FATAL_ERROR "fatal" "${message}")
 endfunction()
-
-
-
-endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
-
