@@ -1,5 +1,9 @@
 include(CheckCXXCompilerFlag)
 
+include("${CMAKE_CURRENT_LIST_DIR}/cmut_deprecated.cmake")
+cmut_deprecated("cmut_enable_cxx11.cmake" "build/cmut__build__enable_cxx_standard.cmake")
+
+
 #message(CMAKE_COMPILER_IS_CLANGXX = ${CMAKE_COMPILER_IS_CLANGXX})
 #if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
 

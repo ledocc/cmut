@@ -2,6 +2,9 @@
 # common install command for simple project
 #-----------------------------------------------------------------------------
 
+include("${CMAKE_CURRENT_LIST_DIR}/cmut_deprecated.cmake")
+cmut_deprecated("cmut_parse_function.cmake" "build/cmut__utils__parse_arguments.cmake")
+
 
 function( cmut_increment VALUE )
     math( EXPR ${VALUE} "${${VALUE}} + 1" )

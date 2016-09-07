@@ -1,3 +1,5 @@
+include("${CMAKE_CURRENT_LIST_DIR}/cmut_deprecated.cmake")
+cmut_deprecated("cmut_target_compile_option_cxx_version.cmake" "build/cmut__build__enable_cxx_standard.cmake")
 
 
 # look for an compiler option to enable specified cxx version

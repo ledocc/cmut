@@ -4,6 +4,9 @@
 # replace warning flag in CMAKE_CXX_FLAGS by CMUT_CXX_FLAGS_WARNING ones
 ###############################################################################
 
+include("${CMAKE_CURRENT_LIST_DIR}/cmut_deprecated.cmake")
+cmut_deprecated("cmut_enable_warning.cmake" "build/cmut__build__enable_warning.cmake")
+
 
 # define common variable for any gcc compatible flags, like clang
 set(__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER "-Wextra -Wall -Wpedantic")
