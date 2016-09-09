@@ -18,22 +18,22 @@ function(cmut__utils__parse_version version __major __minor __patch)
 
     
     if(${version} MATCHES ${THREE_PART_VERSION_REGEX})
-        string(REGEX REPLACE "^(${version_regex_component})${version_regex_separator}${version_regex_component}${version_regex_separator}${version_regex_component}" "\\1" ${__major} "${version}")
-        string(REGEX REPLACE "^${version_regex_component}${version_regex_separator}(${version_regex_component})${version_regex_separator}${version_regex_component}" "\\1" ${__minor} "${version}")
-        string(REGEX REPLACE "^${version_regex_component}${version_regex_separator}${version_regex_component}${version_regex_separator}(${version_regex_component})" "\\1" ${__patch} "${version}")
+        string(REGEX REPLACE "^(${version_regex_component})${version_regex_separator}${version_regex_component}${version_regex_separator}${version_regex_component}" "\\1" __major_version "${version}")
+        string(REGEX REPLACE "^${version_regex_component}${version_regex_separator}(${version_regex_component})${version_regex_separator}${version_regex_component}" "\\1" __minor_version "${version}")
+        string(REGEX REPLACE "^${version_regex_component}${version_regex_separator}${version_regex_component}${version_regex_separator}(${version_regex_component})" "\\1" __patch_version "${version}")
     elseif(${version} MATCHES ${TWO_PART_VERSION_REGEX})
-        string(REGEX REPLACE "^(${version_regex_component})${version_regex_separator}${version_regex_component}${version_regex_separator}${version_regex_component}" "\\1" ${__major} "${version}")
-        string(REGEX REPLACE "^${version_regex_component}${version_regex_separator}(${version_regex_component})${version_regex_separator}${version_regex_component}" "\\1" ${__minor} "${version}")
-        set(${patch} 0)
+        string(REGEX REPLACE "^(${version_regex_component})${version_regex_separator}${version_regex_component}${version_regex_separator}${version_regex_component}" "\\1" __major_version "${version}")
+        string(REGEX REPLACE "^${version_regex_component}${version_regex_separator}(${version_regex_component})${version_regex_separator}${version_regex_component}" "\\1" __minor_version "${version}")
+        set(${__patch_version} 0)
     else()
         cmut_error("cmut__utils__parse_version: fail to parse version \"${version}\"")
         return()
     endif()
 
 
-    set(${__major} ${__major} PARENT_SCOPE)
-    set(${__minor} ${__minor} PARENT_SCOPE)
-    set(${__patch} ${__patch} PARENT_SCOPE)
+    set(${__major} ${__major_version} PARENT_SCOPE)
+    set(${__minor} ${__minor_version} PARENT_SCOPE)
+    set(${__patch} ${__patch_version} PARENT_SCOPE)
 
     
 endfunction()
