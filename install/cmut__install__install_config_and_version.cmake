@@ -6,6 +6,8 @@ cmut__utils__define_header_guard()
 include(${CMAKE_CURRENT_LIST_DIR}/cmut__install__define_variables.cmake)
 
 
+set(config_in_filepath "${CMAKE_CURRENT_LIST_DIR}/Config.cmake.in")
+
 
 # cmut__install__install_config_and_version :
 # - generate and install <project name>Config.cmake
@@ -22,9 +24,18 @@ function(cmut__install__install_config_and_version)
         "${cmut__install__version_config}" COMPATIBILITY SameMajorVersion
     )
 
+
+    get_property(__CMUT__INSTALL__PROJECT_SUPPORTED_COMPONENTS
+        GLOBAL
+        PROPERTY
+            CMUT__INSTALL_PROJECT_SUPPORTED_COMPONENTS
+    )
+
+
+    
     # generate Config file
     configure_package_config_file(
-        "cmake/Config.cmake.in"
+        "${config_in_filepath}"
         "${cmut__install__project_config}"
         INSTALL_DESTINATION "${cmut__install__config_dir}"
     )
@@ -41,6 +52,6 @@ function(cmut__install__install_config_and_version)
         set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY OFF)
         export(PACKAGE ${PROJECT_NAME})
     endif()
-
+    
 
 endfunction()

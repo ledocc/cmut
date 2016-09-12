@@ -11,10 +11,21 @@ function(cmut__target__set_library_version target version)
 
     cmut__utils__parse_version(${version} major minor patch)
 
-    set_target_properties(${target}
+    
+    get_target_property(library_type ${target} TYPE)
+    if(NOT ${library_type} STREQUAL "INTERFACE_LIBRARY")
+        
+        set_target_properties(${target}
         PROPERTIES
             VERSION                           ${version}
             SOVERSION                         ${major}
+        )
+
+    endif()
+
+    
+    set_target_properties(${target}
+        PROPERTIES
             INTERFACE_${target}_MAJOR_VERSION ${major}
             COMPATIBLE_INTERFACE_STRING       ${target}_MAJOR_VERSION
         )

@@ -42,8 +42,9 @@ function(cmut__install__install_library target)
     endif()
 
 
-    # install lib
     set(target_export_name "${target}${cmut__install__target_export_name_posfix}")
+
+    # install lib
     install(
         TARGETS  ${target}
         EXPORT   ${target_export_name}
@@ -51,9 +52,11 @@ function(cmut__install__install_library target)
         LIBRARY  DESTINATION "${cmut__install__library_dir}"
         RUNTIME  DESTINATION "${cmut__install__runtime_dir}"
         INCLUDES DESTINATION "${cmut__install__include_dir}"
-    )
+        )
+
 
     if(CMUT__CONFIG__DEVELOPER_MODE)
+        message("install ${CMAKE_BINARY_DIR}/${cmut__install__config_dir}/${target}/${target_export_name}.cmake")
         export(
             EXPORT ${target_export_name}
             NAMESPACE ${cmut__install__export_namespace}
@@ -69,4 +72,16 @@ function(cmut__install__install_library target)
         COMPONENT devel
     )
 
+    set_property(
+        GLOBAL
+        APPEND
+        PROPERTY
+            CMUT__INSTALL_PROJECT_SUPPORTED_COMPONENTS
+        "${target}"
+    )
+
+
+    
 endfunction()
+
+

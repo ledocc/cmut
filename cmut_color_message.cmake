@@ -1,4 +1,16 @@
-if(NOT WIN32)
+
+
+if(NOT DEFINED CMUT_COLOR_TEST_CONSOLE)
+    if("x$ENV{SHELL}" STREQUAL "x")
+        set(CMUT_COLOR_TEST_CONSOLE 0)
+    else()
+        set(CMUT_COLOR_TEST_CONSOLE 1)
+    endif()
+endif()
+
+
+
+if(CMUT_COLOR_TEST_CONSOLE)
   string(ASCII 27 Esc)
   set(cmut_color_message_ColorReset "${Esc}[m")
   set(cmut_color_message_ColorBold  "${Esc}[1m")

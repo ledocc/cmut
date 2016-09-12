@@ -23,7 +23,6 @@ function(cmut__install__install_config_file)
         return()
     endif()
 
-
     __cmut__install__define_variables()
 
 
