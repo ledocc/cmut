@@ -17,7 +17,7 @@ macro(__cmut__install__define_variables)
 
     if(NOT __cmut__install__define_variables__done)
 
-        set(cmut__install__generated_dir "${CMAKE_BINARY_DIR}")
+        set(cmut__install__generated_dir "${PROJECT_BINARY_DIR}")
 
         set(cmut__install__config_dir  "lib/cmake/${PROJECT_NAME}")
         set(cmut__install__include_dir "include")

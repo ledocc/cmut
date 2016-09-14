@@ -191,7 +191,7 @@ endfunction()
 
 
 macro(cmut_add_install_component_target component dependencies)
-    add_custom_target(install_${component} ${CMAKE_COMMAND} -DCOMPONENT=${component} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake)
+    add_custom_target(install_${component} ${CMAKE_COMMAND} -DCOMPONENT=${component} -P ${PROJECT_BINARY_DIR}/cmake_install.cmake)
 #    message("dependencies = ${dependencies}")
     foreach(dep ${dependencies})
         add_dependencies(install_${component} ${dep})

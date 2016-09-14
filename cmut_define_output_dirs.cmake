@@ -9,7 +9,7 @@ include( cmut_determine_lib_postfix )
 # TODO on MacOS, define function for bundle, Framework and regular bin
 macro( cmut_define_output_dirs )
 
-    set(BASE_DIR ${CMAKE_BINARY_DIR})
+    set(BASE_DIR ${PROJECT_BINARY_DIR})
     if(${ARGC} GREATER 0)
         set(BASE_DIR ${ARGV0})
     endif()

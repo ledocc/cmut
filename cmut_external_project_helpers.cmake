@@ -121,7 +121,7 @@ endfunction()
 
 macro(__cmut_EP_include_module_dependencies name)
 
-    set(__dependencies_file ${CMAKE_SOURCE_DIR}/${CMUT_MODULE_PREFIX}/${name}/dependencies.cmake)
+    set(__dependencies_file ${PROJECT_SOURCE_DIR}/${CMUT_MODULE_PREFIX}/${name}/dependencies.cmake)
 
     if (EXISTS ${__dependencies_file})
         cmut_debug("${name} dependencies file : ${__dependencies_file} found")
