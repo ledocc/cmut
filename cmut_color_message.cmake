@@ -1,11 +1,13 @@
 
 
 if(NOT DEFINED CMUT_COLOR_TEST_CONSOLE)
-    if("x$ENV{SHELL}" STREQUAL "x")
-        set(CMUT_COLOR_TEST_CONSOLE 0)
-    else()
+
+    if(CMUT__MESSAGE__USE_COLOR)
         set(CMUT_COLOR_TEST_CONSOLE 1)
+    else()
+        set(CMUT_COLOR_TEST_CONSOLE 0)
     endif()
+
 endif()
 
 
