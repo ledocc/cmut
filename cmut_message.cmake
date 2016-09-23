@@ -7,26 +7,26 @@ include(${CMAKE_CURRENT_LIST_DIR}//cmut_color_message.cmake)
 
 
 
+set(cmut_message_cmut_color ${cmut_color_message_Bold}${cmut_color_message_Blue})
+set(cmut_message_info_color ${cmut_color_message_Green})
+set(cmut_message_warn_color ${cmut_color_message_Red})
+set(cmut_message_error_color ${cmut_color_message_Bold}${cmut_message_warn_color})
+set(cmut_message_fatal_color ${cmut_color_message_Blink}${cmut_message_error_color})
+
+
+
 set(ENV{__cmut_message_count} 0)
 function(cmut_message status severity message)
-
-    if(${ARGC} GREATER 3)
-        set(color_message ${ARGV3})
-        set(reset_color_message ${cmut_color_message_ColorReset})
-    else()
-        set(color_message "")
-        set(reset_color_message "")
-    endif()
-
     
     string(TIMESTAMP timestamp)
-
+        
     set(__message
-"${cmut_color_message_BoldBlue} [cmut] ${cmut_color_message_ColorReset} \
-[${timestamp}] $ENV{__cmut_message_count}  ${cmut_color_message_BoldBlue}<${severity}>${cmut_color_message_ColorReset} : \
-${color_message}${message}${reset_color_message}"
+"\
+${cmut_message_cmut_color}[cmut] ${cmut_color_message_Reset} \
+[${timestamp}] $ENV{__cmut_message_count} \
+${cmut_message_${severity}_color}<${severity}>${cmut_color_message_Reset} : \
+${cmut_message_${severity}_color}${message}${cmut_color_message_Reset}"
         )
-
     
     message(${status} "${__message}")
 
@@ -35,6 +35,8 @@ ${color_message}${message}${reset_color_message}"
 
 endfunction()
 
+
+
 function(cmut_debug message)
     if(CMUT_DEBUG)
         cmut_message(STATUS "debug" "${message}" )
@@ -42,17 +44,17 @@ function(cmut_debug message)
 endfunction()
 
 function(cmut_info message)
-    cmut_message(STATUS "info" "${message}" ${cmut_color_message_Green})
+    cmut_message(STATUS "info" "${message}")
 endfunction()
 
 function(cmut_warn message)
-    cmut_message(WARNING "error" "${message}" ${cmut_color_message_Red})
+    cmut_message(WARNING "warn" "\n${message}")
 endfunction()
 
 function(cmut_error message)
-    cmut_message(SEND_ERROR "error" "${message}" ${cmut_color_message_BoldRed})
+    cmut_message(SEND_ERROR "error" "\n${message}")
 endfunction()
 
 function(cmut_fatal message)
-    cmut_message(FATAL_ERROR "fatal" "${message}" ${cmut_color_message_BoldRed})
+    cmut_message(FATAL_ERROR "fatal" "\n${message}")
 endfunction()
