@@ -32,13 +32,23 @@ function(cmut__install__install_library target)
 
 
     # install generated "export header"
-    set(target_export_filepath "${CMAKE_CURRENT_BINARY_DIR}/${target}_export.h")
-    if (EXISTS ${target_export_filepath})
-        install(
-            FILES       "${target_export_filepath}"
-            DESTINATION "${cmut__install__include_dir}/${target}"
-            COMPONENT   devel
-        )
+    get_target_property(target_type ${target} TYPE)
+    if(NOT target_type STREQUAL INTERFACE_LIBRARY)
+
+        get_target_property(export_header ${target} CMUT__TARGET__EXPORT_HEADER)
+
+        set(export_header_filepath "${CMAKE_CURRENT_BINARY_DIR}/${export_header}")
+        if (EXISTS ${export_header_filepath})
+
+            get_filename_component(export_header_dirname "${export_header}" DIRECTORY)
+
+            install(
+                FILES       "${export_header_filepath}"
+                DESTINATION "${cmut__install__include_dir}/${export_header_dirname}"
+                COMPONENT   devel
+            )
+
+        endif()
     endif()
 
 
@@ -81,7 +91,7 @@ function(cmut__install__install_library target)
     )
 
 
-    
+
 endfunction()
 
 
