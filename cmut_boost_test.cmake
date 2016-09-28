@@ -35,7 +35,7 @@ macro(cmut_test__find_boost_test version)
             Boost::${component}
             )
     endforeach()
-    
+
     get_target_property(BUILD_TYPE Boost::unit_test_framework TYPE)
     if(NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY)
         add_definitions(-DBOOST_TEST_DYN_LINK)
@@ -47,6 +47,17 @@ endmacro()
 function(cmut_add_boost_test namespace test_src_file)
 
     get_filename_component(_test_exec_name ${test_src_file} NAME_WE)
+
+    get_filename_component(_path ${test_src_file} DIRECTORY)
+    while(_path)
+
+
+        get_filename_component(_dirname ${_path} NAME_WE)
+        set(_test_exec_name "${_dirname}_${_test_exec_name}")
+        get_filename_component(_path ${_path} DIRECTORY)
+
+    endwhile()
+
     set(name ${namespace}_${_test_exec_name})
 
     add_executable(${name} ${test_src_file})
