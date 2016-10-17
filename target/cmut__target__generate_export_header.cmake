@@ -5,10 +5,10 @@ cmut__utils__define_header_guard()
 function(cmut__target__generate_export_header target)
 
     if(ARGC GREATER 0)
-        set(export_filename "${ARGV1}")
+        set(export_filename "include/${ARGV1}")
     else()
         string(TOLOWER "${target}" target_lower)
-        set(export_filename "${target_lower}_export.h")
+        set(export_filename "include/${target_lower}_export.h")
     endif()
 
     include(GenerateExportHeader)
@@ -27,7 +27,7 @@ function(cmut__target__generate_export_header target)
     target_include_directories(
         ${target}
         PUBLIC
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+            "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
     )
 
 
