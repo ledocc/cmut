@@ -37,7 +37,7 @@ function(cmut__install__install_library target)
 
         get_target_property(export_header ${target} CMUT__TARGET__EXPORT_HEADER)
 
-        set(export_header_filepath "${CMAKE_CURRENT_BINARY_DIR}/${export_header}")
+        set(export_header_filepath "${CMAKE_CURRENT_BINARY_DIR}/include/${export_header}")
         if (EXISTS ${export_header_filepath})
 
             get_filename_component(export_header_dirname "${export_header}" DIRECTORY)
