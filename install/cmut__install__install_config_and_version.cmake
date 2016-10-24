@@ -42,7 +42,7 @@ function(cmut__install__install_config_and_version)
 
     # install Config and VersionConfig files
     install(
-        FILES       "${cmut__install__project_config}" "${cmut__install__version_config}"
+        FILES       "${CMAKE_CURRENT_BINARY_DIR}/${cmut__install__project_config}" "${CMAKE_CURRENT_BINARY_DIR}/${cmut__install__version_config}"
         DESTINATION "${cmut__install__config_dir}"
         COMPONENT    devel
     )
