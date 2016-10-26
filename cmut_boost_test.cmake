@@ -21,7 +21,18 @@ if(HUNTER_ENABLED)
     set(__cmut_test__boost_search_mode CONFIG)
 endif()
 
-macro(cmut_test__find_boost_test version)
+
+
+function(cmut_test__find_boost_test version)
+
+    if(HUNTER_ENABLED)
+        hunter_add_package(
+            Boost
+            COMPONENTS
+                ${CMUT_TEST__HUNTER_BOOST_TEST_COMPONENTS}
+            )
+    endif()
+
 
     find_package(
         Boost ${version}
@@ -30,18 +41,45 @@ macro(cmut_test__find_boost_test version)
         ${__cmut_test__boost_search_mode}
         )
 
+    if(NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
+        cmut_warn("Can't found boost::unit_test_framework. Tests skipped.")
+        return()
+    endif()
+    set(Boost_UNIT_TEST_FRAMEWORK_FOUND ${Boost_UNIT_TEST_FRAMEWORK_FOUND} PARENT_SCOPE)
+
     foreach(component ${CMUT_TEST__BOOST_TEST_COMPONENTS})
         link_libraries(
             Boost::${component}
             )
     endforeach()
 
+
     get_target_property(BUILD_TYPE Boost::unit_test_framework TYPE)
     if(NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY)
         add_definitions(-DBOOST_TEST_DYN_LINK)
     endif()
 
-endmacro()
+
+endfunction()
+
+function(cmut_test__find_turtle)
+
+
+    if(HUNTER_ENABLED)
+        hunter_add_package(turtle)
+    endif()
+
+    find_package(Turtle)
+
+    if(NOT TURTLE_FOUND)
+        cmut_warn("Can't found turtle. Tests skipped.")
+        return()
+    endif()
+    set(TURTLE_FOUND ${TURTLE_FOUND} PARENT_SCOPE)
+
+    include_directories(${TURTLE_INCLUDE_DIR})
+
+endfunction()
 
 
 function(cmut_add_boost_test namespace test_src_file)
