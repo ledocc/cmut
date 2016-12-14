@@ -43,7 +43,7 @@ macro(cmut_EP_add_module name)
         ${ARGN}
     )
 
-    
+
     if(__CMUT_EP_ADD_MODULE_VERSION)
         cmut_define_EP_version(${name} ${__CMUT_EP_ADD_MODULE_VERSION})
     endif()
@@ -202,7 +202,7 @@ endfunction()
 
 
 function(__cmut_EP__on_change_version_name variable access value current_list_file stack)
-    
+
     if(${access} STREQUAL "MODIFIED_ACCESS")
     message(WARNING "variable = ${variable}")
     message(WARNING "access = ${access}")
@@ -231,7 +231,7 @@ function(cmut_EP_collect_cmake_variable resultVariable)
     set(__cmake_vars)
 
     cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_TOOLCHAIN_FILE)
-    
+
     cmut_EP_add_variable_if_defined(__cmake_vars BUILD_SHARED_LIBS)
     cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_INSTALL_PREFIX)
     cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_BUILD_TYPE)
@@ -284,7 +284,7 @@ endmacro()
 
 set(CMUT_EP_AUTOTOOLS_CONFIGURE_CMD configure)
 macro(cmut_EP_autotools_config_build_install_command)
-    set(CMUT_EP_${module}_CONFIGURE_CMD export PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX} && ../${module}/${CMUT_EP_AUTOTOOLS_CONFIGURE_CMD} "${CMUT_EP_${module}_CONFIG_ARG}")
+    set(CMUT_EP_${module}_CONFIGURE_CMD export PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig && ../${module}/${CMUT_EP_AUTOTOOLS_CONFIGURE_CMD} "${CMUT_EP_${module}_CONFIG_ARG}")
     set(CMUT_EP_${module}_BUILD_CMD     ${CMAKE_MAKE_PROGRAM} -j${CMUT_NUM_CORE_AVAILABLE})
     set(CMUT_EP_${module}_INSTALL_CMD   ${CMAKE_MAKE_PROGRAM} install)
 
@@ -297,7 +297,7 @@ macro(cmut_EP_assemble_config_build_install_command)
     __cmut_EP_test_variable(CMUT_EP_${module}_BUILD_CMD)
     __cmut_EP_test_variable(CMUT_EP_${module}_INSTALL_CMD)
 
-    
+
     set(CMUT_EP_${module}_CONFIG_BUILD_INSTALL
         CONFIGURE_COMMAND
             ${CMUT_EP_${module}_CONFIGURE_CMD}
@@ -318,9 +318,9 @@ endmacro()
 function(cmut_EP_add_version name version)
 
     __cmut_EP_version_to_name(${version} version_name)
-    
+
     set(CMUT_EP_${name}_${version_name}_DOWNLOAD_CMD "${ARGN}" PARENT_SCOPE)
-    
+
 endfunction()
 
 
@@ -338,8 +338,8 @@ function(cmut_EP_assemble_download_command)
     __cmut_EP_test_variable(module)
     __cmut_EP_test_variable(CMUT_EP_${module}_VERSION_NAME)
     __cmut_EP_test_variable(CMUT_EP_${module}_${CMUT_EP_${module}_VERSION_NAME}_DOWNLOAD_CMD)
-    
-        
+
+
     set(CMUT_EP_${module}_DOWNLOAD_CMD
         ${CMUT_EP_${module}_${CMUT_EP_${module}_VERSION_NAME}_DOWNLOAD_CMD}
         PARENT_SCOPE)
@@ -349,7 +349,7 @@ endfunction()
 function(cmut_EP_assemble_log_command)
 
     __cmut_EP_test_variable(module)
-    
+
     set(
         CMUT_EP_${module}_LOG_CMD___disable
         LOG_DOWNLOAD 1
