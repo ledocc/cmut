@@ -2,10 +2,6 @@ function( cmut_define_uninstall_target )
 
     if(NOT CMUT_UNINSTALL_CMAKE_IN)
 
-        message("CMAKE_CURRENT_LIST_FILE = ${CMAKE_CURRENT_LIST_FILE}")
-        message("CMAKE_CURRENT_LIST_DIR = ${CMAKE_CURRENT_LIST_DIR}")
-
-
         find_file(CMUT_UNINSTALL_CMAKE_IN cmake_uninstall.cmake.in
                   PATHS ${CMAKE_CURRENT_LIST_DIR}/private
                   DOC "source file used to generate uninstall target"
