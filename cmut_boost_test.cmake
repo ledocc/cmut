@@ -58,6 +58,7 @@ function(cmut_test__find_boost_test version)
     if(NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY)
         add_definitions(-DBOOST_TEST_DYN_LINK)
     endif()
+    add_definitions(-DBOOST_ALL_NO_LIB)
 
 
 endfunction()
