@@ -3,7 +3,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/parse_arguments.cmake)
 
 
 
-function(__cmut__util__test_and_log_execute_process_error result__ )
+function(__cmut__utils__test_and_log_execute_process_error result__ )
 
     if(${result__})
         set(msg "Command failed (${${result__}}):\n")
@@ -15,9 +15,9 @@ function(__cmut__util__test_and_log_execute_process_error result__ )
     
 endfunction()
 
-function(cmut__util__execute_process)
+function(cmut__utils__execute_process)
 
-    cmut__util__parse_arguments__m(cmut__util__execute_process
+    cmut__utils__parse_arguments__m(cmut__utils__execute_process
         exec
         ""
         ""
@@ -32,6 +32,6 @@ function(cmut__util__execute_process)
         WORKING_DIRECTORY ${exec_WORKING_DIRECTORY}
         RESULT_VARIABLE result
         )
-    __cmut__util__test_and_log_execute_process_error(result ${exec_COMMAND})
+    __cmut__utils__test_and_log_execute_process_error(result ${exec_COMMAND})
     
 endfunction()

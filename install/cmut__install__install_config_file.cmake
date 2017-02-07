@@ -12,12 +12,12 @@ include(${CMAKE_CURRENT_LIST_DIR}/../utils/cmut__utils__parse_arguments.cmake)
 # - install tree to be used in package mode
 function(cmut__install__install_config_file)
 
-    cmut__util__parse_arguments(cmut__install__install_config_files
-                                __ARGS
-                                ""
-                                "DESTINATION"
-                                "FILES"
-                                ${ARGN})
+    cmut__utils__parse_arguments(cmut__install__install_config_files
+                                 __ARGS
+                                 ""
+                                 "DESTINATION"
+                                 "FILES"
+                                 ${ARGN})
 
     if(__ARGS_FILES STREQUAL "")
         return()

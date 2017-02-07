@@ -10,12 +10,12 @@ include(${CMAKE_CURRENT_LIST_DIR}/../utils/cmut__utils__parse_arguments.cmake)
 
 function(cmut__install__install_config_directory)
 
-    cmut__util__parse_arguments(cmut__install__install_config_directory
-                                __ARGS
-                                ""
-                                "DESTINATION"
-                                "DIRECTORY"
-                                ${ARGN})
+    cmut__utils__parse_arguments(cmut__install__install_config_directory
+                                 __ARGS
+                                 ""
+                                 "DESTINATION"
+                                 "DIRECTORY"
+                                 ${ARGN})
 
     if(__ARGS_DIRECTORY STREQUAL "")
         return()

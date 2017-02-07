@@ -5,7 +5,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../cmut_message.cmake)
 
 function(cmut__script__add_cmake_opt result)
 
-    cmut__util__parse_arguments__m(cmut__script__add_cmake_opt
+    cmut__utils__parse_arguments__m(cmut__script__add_cmake_opt
         opt    
         "RESOLVE_PATH;DEFAULT_ENV"
         "NAME;DESC"

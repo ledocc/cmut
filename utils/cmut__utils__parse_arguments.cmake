@@ -7,12 +7,12 @@ include(${CMAKE_CURRENT_LIST_DIR}/../cmut_message.cmake)
 
 
 
-macro(cmut__util__parse_arguments function_name
-                                  prefix options
-                                  one_value_keywords
-                                  multi_value_keywords)
+macro(cmut__utils__parse_arguments function_name
+                                   prefix options
+                                   one_value_keywords
+                                   multi_value_keywords)
 
-    set(function_name cmut__util__parse_arguments)
+    set(function_name cmut__utils__parse_arguments)
 
 
     cmake_parse_arguments(${prefix}
