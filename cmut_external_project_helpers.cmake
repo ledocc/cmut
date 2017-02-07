@@ -2,6 +2,9 @@ if(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
 set(${CMAKE_CURRENT_LIST_FILE}_include "1")
 
 include(cmut_define_num_core_available)
+include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__parse_version.cmake")
+
+
 
 cmake_policy(VERSION 3.5.2)
 
@@ -54,6 +57,11 @@ macro(cmut_define_EP_version name version)
     set(CMUT_EP_${name}_VERSION ${version} CACHE STRING "${name} version to build")
     __cmut_ep_version_to_name(${CMUT_EP_${name}_VERSION} CMUT_EP_${name}_VERSION_NAME)
     variable_watch(CMUT_EP_${name}_VERSION __cmut_EP__on_change_version_name)
+
+    cmut__utils__parse_version(${version} CMUT_EP_${name}_VERSION_MAJOR
+                                          CMUT_EP_${name}_VERSION_MINOR
+                                          CMUT_EP_${name}_VERSION_PATCH)
+
 endmacro()
 
 
