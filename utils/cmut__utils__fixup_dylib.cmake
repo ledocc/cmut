@@ -7,55 +7,13 @@ cmake_policy(SET CMP0054 NEW)
 
 include(${CMAKE_CURRENT_LIST_DIR}/../cmut_message.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cmut__utils__parse_arguments.cmake)
-
-
-
-function(cmut__utils__find_install_name_tool)
-
-    cmut__utils__parse_arguments(find_install_name_tool "__" "REQUIRED" "" "")
-
-
-    if(NOT APPLE)
-        cmut_warning("install_name_tool available only on apple.")
-	return()
-    endif()
-
-    find_program(INSTALL_NAME_TOOL_CMD "install_name_tool")
-    mark_as_advanced(INSTALL_NAME_TOOL_CMD)
-
-    if(__REQUIRED AND (NOT INSTALL_NAME_TOOL_CMD))
-        cmut_error("install_name_tool not found.")
-	return()
-    endif()
-
-endfunction()
-
-function(cmut__utils__find_otool)
-
-    cmut__utils__parse_arguments(find_otool "__" "REQUIRED" "" "")
-
-
-    if(NOT APPLE)
-        cmut_warning("otool available only on apple.")
-	return()
-    endif()
-
-    find_program(OTOOL_CMD "otool")
-    mark_as_advanced(OTOOL_CMD)
-
-    if(__REQUIRED AND (NOT OTOOL_CMD))
-        cmut_error("otool not found.")
-	return()
-    endif()
-
-endfunction()
-
+include(${CMAKE_CURRENT_LIST_DIR}/cmut__utils__find_program.cmake)
 
 
 function(cmut__utils__fixup_dylib_id item)
 
-    cmut__utils__find_install_name_tool(REQUIRED)
-    cmut__utils__find_otool(REQUIRED)
+    cmut__utils__find_program(install_name_tool REQUIRED)
+    cmut__utils__find_program(otool REQUIRED)
 
     get_filename_component(item "${item}" REALPATH)
     if(NOT EXISTS "${item}")
@@ -100,8 +58,9 @@ endfunction()
 
 function(cmut__utils__fixup_dylib_dependencies item install_dir)
 
-    cmut__utils__find_install_name_tool(REQUIRED)
-    cmut__utils__find_otool(REQUIRED)
+
+    cmut__utils__find_program(install_name_tool REQUIRED)
+    cmut__utils__find_program(otool REQUIRED)
 
     get_filename_component(item "${item}" REALPATH)
     if(NOT EXISTS "${item}")
