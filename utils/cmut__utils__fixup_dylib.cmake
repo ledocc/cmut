@@ -17,7 +17,7 @@ function(cmut__utils__fixup_dylib_id item)
 
     get_filename_component(item "${item}" REALPATH)
     if(NOT EXISTS "${item}")
-        cmut_warning("file ${item} not found. Fixup dylib id skipped.")
+        cmut_warn("file ${item} not found. Fixup dylib id skipped.")
         return()
     endif()
 
@@ -28,10 +28,10 @@ function(cmut__utils__fixup_dylib_id item)
 
 
     # remove <file path:>
-    string(REPLACE "${item}:\n" "" id_value ${id_value})
+    string(REGEX REPLACE "[^\n]*:\n" "" id_value ${id_value})
 
     # remove end line
-    string(REPLACE "\n" "" id_value ${id_value})
+    string(REPLACE "\n" "" id_value "${id_value}")
 
     get_filename_component(filename "${id_value}" NAME)
     set(rpath_filename "@rpath/${filename}")
@@ -75,7 +75,7 @@ function(cmut__utils__fixup_dylib_dependencies item install_dir)
 
 
     # remove "file path:"
-    string(REPLACE "${item}:\n" "" dependencies_value "${dependencies_value}")
+    string(REGEX REPLACE "[^\n]*:\n" "" dependencies_value "${dependencies_value}")
 
     # split end line
     string(REPLACE "\n" ";" dependencies_value ${dependencies_value})
@@ -97,15 +97,13 @@ function(cmut__utils__fixup_dylib_dependencies item install_dir)
         # remove begin and end space
         string(STRIP ${dependency} dependency)
 
-        get_filename_component(filename ${dependency} NAME)
-        get_filename_component(dirname ${dependency} DIRECTORY)
-
-
-	if(NOT dirname STREQUAL install_dir)
+        if (NOT "${dependency}" MATCHES "^${install_dir}/.*$")
 	    continue()
 	endif()
 
-        set(rpath_filename "@rpath/${filename}")
+
+        string(REPLACE "${install_dir}" "@rpath" rpath_filename ${dependency})
+
 
         if(NOT "rpath_filename" STREQUAL id_value)
     
@@ -125,4 +123,28 @@ function(cmut__utils__fixup_dylib_dependencies item install_dir)
     endforeach()
 
 endfunction()
+
+
+function(cmut__utils__install_name_tool output )
+
+    cmut__utils__find_program(install_name_tool REQUIRED)
+    
+    foreach(arg ${ARGN})
+        set(args "${args} \"${arg}\"")
+    endforeach()
+
+    execute_process(
+        COMMAND "${INSTALL_NAME_TOOL_CMD}" ${args}
+	RESULT_VARIABLE cmd_result
+        OUTPUT_VARIABLE cmd_output
+    )
+
+    if(NOT cmd_result EQUAL 0)
+        cmut_error("cmut__utils__install_name_tool : \"install_name_tool ${args}\" failed.")
+    endif()
+    
+    set(${output} ${cmd_output} PARENT_SCOPE)
+
+endfunction()
+
 
