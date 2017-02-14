@@ -17,7 +17,14 @@ function(cmut__build__msvc__set_runtime_link_type link_type)
         cmut_error("cmut__build__msvc__set_runtime_link_type : \"${link_type}\" not a valid runtime link type")
     endif()
     
-    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+
+    if(NOT CMAKE_BUILD_TYPE)
+        set(__BUILD_TYPE "Release")
+    else()
+        set(__BUILD_TYPE ${CMAKE_BUILD_TYPE})
+    endif()
+
+    if ("${__BUILD_TYPE}" STREQUAL "Debug")
         set(runtime_link_type_option ${runtime_link_type_option}d)
     endif()
     
