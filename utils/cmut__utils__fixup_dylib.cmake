@@ -79,33 +79,42 @@ function(cmut__utils__fixup_dylib_dependencies item install_dir)
 
     # split end line
     string(REPLACE "\n" ";" dependencies_value ${dependencies_value})
-
+    cmut_debug("dependencies_value = ${dependencies_value}")
 
 
     set(loop_index 0)
     foreach(dependency ${dependencies_value})
+        cmut_debug("dependency = ${dependency}")
 
 	math(EXPR loop_index "${loop_index} + 1")
-
         if(loop_index EQUAL 1)
             continue()
         endif()
+
   
         # remove (compatibility ...)
         string(REGEX REPLACE " *\\(compatibility.*\\)$" " " dependency ${dependency})
 
         # remove begin and end space
         string(STRIP ${dependency} dependency)
+        cmut_debug("cleaned dependency = ${dependency}")
 
-        if (NOT "${dependency}" MATCHES "^${install_dir}/.*$")
+
+        get_filename_component(dirname ${dependency} DIRECTORY)
+        if (dirname AND (NOT "${dependency}" MATCHES "^${install_dir}/.*$"))
+	    cmut_debug("dirname\(${dirname}\) != install_dir\(${install_dir}\)")
 	    continue()
 	endif()
 
 
-        string(REPLACE "${install_dir}" "@rpath" rpath_filename ${dependency})
+	if (dirname)
+	    string(REPLACE "${install_dir}" "@rpath" rpath_filename ${dependency})
+        else()
+            set(rpath_filename "@rpath/${dependency}")
+        endif()
 
 
-        if(NOT "rpath_filename" STREQUAL id_value)
+        if(NOT rpath_filename STREQUAL id_value)
     
             execute_process(
                 COMMAND "${INSTALL_NAME_TOOL_CMD}" -change "${dependency}" "${rpath_filename}" "${item}"
