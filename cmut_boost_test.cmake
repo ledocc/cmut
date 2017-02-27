@@ -65,7 +65,6 @@ endfunction()
 
 function(cmut_test__find_turtle)
 
-
     if(HUNTER_ENABLED)
         hunter_add_package(turtle)
     endif()
