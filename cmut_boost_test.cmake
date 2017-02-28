@@ -4,6 +4,7 @@
 # conveniant function to add boost test
 
 include(CMakePrintHelpers)
+include("${CMAKE_CURRENT_LIST_DIR}/cmut__find.cmake")
 
 set(CMUT_TEST__HUNTER_BOOST_TEST_COMPONENTS
     chrono
@@ -63,12 +64,14 @@ function(cmut_test__find_boost_test version)
 
 endfunction()
 
+
 function(cmut_test__find_turtle)
 
     if(HUNTER_ENABLED)
         hunter_add_package(turtle)
     endif()
 
+    list(APPEND CMAKE_MODULE_PATH "${CMUT_FIND_MODULE_PATH}")
     find_package(Turtle)
 
     if(NOT TURTLE_FOUND)
