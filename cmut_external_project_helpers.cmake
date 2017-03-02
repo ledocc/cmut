@@ -250,6 +250,7 @@ function(cmut_EP_collect_cmake_variable resultVariable)
     cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_OSX_ARCHITECTURES)
     cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_OSX_DEPLOYMENT_TARGET)
     cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_OSX_SYSROOT)
+    cmut_EP_add_variable_if_defined(__cmake_vars CMAKE_MACOSX_RPATH)
 
     set(${resultVariable} ${__cmake_vars} PARENT_SCOPE)
 
