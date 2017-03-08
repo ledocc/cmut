@@ -296,7 +296,18 @@ macro(cmut_EP_autotools_config_build_install_command)
     set(CMUT_EP_${module}_CONFIGURE_CMD export PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig && ../${module}/${CMUT_EP_AUTOTOOLS_CONFIGURE_CMD} "${CMUT_EP_${module}_CONFIG_ARG}")
     set(CMUT_EP_${module}_BUILD_CMD     ${CMAKE_MAKE_PROGRAM} -j${CMUT_NUM_CORE_AVAILABLE})
     set(CMUT_EP_${module}_INSTALL_CMD   ${CMAKE_MAKE_PROGRAM} install)
+endmacro()
 
+macro(cmut_EP_cmake_config_build_install_command)
+
+    set(CMAKE_COMMAND_BUILD_OPTS)
+    if((${CMAKE_MAKE_PROGRAM} MATCHES ".*/make$") OR (${CMAKE_MAKE_PROGRAM} MATCHES ".*/jom$"))
+        set(CMAKE_COMMAND_BUILD_OPTS -- -j${CMUT_NUM_CORE_AVAILABLE})
+    endif()
+
+    set(CMUT_EP_${module}_CONFIGURE_CMD ${CMAKE_COMMAND} "${CMUT_EP_${module}_CONFIG_ARG}" "../${module}")
+    set(CMUT_EP_${module}_BUILD_CMD     ${CMAKE_COMMAND} --build . ${CMAKE_COMMAND_BUILD_OPTS})
+    set(CMUT_EP_${module}_INSTALL_CMD   ${CMAKE_COMMAND} --build . --target install ${CMAKE_COMMAND_BUILD_OPTS})
 endmacro()
 
 macro(cmut_EP_assemble_config_build_install_command)
@@ -355,6 +366,12 @@ function(cmut_EP_assemble_download_command)
 
 endfunction()
 
+function(cmut_EP_assemble_update_command)
+    set(CMUT_EP_${module}_UPDATE_CMD
+        UPDATE_COMMAND ${CMUT_EP_${module}_UPDATE_CMD}
+        PARENT_SCOPE)
+endfunction()
+
 function(cmut_EP_assemble_log_command)
 
     __cmut_EP_test_variable(module)
@@ -371,6 +388,35 @@ function(cmut_EP_assemble_log_command)
     )
 
 endfunction()
+
+
+function(cmut_EP_assemble_command_and_define_external_project module)
+
+    cmut_EP_assemble_download_command()
+    cmut_EP_assemble_update_command()
+    cmut_EP_assemble_config_build_install_command()
+    cmut_EP_assemble_log_command()
+
+    if(DEFINED CMUT_EP_PREFIX)
+        set(CMUT_EP_${module}_PREFIX PREFIX ${CMUT_EP_PREFIX}/${module})
+    endif()
+
+    include(ExternalProject)
+    ExternalProject_Add(
+        ${module}
+        ${CMUT_EP_${module}_PREFIX}
+        DEPENDS ${CMUT_EP_${module}_DEPENDS}
+        ${CMUT_EP_${module}_DOWNLOAD_CMD}
+        TIMEOUT ${CMUT_EP_DOWNLOAD_TIMEOUT}
+        BUILD_IN_SOURCE ${CMUT_EP_${module}_BUILD_IN_SOURCE}
+        ${CMUT_EP_${module}_UPDATE}
+        ${CMUT_EP_${module}_CONFIG_BUILD_INSTALL}
+        ${CMUT_EP_${module}_LOG_CMD}
+)
+
+endfunction()
+
+
 
 
 endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
