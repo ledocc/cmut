@@ -8,13 +8,11 @@ if(DEFINED ${CMAKE_CURRENT_LIST_FILE}_include)
 endif()
 set(${CMAKE_CURRENT_LIST_FILE}_include "1")
 
+cmut_info("cmut_define_num_core_available is deprecated, use system/cmut__system__num_core_available.cmake instead")
 
-cmake_host_system_information(
-    RESULT __cmut_num_core_available
-    QUERY  NUMBER_OF_LOGICAL_CORES)
 
-if(__cmut_num_core_available LESS 1)
-    set(__cmut_num_core_available 1)
-endif()
 
+include("${CMAKE_CURRENT_LIST_DIR/system/cmut__system__num_core_available.cmake}")
+
+cmut__system__get_num_core_available(__cmut_num_core_available)
 set(CMUT_NUM_CORE_AVAILABLE ${__cmut_num_core_available} CACHE STRING "number of parallel job used to build")
