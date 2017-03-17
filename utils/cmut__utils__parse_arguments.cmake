@@ -14,7 +14,6 @@ macro(cmut__utils__parse_arguments function_name
 
     set(function_name cmut__utils__parse_arguments)
 
-
     cmake_parse_arguments(${prefix}
         "${options}"
         "${one_value_keywords}"
@@ -22,7 +21,8 @@ macro(cmut__utils__parse_arguments function_name
         ${ARGN}
         )
 
-    if(CMUT_DEBUG)
+    if(CMUT__UTILS__PARSE_ARGUMENT__DEBUG)
+        cmut_debug("${function_name} arguments parsed :")
         foreach(v ${options})
             cmut_debug("${prefix}_${v} = ${${prefix}_${v}}")
         endforeach()
