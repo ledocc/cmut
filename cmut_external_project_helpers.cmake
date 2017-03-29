@@ -307,7 +307,7 @@ macro(cmut_EP_cmake_config_build_install_command)
         set(CMAKE_COMMAND_BUILD_OPTS -- -j${CMUT_NUM_CORE_AVAILABLE})
     endif()
 
-    set(CMUT_EP_${module}_CONFIGURE_CMD ${CMAKE_COMMAND} "${CMUT_EP_${module}_CONFIG_ARG}" "../${module}")
+    set(CMUT_EP_${module}_CONFIGURE_CMD ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" "${CMUT_EP_${module}_CONFIG_ARG}" "../${module}")
     set(CMUT_EP_${module}_BUILD_CMD     ${CMAKE_COMMAND} --build . ${CMAKE_COMMAND_BUILD_OPTS})
     set(CMUT_EP_${module}_INSTALL_CMD   ${CMAKE_COMMAND} --build . --target install ${CMAKE_COMMAND_BUILD_OPTS})
 endmacro()
