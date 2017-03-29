@@ -4,7 +4,7 @@ set(${CMAKE_CURRENT_LIST_FILE}_include "1")
 include(cmut_define_num_core_available)
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__parse_version.cmake")
 
-include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut_message.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/cmut_message.cmake")
 cmut_warn("cmut_external_project_helpers is deprecated. \"Use https://github.com/ledocc/byd.git\" instead")
 
 
