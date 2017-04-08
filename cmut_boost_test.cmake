@@ -99,7 +99,7 @@ function(cmut_add_boost_test namespace test_src_file)
 
     endwhile()
 
-    set(name ${namespace}_${_test_exec_name})
+    set(name ${namespace}__${_test_exec_name})
 
     add_executable(${name} ${test_src_file})
 
