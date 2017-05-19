@@ -62,6 +62,7 @@ function(cmut__install__install_library target)
         LIBRARY  DESTINATION "${cmut__install__library_dir}"
         RUNTIME  DESTINATION "${cmut__install__runtime_dir}"
         INCLUDES DESTINATION "${cmut__install__include_dir}"
+        COMPONENT runtime
         )
 
 
@@ -90,8 +91,4 @@ function(cmut__install__install_library target)
         "${target}"
     )
 
-
-
 endfunction()
-
-
