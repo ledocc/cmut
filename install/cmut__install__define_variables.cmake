@@ -21,9 +21,12 @@ macro(__cmut__install__define_variables)
 
         set(cmut__install__config_dir  "lib/cmake/${PROJECT_NAME}")
         set(cmut__install__include_dir "include")
-        set(cmut__install__binary_dir  "bin")
+        set(cmut__install__runtime_dir "bin")
         set(cmut__install__library_dir "lib")
         set(cmut__install__archive_dir "lib")
+        set(cmut__install__private_header_dir "include")
+        set(cmut__install__public_header_dir  "include")
+        set(cmut__install__resource_dir       "resource")
 
         set(cmut__install__project_config "${cmut__install__config_dir}/${PROJECT_NAME}Config.cmake")
         set(cmut__install__version_config "${cmut__install__config_dir}/${PROJECT_NAME}ConfigVersion.cmake")

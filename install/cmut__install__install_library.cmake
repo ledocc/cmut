@@ -28,7 +28,7 @@ function(cmut__install__install_library target)
         DIRECTORY   "${${target}_INCLUDE_DIR}"
         DESTINATION "${cmut__install__include_dir}"
         COMPONENT   devel
-    )
+        )
 
 
     # install generated "export header"
@@ -54,15 +54,24 @@ function(cmut__install__install_library target)
 
     set(target_export_name "${target}${cmut__install__target_export_name_posfix}")
 
+
     # install lib
     install(
         TARGETS  ${target}
         EXPORT   ${target_export_name}
         ARCHIVE  DESTINATION "${cmut__install__archive_dir}"
+        COMPONENT "runtime"
         LIBRARY  DESTINATION "${cmut__install__library_dir}"
+        COMPONENT "runtime"
         RUNTIME  DESTINATION "${cmut__install__runtime_dir}"
+        COMPONENT "runtime"
+        PRIVATE_HEADER DESTINATION "${cmut__install__private_header_dir}"
+        COMPONENT "devel"
+        PUBLIC_HEADER  DESTINATION "${cmut__install__public_header_dir}"
+        COMPONENT "devel"
+        RESOURCE       DESTINATION "${cmut__install__resource_header_dir}"
+        COMPONENT "devel"
         INCLUDES DESTINATION "${cmut__install__include_dir}"
-        COMPONENT runtime
         )
 
 
