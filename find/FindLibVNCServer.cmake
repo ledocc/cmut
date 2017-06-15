@@ -25,7 +25,7 @@ set(LibVNCServer_Server_INCLUDE_DIRS ${LibVNCServer_INCLUDE_DIR})
 
 
 
-find_library(LibVNCServer_Client_LIBRARY vncclient
+find_library(LibVNCServer_Client_LIBRARY vncclient vncclientd
     HINTS ${_LibVNCServer_path_to_search}
     PATH_SUFFIXES lib lib64
 )
