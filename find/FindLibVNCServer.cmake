@@ -25,66 +25,75 @@ set(LibVNCServer_Server_INCLUDE_DIRS ${LibVNCServer_INCLUDE_DIR})
 
 
 
-find_library(LibVNCServer_Client_LIBRARY vncclient vncclientd
-    HINTS ${_LibVNCServer_path_to_search}
-    PATH_SUFFIXES lib lib64
-)
+macro(libvnc__find_library name)
 
-#find_package(OpenSSL)
-#find_package(JPEG)
+    string(TOLOWER ${name} libName)
+
+
+    find_library(
+        LibVNCServer_${name}_LIBRARY_RELEASE
+        NAMES vnc${libName}
+        HINTS ${_LibVNCServer_path_to_search}
+        )
+
+    find_library(
+        LibVNCServer_${name}_LIBRARY_DEBUG
+        NAMES vnc${libName}d
+        HINTS ${_LibVNCServer_path_to_search}
+        )
+
+    set(LibVNCServer_${name}_LIBRARIES
+        ${LibVNCServer_${name}_LIBRARY_RELEASE}
+        ${LibVNCServer_${name}_LIBRARY_DEBUG}
+        )
+
+    include(FindPackageHandleStandardArgs)
+    find_package_handle_standard_args(
+        LibVNCServer_${name} FOUND_VAR LibVNCServer_${name}_FOUND
+        REQUIRED_VARS
+            LibVNCServer_${name}_INCLUDE_DIRS
+            LibVNCServer_${name}_LIBRARIES
+        )
+
+    if (NOT LibVNCServer_${name}_FOUND)
+        return()
+    endif()
+
+
+    if (LibVNCServer_${name}_LIBRARY_RELEASE)
+        cmut__find__import_target(LibVNCServer ${name}
+            LANGUAGE "CXX"
+            INCLUDE_DIR "${LibVNCServer_INCLUDE_DIR}"
+            CONFIG RELEASE
+            LIBRARY "${LibVNCServer_Client_LIBRARY_RELEASE}"
+            DEFAULT
+            )
+    endif()
+
+    if (LibVNCServer_${name}_LIBRARY_DEBUG)
+        if (NOT LibVNCServer_${name}_LIBRARY_RELEASE)
+            set(OPT DEFAULT)
+        endif()
+
+        cmut__find__import_target(LibVNCServer ${name}
+            LANGUAGE "CXX"
+            INCLUDE_DIR "${LibVNCServer_INCLUDE_DIR}"
+            CONFIG DEBUG
+            LIBRARY "${LibVNCServer_Client_LIBRARY_DEBUG}"
+            ${OPT}
+            LINK_LIBRARIES OpenSSL::SSL OpenSSL::Crypto JPEG::JPEG PNG::PNG ZLIB::ZLIB
+            )
+    endif()
+
+
+endmacro()
+
+
+find_package(OpenSSL)
+find_package(JPEG)
+find_package(PNG)
 find_package(ZLIB)
 
-set(LibVNCServer_Client_LIBRARIES ${LibVNCServer_Client_LIBRARY} ${ZLIB_LIBRARIES})
 
-
-find_library(LibVNCServer_Server_LIBRARY vncserver
-    HINTS ${_LibVNCServer_path_to_search}
-    PATH_SUFFIXES lib lib64
-)
-set(LibVNCServer_Server_LIBRARIES ${LibVNCServer_Server_LIBRARY})
-
-
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(
-    LibVNCServer_Client FOUND_VAR LibVNCServer_Client_FOUND
-    REQUIRED_VARS
-        LibVNCServer_Client_INCLUDE_DIRS
-        LibVNCServer_Client_LIBRARIES
-)
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(
-    LibVNCServer_Server FOUND_VAR LibVNCServer_Server_FOUND
-    REQUIRED_VARS
-        LibVNCServer_Server_INCLUDE_DIRS
-        LibVNCServer_Server_LIBRARIES
-)
-
-
-
-
-
-if(ZLIB_FOUND)
-    list(APPEND dependencies_library ${ZLIB_LIBRARIES})
-endif()
-
-if(LibVNCServer_CLient_FOUND)
-
-    set(target_name libvncserver::client)
-
-    add_library(${target_name} UNKNOWN IMPORTED)
-    set_target_properties(
-        ${target_name}
-            PROPERTIES
-                INTERFACE_INCLUDE_DIRECTORIES "${LibVNCServer_Client_INCLUDE_DIRS}"
-        )
-
-    set_target_properties(
-        ${target_name}
-            PROPERTIES
-                IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
-                IMPORTED_LOCATION "${LibVNCServer_Client_LIBRARY}"
-                INTERFACE_LINK_LIBRARIES ${dependencies_library}
-        )
-endif()
+libvnc__find_library( Client )
+libvnc__find_library( Server )
