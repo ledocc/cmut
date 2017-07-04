@@ -3,8 +3,8 @@ cmut__utils__define_header_guard()
 
 
 
-include(${CMAKE_CURRENT_LIST_DIR}/cmut__install__define_variables.cmake)
-
+include("${CMAKE_CURRENT_LIST_DIR}/cmut__install__define_variables.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/cmut__install__component_dependency.cmake")
 
 
 # cmut__install__install_library :
@@ -92,12 +92,7 @@ function(cmut__install__install_library target)
         COMPONENT devel
     )
 
-    set_property(
-        GLOBAL
-        APPEND
-        PROPERTY
-            CMUT__INSTALL_PROJECT_SUPPORTED_COMPONENTS
-        "${target}"
-    )
+    cmut__install__add_component_dependency(devel ${target})
+    cmut__install__add_component_dependency(runtime ${target})
 
 endfunction()

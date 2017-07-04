@@ -25,14 +25,6 @@ function(cmut__install__install_config_and_version)
     )
 
 
-    get_property(__CMUT__INSTALL__PROJECT_SUPPORTED_COMPONENTS
-        GLOBAL
-        PROPERTY
-            CMUT__INSTALL_PROJECT_SUPPORTED_COMPONENTS
-    )
-
-
-    
     # generate Config file
     configure_package_config_file(
         "${config_in_filepath}"
@@ -52,6 +44,6 @@ function(cmut__install__install_config_and_version)
         set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY OFF)
         export(PACKAGE ${PROJECT_NAME})
     endif()
-    
+
 
 endfunction()

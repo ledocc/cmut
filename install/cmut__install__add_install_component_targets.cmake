@@ -1,3 +1,5 @@
+include("${CMAKE_CURRENT_LIST_DIR}/cmut__install__component_dependency.cmake")
+
 
 
 function(cmut__install__add_install_component_targets)
@@ -19,6 +21,15 @@ function(cmut__install__add_install_component_targets)
                         -P ${CMAKE_BINARY_DIR}/cmake_install.cmake
                 )
         endif()
+
+
+        cmut__install__get_component_dependency(${component} dependencies)
+        list(LENGTH dependencies dependenciesSize)
+
+        if(dependenciesSize)
+            add_dependencies(install_${component} ${dependencies})
+        endif()
+
 
     endforeach()
 
