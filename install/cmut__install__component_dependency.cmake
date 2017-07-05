@@ -4,6 +4,11 @@
 
 function(cmut__install__add_component_dependency component)
 
+    if(ARGC LESS 2)
+        return()
+    endif()
+
+
     set_property(
         GLOBAL
         APPEND
@@ -11,6 +16,10 @@ function(cmut__install__add_component_dependency component)
             CMUT__INSTALL__${component}_COMPONENTS_DEPENDENCIES
         "${ARGN}"
     )
+
+    if(TARGET install_${component})
+        add_dependencies(install_${component} "${ARGN}")
+    endif()
 
 endfunction()
 
