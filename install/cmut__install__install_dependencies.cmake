@@ -128,3 +128,42 @@ function(cmut__install__install_dependencies name)
     )
 
 endfunction()
+
+
+
+
+
+
+function(cmut__install__install_directory_items directory_ component_)
+
+    file(
+        GLOB files
+        RELATIVE "${directory_}"
+        "${directory_}/*"
+    )
+
+    list(LENGTH files filesLenght)
+    if(NOT ${filesLenght})
+        cmut_warn("${directory_} directory is empty. Nothing to install.")
+        return()
+    endif()
+
+
+    __cmut__install__define_variables()
+
+    if(NOT ${component_} STREQUAL "")
+        set(__component_directive COMPONENT ${component_})
+    endif()
+
+    foreach(__dir ${files})
+
+        install(
+            DIRECTORY   "${directory_}/${__dir}"
+            DESTINATION "."
+            COMPONENT runtime
+            ${__component_directive}
+        )
+
+    endforeach()
+
+endfunction()
