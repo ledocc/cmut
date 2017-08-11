@@ -92,6 +92,14 @@ function(cmut__install__install_library target)
         COMPONENT devel
     )
 
+    set_property(
+        GLOBAL
+        APPEND
+        PROPERTY
+            CMUT__INSTALL__${PROJECT_NAME}_SUPPORTED_COMPONENTS
+        "${target}"
+    )
+
     cmut__install__add_component_dependency(devel ${target})
     cmut__install__add_component_dependency(runtime ${target})
 

@@ -26,6 +26,11 @@ function(cmut__install__install_config_and_version)
 
 
     # generate Config file
+    get_property(__CMUT__INSTALL__PROJECT_SUPPORTED_COMPONENTS
+        GLOBAL
+        PROPERTY
+        CMUT__INSTALL__${PROJECT_NAME}_SUPPORTED_COMPONENTS
+    )
     configure_package_config_file(
         "${config_in_filepath}"
         "${cmut__install__project_config}"

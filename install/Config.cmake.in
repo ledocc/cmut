@@ -54,6 +54,3 @@ if(@PROJECT_NAME@_unsupported_components)
 endif()
 
 check_required_components("@PROJECT_NAME@")
-
-
-    
