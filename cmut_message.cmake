@@ -3,7 +3,7 @@ cmut__utils__define_header_guard()
 
 
 
-include(${CMAKE_CURRENT_LIST_DIR}//cmut_color_message.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cmut_color_message.cmake)
 
 
 
