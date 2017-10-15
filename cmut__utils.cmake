@@ -2,6 +2,7 @@
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__chmod.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__directory.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__error_if_empty.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__execute_process.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__find_program.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__fixup_dylib.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__get_build_time.cmake")
