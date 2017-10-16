@@ -8,13 +8,13 @@ include( cmut_determine_lib_postfix )
 include( cmut_define_install_dirs )
 
 
-# Prototype : 
+# Prototype :
 # INSTALL_LIBRARY( TARGET_NAME [ INCLUDE_DIRS include_dir1 [include_dir2 [...]] ]
 #                              [ INCLUDE_FILES include_file1 [include_file2 [...]] DEST_DIR destination_directory ]
 #                              [ INSTALL_PDB TRUE|FALSE ]
 #                              [ COMPONENT component ] )
 function( CMUT_INSTALL_LIBRARY TARGET_NAME )
-    
+
     #set(CMUT_INSTALL_LIBRARY_COMPONENT CMAKE_INSTALL_DEFAULT_COMPONENT_NAME)
     #set(CMUT_INSTALL_LIBRARY_INSTALL_PDB FALSE)
     #
@@ -28,12 +28,12 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
     set( ARG_LIST ${ARGV} )
     set( TYPES_NAME_ARG_LIST INCLUDE_DIRS INCLUDE_FILES INSTALL_PDB COMPONENT )
 
-    
-    
+
+
     if( NOT DEFINED CMUT_LIB_POSTFIX )
         cmut_determine_lib_postfix()
     endif()
-    
+
     #-----------------------------------------------------------------------------
     # define install directory
     #-----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
         ARCHIVE DESTINATION ${CMUT_INSTALL_ARCHIVEDIR}
     )
 
-    
+
     #-----------------------------------------------------------------------------
     # install include directories if required
     #-----------------------------------------------------------------------------
@@ -61,18 +61,18 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
     if( NUM_INCLUDE_DIRS_TO_INSTALL GREATER 0 )
         install( DIRECTORY ${INCLUDE_DIRS_TO_INSTALL} DESTINATION ${CMUT_INSTALL_INCDIR} )
     endif()
-    
-    
+
+
     #-----------------------------------------------------------------------------
     # install include files if required
     #-----------------------------------------------------------------------------
     cmut_parse_args( INCLUDE_FILES ARG_LIST TYPES_NAME_ARG_LIST INCLUDE_FILES__ARG_LIST )
-    
+
     set(INCLUDE_FILES__TYPES_NAME_ARG_LIST INCLUDE_FILES DEST_DIR)
     set(INCLUDE_FILES__ARG_LIST INCLUDE_FILES ${INCLUDE_FILES__ARG_LIST} )
     cmut_parse_args( INCLUDE_FILES INCLUDE_FILES__ARG_LIST INCLUDE_FILES__TYPES_NAME_ARG_LIST INCLUDE_FILES_TO_INSTALL )
     cmut_parse_args( DEST_DIR      INCLUDE_FILES__ARG_LIST INCLUDE_FILES__TYPES_NAME_ARG_LIST CUSTOM_DESTINATION_DIR_NAME )
-    
+
     list( LENGTH INCLUDE_FILES_TO_INSTALL NUM_INCLUDE_FILES_TO_INSTALL )
     if( NUM_INCLUDE_FILES_TO_INSTALL GREATER 0 )
         set(DESTINATION_DIR ${CMUT_INSTALL_INCDIR})
@@ -81,8 +81,8 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
         endif()
         install( FILES ${INCLUDE_FILES_TO_INSTALL} DESTINATION ${DESTINATION_DIR} )
     endif()
-    
-    
+
+
     #-----------------------------------------------------------------------------
     # install pdb file if required
     #-----------------------------------------------------------------------------
@@ -102,13 +102,13 @@ function( CMUT_INSTALL_LIBRARY TARGET_NAME )
             )
         endif()
     endif()
-    
+
 endfunction()
 
 
-# Prototype : 
-# CMUT_INSTALL_EXECUTABLE( TARGET_NAME [ INSTALL_PDB ] 
-#                                      [ COMPONENT component ] 
+# Prototype :
+# CMUT_INSTALL_EXECUTABLE( TARGET_NAME [ INSTALL_PDB ]
+#                                      [ COMPONENT component ]
 #                                      [ CONFIGURATIONS component ] )
 function( CMUT_INSTALL_EXECUTABLE TARGET_NAME )
 
@@ -119,7 +119,7 @@ function( CMUT_INSTALL_EXECUTABLE TARGET_NAME )
 
     if(CMUT_INSTALL_EXECUTABLE_COMPONENT)
         set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME ${CMUT_INSTALL_EXECUTABLE_COMPONENT})
-    
+
 
     #-----------------------------------------------------------------------------
     # define install directory
@@ -128,7 +128,7 @@ function( CMUT_INSTALL_EXECUTABLE TARGET_NAME )
         cmut_define_install_dirs()
     endif()
 
-    
+
     #-----------------------------------------------------------------------------
     # install target
     #-----------------------------------------------------------------------------
@@ -136,8 +136,8 @@ function( CMUT_INSTALL_EXECUTABLE TARGET_NAME )
         TARGETS ${TARGET_NAME}
         RUNTIME DESTINATION ${CMUT_INSTALL_BINDIR}
     )
-    
-        
+
+
     #-----------------------------------------------------------------------------
     # install pdb file if required
     #-----------------------------------------------------------------------------
@@ -156,7 +156,7 @@ function( CMUT_INSTALL_EXECUTABLE TARGET_NAME )
             )
         endif()
     endif()
-    
+
 endfunction()
 
 
@@ -191,7 +191,7 @@ endfunction()
 
 
 macro(cmut_add_install_component_target component dependencies)
-    add_custom_target(install_${component} ${CMAKE_COMMAND} -DCOMPONENT=${component} -P ${CMAKE_BINARY_DIR}/cmake_install.cmake)
+    add_custom_target(install_${component} ${CMAKE_COMMAND} -DCOMPONENT=${component} -P ${PROJECT_BINARY_DIR}/cmake_install.cmake)
 #    message("dependencies = ${dependencies}")
     foreach(dep ${dependencies})
         add_dependencies(install_${component} ${dep})
@@ -199,24 +199,3 @@ macro(cmut_add_install_component_target component dependencies)
 endmacro()
 
 
-function( CMUT_DEFINE_UNINSTALL_TARGET )
-
-    if(NOT CMAKEMODULES_UNINSTALL_CMAKE_IN)
-        find_file(CMAKEMODULES_UNINSTALL_CMAKE_IN private/cmake_uninstall.cmake.in 
-                  PATHS ${CMAKE_MODULE_PATH}
-                  DOC "source file used to generate uninstall target"
-                  NO_DEFAULT_PATH)
-        mark_as_advanced(FORCE CMAKEMODULES_UNINSTALL_CMAKE_IN)
-#    else()
-#        message("define_uninstall_target already called, skipped." )
-    endif()
-#-----------------------------------------------------------------------------
-### uninstall target
-#-----------------------------------------------------------------------------
-    configure_file(
-      ${CMAKEMODULES_UNINSTALL_CMAKE_IN}
-      "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-      IMMEDIATE @ONLY)
-    add_custom_target(uninstall
-      "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-endfunction()

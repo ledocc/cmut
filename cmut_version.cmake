@@ -1,0 +1,2 @@
+
+file(READ "${CMAKE_CURRENT_LIST_DIR}/version.txt" CMUT_VERSION)

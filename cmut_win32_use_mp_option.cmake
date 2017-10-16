@@ -3,6 +3,10 @@
 # define option WIN32_USE_MP to build with /MP option 
 #------------------------------------------------------------------------------
 
+include("${CMAKE_CURRENT_LIST_DIR}/cmut_deprecated.cmake")
+cmut_deprecated("cmut_win32_use_mp_option.cmake" "build/msvc/cmut__build__msvc__option_use_mp.cmake")
+
+
 macro( CMUT_WIN32_USE_MP_OPTION )
 
     if(CMAKE_HOST_WIN32 AND MSVC)
