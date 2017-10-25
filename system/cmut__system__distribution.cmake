@@ -10,31 +10,34 @@ function(cmut__system__lsb_release result)
     endif()
 
 
-    if(NOT DEFINED LSB_RELEASE_COMMAND)
+    if(NOT LSB_RELEASE_COMMAND)
         find_file(LSB_RELEASE_COMMAND lsb_release)
 
-        if(NOT DEFINED LSB_RELEASE_COMMAND)
-            cmut_error("Can't find lsb_release, check if it is installed.")
+        if(NOT LSB_RELEASE_COMMAND)
+            cmut_fatal("Can't find lsb_release, check if it is installed.")
         endif()
     endif()
 
 
-    cmut__utils__parse_function_arguments(
-        cmut__system__lsb_release result
-        "CMUT__SYSTEM__LSB_RELEASE__ARG"
-        "ID RELEASE CODENAME"
+    cmut__utils__parse_arguments(
+        cmut__system__lsb_release
+        CMUT__SYSTEM__LSB_RELEASE__ARG
+        "ID;RELEASE;CODENAME"
         ""
         ""
-        ${ARGC}
+        ${ARGN}
         )
 
 
-    if(DEFINED CMUT__SYSTEM__LSB_RELEASE__ARG_ID)
+    if(CMUT__SYSTEM__LSB_RELEASE__ARG_ID)
         set(lsb_release_opt -i)
-    elseif(DEFINED CMUT__SYSTEM__LSB_RELEASE__ARG_REVISION)
+    elseif(DEFINED CMUT__SYSTEM__LSB_RELEASE__ARG_RELEASE)
         set(lsb_release_opt -r)
     elseif(DEFINED CMUT__SYSTEM__LSB_RELEASE__ARG_CODENAME)
         set(lsb_release_opt -c)
+    else()
+        cmut_warn("cmut__system__lsb_release call with no valid argument.")
+    endif()
     endif()
 
     execute_process(COMMAND ${LSB_RELEASE_COMMAND} -s ${lsb_release_opt}
@@ -42,7 +45,7 @@ function(cmut__system__lsb_release result)
         OUTPUT_STRIP_TRAILING_WHITESPACE
         )
 
-    set(${result} ${lsb_release_result} PARENT_SCOPE)
+    set(${result} "${lsb_release_result}" PARENT_SCOPE)
 
 endfunction()
 
@@ -56,7 +59,7 @@ endfunction()
 
 function(cmut__system__get_distribution_version result)
 
-    cmut__system__lsb_release(_result REVISION)
+    cmut__system__lsb_release(_result RELEASE)
     set(${result} ${_result} PARENT_SCOPE)
 
 endfunction()
