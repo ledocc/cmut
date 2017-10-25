@@ -5,8 +5,10 @@
 
 function(cmut__system__lsb_release result)
 
-    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        cmut_error("cmut__system__lsb_release is only available on linux platform")
+    if(DEFINED CMAKE_SYSTEM_NAME)
+        if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+            cmut_error("cmut__system__lsb_release is only available on linux platform")
+        endif()
     endif()
 
 
