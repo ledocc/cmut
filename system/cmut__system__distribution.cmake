@@ -68,14 +68,34 @@ endfunction()
 
 function(cmut__system__get_distribution_name result)
 
-    cmut__system__lsb_release(_result ID)
+    if(WIN32)
+        set(_result Windows)
+    elseif(APPLE)
+        set(_result Darwin)
+    else()
+        cmut__system__lsb_release(_result ID)
+    endif()
+
     set(${result} ${_result} PARENT_SCOPE)
 
 endfunction()
 
 function(cmut__system__get_distribution_version result)
 
-    cmut__system__lsb_release(_result RELEASE)
+    if(WIN32)
+        set(_result ${CMAKE_CXX_COMPILER_VERSION})
+    elseif(APPLE)
+        if(NOT CMAKE_OSX_DEPLOYMENT_TARGET STREQUAL "")
+            set(_result ${CMAKE_OSX_DEPLOYMENT_TARGET})
+        elseif(NOT CMAKE_OSX_SYSROOT STREQUAL "")
+            set(_result ${CMAKE_OSX_DEPLOYMENT_TARGET})
+        else()
+            set(_result undefined)
+        endif()
+    else()
+        cmut__system__lsb_release(_result RELEASE)
+    endif()
+
     set(${result} ${_result} PARENT_SCOPE)
 
 endfunction()
