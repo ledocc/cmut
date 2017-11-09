@@ -14,7 +14,7 @@ function(cmut__test__get_required_boost_components result)
         timer
         unit_test_framework
         )
-    set(${result} ${components} PARENT_SCOPE)
+    set(${result} "${components}" PARENT_SCOPE)
 
 endfunction()
 
