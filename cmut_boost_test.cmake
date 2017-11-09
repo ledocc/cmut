@@ -6,40 +6,29 @@
 include(CMakePrintHelpers)
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__find.cmake")
 
-set(CMUT_TEST__HUNTER_BOOST_TEST_COMPONENTS
-    chrono
-    timer
-    test
-    )
 
-set(CMUT_TEST__BOOST_TEST_COMPONENTS
-    chrono
-    timer
-    unit_test_framework
-    )
+function(cmut__test__get_required_boost_components result)
 
-if(HUNTER_ENABLED)
-    set(__cmut_test__boost_search_mode CONFIG)
-endif()
+    set(components
+        chrono
+        timer
+        unit_test_framework
+        )
+    set(${result} ${components} PARENT_SCOPE)
 
+endfunction()
+
+
+cmut__test__get_required_boost_components( CMUT_TEST__BOOST_TEST_COMPONENTS )
 
 
 function(cmut_test__find_boost_test version)
 
-    if(HUNTER_ENABLED)
-        hunter_add_package(
-            Boost
-            COMPONENTS
-                ${CMUT_TEST__HUNTER_BOOST_TEST_COMPONENTS}
-            )
-    endif()
-
-
+    cmut__test__get_required_boost_components(boost_test_components)
     find_package(
         Boost ${version}
         REQUIRED COMPONENTS
-            ${CMUT_TEST__BOOST_TEST_COMPONENTS}
-        ${__cmut_test__boost_search_mode}
+            ${boost_test_components}
         )
 
     if(NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
@@ -48,10 +37,8 @@ function(cmut_test__find_boost_test version)
     endif()
     set(Boost_UNIT_TEST_FRAMEWORK_FOUND ${Boost_UNIT_TEST_FRAMEWORK_FOUND} PARENT_SCOPE)
 
-    foreach(component ${CMUT_TEST__BOOST_TEST_COMPONENTS})
-        link_libraries(
-            Boost::${component}
-            )
+    foreach(component ${boost_test_components})
+        link_libraries( Boost::${component} )
     endforeach()
 
 
