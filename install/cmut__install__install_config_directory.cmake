@@ -27,18 +27,21 @@ function(cmut__install__install_config_directory)
 
     foreach(dir "${__ARGS_DIRECTORY}")
 
-        get_filename_component(absolute_dir ${dir} ABSOLUTE)
-        get_filename_component(absolute_parent_dir ${absolute_dir} DIRECTORY)
-
+        get_filename_component(absolute_src_dir ${dir} ABSOLUTE)
         file(GLOB_RECURSE files
             LIST_DIRECTORIES false
-            "${absolute_dir}/*"
+            "${absolute_src_dir}/*"
             )
 
-       
+        # if DESTINATION end by "/", install "DIRECTORY content" and not "DIRECTORY"
+        if(__ARGS_DESTINATION MATCHES "^.+[^/]+$")
+            get_filename_component(absolute_src_dir ${absolute_src_dir} DIRECTORY)
+        endif()
+
+
         foreach(f ${files})
 
-            file(RELATIVE_PATH dst_file "${absolute_parent_dir}" "${f}")
+            file(RELATIVE_PATH dst_file "${absolute_src_dir}" "${f}")
             get_filename_component(dst_dir ${dst_file} DIRECTORY)
 
             cmut__install__install_config_file(
