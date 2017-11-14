@@ -1,4 +1,5 @@
 
+include("${CMAKE_CURRENT_LIST_DIR}/config/cmut__config__default_build_type.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/config/cmut__config__log_project.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/config/cmut__config__option_build_documentation.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/config/cmut__config__option_build_shared_libs.cmake")
