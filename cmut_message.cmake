@@ -19,7 +19,11 @@ set(cmut_message_fatal_message_color ${cmut_message_error_color})
 
 
 
-set(ENV{__cmut_message_count} 0)
+set(ENV__cmut_message_count $ENV{__cmut_message_count})
+if("${ENV__cmut_message_count}" STREQUAL "")
+    set(ENV{__cmut_message_count} 0)
+endif()
+
 function(cmut_message status severity message)
 
     string(TIMESTAMP timestamp)
