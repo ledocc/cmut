@@ -4,7 +4,9 @@
 
 
 include( cmut_determine_lib_postfix )
+include( cmut_deprecated )
 
+cmut_deprecated("cmut_define_output_dirs" "cmut__build__define_output_dir")
 
 # TODO on MacOS, define function for bundle, Framework and regular bin
 macro( cmut_define_output_dirs )
