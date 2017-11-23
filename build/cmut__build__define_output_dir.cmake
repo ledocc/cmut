@@ -9,17 +9,17 @@ function( cmut__build__define_output_dir )
 
 
     if(APPLE)
-        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${base_dir})
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${base_dir} PARENT_SCOPE)
     else()
-        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${base_dir}/bin)
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${base_dir}/bin PARENT_SCOPE)
     endif()
 
     if(WIN32)
-        set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${base_dir}/bin)
+        set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${base_dir}/bin PARENT_SCOPE)
     else()
-        set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${base_dir}/lib)
+        set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${base_dir}/lib PARENT_SCOPE)
     endif()
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${base_dir}/lib)
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${base_dir}/lib PARENT_SCOPE)
 
 
     cmut_info("[cmut][build] : runtime output dir : ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
