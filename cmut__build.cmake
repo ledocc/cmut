@@ -5,5 +5,6 @@ include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__enable_color_with_ninja.cm
 include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__enable_cxx_standard.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__enable_runpath_link.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__enable_warning.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__get_build_id.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__msvc.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__set_cxx_visibility.cmake")
