@@ -10,7 +10,7 @@ function(cmut__utils__execute_process)
         cmut__utils__execute_process
         ARG
         "FATAL"
-        "WORKING_DIRECTORY;LOG_FILE"
+        "WORKING_DIRECTORY;LOG_FILE;RESULT_VARIABLE"
         "COMMAND"
         ${ARGN}
         )
@@ -60,6 +60,10 @@ function(cmut__utils__execute_process)
         else()
             cmut_warn("${msg}")
         endif()
+    endif()
+
+    if(ARG_RESULT_VARIABLE)
+        set(${ARG_RESULT_VARIABLE} ${result} PARENT_SCOPE)
     endif()
 
 endfunction()
