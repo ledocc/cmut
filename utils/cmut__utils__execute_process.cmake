@@ -9,7 +9,7 @@ function(cmut__utils__execute_process)
     cmut__utils__parse_arguments(
         cmut__utils__execute_process
         ARG
-        "FATAL"
+        "FATAL;PRINT_LOG_ON_ERROR"
         "WORKING_DIRECTORY;LOG_FILE;RESULT_VARIABLE"
         "COMMAND"
         ${ARGN}
@@ -24,8 +24,8 @@ function(cmut__utils__execute_process)
     endif()
 
     if(ARG_LOG_FILE)
-        list(APPEND execute_process_args OUTPUT_FILE ${ARG_LOG_FILE}-out.log)
-        list(APPEND execute_process_args ERROR_FILE ${ARG_LOG_FILE}-err.log)
+        list(APPEND execute_process_args OUTPUT_FILE "${ARG_LOG_FILE}-out.log")
+        list(APPEND execute_process_args ERROR_FILE "${ARG_LOG_FILE}-err.log")
     else()
         list(APPEND execute_process_args OUTPUT_VARIABLE output_var)
         list(APPEND execute_process_args ERROR_VARIABLE error_var)
@@ -42,24 +42,32 @@ function(cmut__utils__execute_process)
 
 
     if(result)
-        set(msg "Command failed: ${result}\n")
+
+        set(msg "\nCommand failed: ${result}\n")
         foreach(arg IN LISTS ARG_COMMAND)
             set(msg "${msg} '${arg}'")
         endforeach()
         set(msg "${msg}\n")
 
-        if(NOT ARG_LOG_FILE)
-            set(msg "${msg}output : ${output_var}\n")
-            set(msg "${msg}error  : ${error_var}")
+        if( (NOT ARG_LOG_FILE) OR ARG_PRINT_LOG_ON_ERROR )
+            if(ARG_LOG_FILE)
+                file(READ "${ARG_LOG_FILE}-out.log" output_var)
+                file(READ "${ARG_LOG_FILE}-err.log" error_var)
+            endif()
+            set(msg "${msg}output :\n${output_var}\n")
+            set(msg "${msg}error  :\n${error_var}\n")
         else()
-            set(msg "${msg}See also\n  ${ARG_LOG_FILE}-*.log")
+            set(msg "${msg}See also\n${ARG_LOG_FILE}-*.log")
         endif()
+        cmut_info("${msg}")
+
 
         if(ARG_FATAL)
-            cmut_fatal("${msg}")
+            cmut_fatal("execute_process failed.")
         else()
-            cmut_warn("${msg}")
+            cmut_fatal("execute_process failed.")
         endif()
+
     endif()
 
     if(ARG_RESULT_VARIABLE)
