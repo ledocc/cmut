@@ -111,7 +111,7 @@ function(__cmut__build__init_coverage)
         CMAKE_C_FLAGS_COVERAGE
         CMAKE_EXE_LINKER_FLAGS_COVERAGE
         CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
-    
+
     IF ( NOT (CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "Coverage"))
         MESSAGE( WARNING "Code coverage results with an optimized (non-Debug) build may be misleading" )
     ENDIF() # NOT CMAKE_BUILD_TYPE STREQUAL "Debug"
@@ -119,7 +119,7 @@ function(__cmut__build__init_coverage)
 
     set_property(GLOBAL PROPERTY __CMUT__BUILD__COVERAGE_INITIALIZED ON)
 
-    
+
 endfunction()
 
 # Param _targetname     The name of new the custom make target
@@ -143,7 +143,7 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
         __cmut__build__init_coverage()
     endif()
 
-    
+
     get_property(
         COVERAGE_INITIALIZATION_SUCCESS
         GLOBAL
@@ -154,8 +154,8 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
         return()
     endif()
 
-    
-    
+
+
     IF(NOT LCOV_PATH)
         cmut_error("lcov not found! Aborting...")
     ENDIF() # NOT LCOV_PATH
@@ -179,8 +179,8 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
         COMMAND ${test_command} ${ARGV3}
 
         # Capturing lcov counters and generating report
-        COMMAND ${LCOV_PATH} --directory . --capture --output-file ${coverage_info} 
-        COMMAND ${LCOV_PATH} --remove ${coverage_info} 'test/*' 'tests/*' '/usr/*' '*.hunter/*' --output-file ${coverage_cleaned}
+        COMMAND ${LCOV_PATH} --directory . --capture --output-file ${coverage_info}
+        COMMAND ${LCOV_PATH} --remove ${coverage_info} '${PROJECT_SOURCE_DIR}/test/*' '${PROJECT_SOURCE_DIR}/tests/*' '/usr/*' '*/_install/*' --output-file ${coverage_cleaned}
         COMMAND ${GENHTML_PATH} -o ${_outputname} ${coverage_cleaned} -p ${PROJECT_SOURCE_DIR}
         COMMAND ${CMAKE_COMMAND} -E remove ${coverage_info} ${coverage_cleaned}
 
@@ -188,8 +188,8 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
         COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters and generating report."
         )
     cmut_info("target \"coverage\" defined. After build your test, call \"make coverage\"")
-    
-    
+
+
     # Show info where to find the report
     ADD_CUSTOM_COMMAND(TARGET ${_targetname} POST_BUILD
         COMMAND ;
@@ -237,7 +237,7 @@ ENDFUNCTION() # SETUP_TARGET_FOR_COVERAGE_COBERTURA
 function(cmut__build__add_coverage_target)
 
     set(target coverage)
-    
+
     if(NOT CMAKE_BUILD_TYPE STREQUAL "Coverage")
         return()
     endif()
@@ -247,5 +247,5 @@ function(cmut__build__add_coverage_target)
     endif()
 
     setup_target_for_coverage(${target} ctest coverage)
-    
+
 endfunction()
