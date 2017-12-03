@@ -5,8 +5,8 @@ cmut__utils__define_header_guard()
 
 
 
-# This option control the "include what you use" mode.
-# When ON, all c/cxx comiler file is tested by iwyu, and useless include is reported at compile time
+# This option control the "clang-tidy" mode.
+# When ON, all c/cxx compiled file is tested by clang-tidy
 function(cmut__config__option_clang_tidy defaultValue)
 
     if(NOT DEFINED ClangTidy_FOUND)

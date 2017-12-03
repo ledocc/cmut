@@ -6,7 +6,7 @@ cmut__utils__define_header_guard()
 
 
 # This option control the "include what you use" mode.
-# When ON, all c/cxx comiler file is tested by iwyu, and useless include is reported at compile time
+# When ON, all c/cxx compiled file is tested by iwyu, and useless include is reported at compile time
 function(cmut__config__option_include_what_you_use defaultValue)
 
     if(NOT DEFINED IncludeWhatYouUse_FOUND)
