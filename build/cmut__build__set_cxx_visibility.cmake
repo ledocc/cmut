@@ -35,6 +35,6 @@ function(cmut__build__set_cxx_visibility value)
     endif()
 
 
-    cmut_info("cxx use \"${value}\" visibility")
+    cmut_info("[cmut] - cxx use \"${value}\" visibility")
 
 endfunction()
