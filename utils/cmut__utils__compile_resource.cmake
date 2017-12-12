@@ -107,7 +107,7 @@ std::vector<uint8_t> ${variable_name} = {
     static_cast<std::uint8_t>(0x${output})
 };
 
-std::string ${variable_name}__FileName = \"${input_file}\";
+std::string ${variable_name}__FileName = \"${input_name}\";
 
 } // namespace ${namespace}
 ")
