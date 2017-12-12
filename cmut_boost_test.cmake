@@ -88,7 +88,7 @@ function(cmut_add_boost_test namespace test_src_file)
 
     set(name ${namespace}__${_test_exec_name})
 
-    add_executable(${name} ${test_src_file})
+    add_executable(${name} ${test_src_file} ${ARGN})
 
     add_test(NAME "${name}" COMMAND ${name})
 
@@ -112,7 +112,14 @@ function(cmut_add_boost_tests namespace)
 
     foreach(file ${ARGN})
         #message("add test ${file}")
-        cmut_add_boost_test(${namespace} ${file})
+        cmut_add_boost_test(${namespace} ${file} "")
     endforeach()
+
+endfunction()
+
+function(cmut_add_boost_test_single namespace test_source)
+
+    #message("add test ${test_source}")
+    cmut_add_boost_test(${namespace} ${test_source} ${ARGN})
 
 endfunction()
