@@ -5,6 +5,7 @@
 
 include(CMakePrintHelpers)
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__find.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/cmut__test.cmake")
 
 
 function(cmut__test__get_required_boost_components result)
@@ -72,21 +73,10 @@ function(cmut_test__find_turtle)
 endfunction()
 
 
+
 function(cmut_add_boost_test namespace test_src_file)
 
-    get_filename_component(_test_exec_name ${test_src_file} NAME_WE)
-
-    get_filename_component(_path ${test_src_file} DIRECTORY)
-    while(_path)
-
-
-        get_filename_component(_dirname ${_path} NAME_WE)
-        set(_test_exec_name "${_dirname}_${_test_exec_name}")
-        get_filename_component(_path ${_path} DIRECTORY)
-
-    endwhile()
-
-    set(name ${namespace}__${_test_exec_name})
+    cmut__test__make_test_name(${namespace} ${test_src_file} name)
 
     add_executable(${name} ${test_src_file} ${ARGN})
 
