@@ -27,9 +27,6 @@ function(cmut__build__get_executable_build_id result)
             set(abi x86)
         endif()
 
-        message("CMAKE_CXX_COMPILER_ABI = ${CMAKE_CXX_COMPILER_ABI}")
-        message("CMAKE_INTERNAL_PLATFORM_ABI = ${CMAKE_INTERNAL_PLATFORM_ABI}")
-
         set(system_name "${distribution_name}-${distribution_version}-${abi}")
 
     elseif(CMAKE_SYSTEM_NAME MATCHES "Android")
