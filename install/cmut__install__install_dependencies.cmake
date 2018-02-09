@@ -137,13 +137,14 @@ endfunction()
 function(cmut__install__install_directory_items directory_ component_)
 
     file(
-        GLOB files
+        GLOB items
         RELATIVE "${directory_}"
         "${directory_}/*"
     )
 
-    list(LENGTH files filesLenght)
-    if(NOT ${filesLenght})
+
+    list(LENGTH items itemsLenght)
+    if(NOT ${itemsLenght})
         cmut_warn("${directory_} directory is empty. Nothing to install.")
         return()
     endif()
@@ -155,12 +156,11 @@ function(cmut__install__install_directory_items directory_ component_)
         set(__component_directive COMPONENT ${component_})
     endif()
 
-    foreach(__dir ${files})
+    foreach(__dir IN LISTS items)
 
         install(
             DIRECTORY   "${directory_}/${__dir}"
             DESTINATION "."
-            COMPONENT runtime
             ${__component_directive}
         )
 
