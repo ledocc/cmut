@@ -6,7 +6,7 @@
 include(CMakePrintHelpers)
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__find.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__test.cmake")
-
+include("${CMAKE_CURRENT_LIST_DIR}/cmut__target.cmake")
 
 function(cmut__test__get_required_boost_components result)
 
@@ -49,6 +49,10 @@ function(cmut_test__find_boost_test version)
     endif()
     add_definitions(-DBOOST_ALL_NO_LIB)
 
+
+    if( MSVC )
+        cmut__target__append_property(Boost::unit_test_framework INTERFACE_COMPILE_OPTIONS -wd4389 )
+    endif()
 
 endfunction()
 
