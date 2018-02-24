@@ -16,6 +16,6 @@ function(cmut__config__option_build_shared_libs defaultValue)
     else()
         set(CMUT__CONFIG__LINK_TYPE "static")
     endif()
-    cmut_info("library link type : ${CMUT__CONFIG__LINK_TYPE}")
+    cmut_info("[cmut][config] - library link type : ${CMUT__CONFIG__LINK_TYPE}")
 
 endfunction()

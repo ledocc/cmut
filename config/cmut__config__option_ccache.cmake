@@ -16,7 +16,7 @@ function(cmut__config__option_ccache defaultValue)
     endif()
 
     option(CMUT__CONFIG__CCACHE "Set to OFF to not use ccache." ${defaultValue})
-    cmut_info("ccache mode is ${CMUT__CONFIG__CCACHE}")
+    cmut_info("[cmut][config] - ccache mode is ${CMUT__CONFIG__CCACHE}")
 
 
     if(CMUT__CONFIG__CCACHE)

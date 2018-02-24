@@ -17,6 +17,6 @@ function(cmut__config__option_build_documentation defaultValue)
         set(BUILD_DOC_MODE "enable")
     endif()
 
-    cmut_info("build documentation : ${BUILD_DOC_MODE}")
+    cmut_info("[cmut][config] - build documentation : ${BUILD_DOC_MODE}")
 
 endfunction()

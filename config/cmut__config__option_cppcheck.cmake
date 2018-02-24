@@ -18,7 +18,7 @@ function(cmut__config__option_cppcheck defaultValue)
     endif()
 
     option(CMUT__CONFIG__CPPCHECK "Set to ON to use cppcheck." ${defaultValue})
-    cmut_info("cppcheck mode is ${CMUT__CONFIG__CPPCHECK}")
+    cmut_info("[cmut][config] - cppcheck mode is ${CMUT__CONFIG__CPPCHECK}")
 
 
     if(CMUT__CONFIG__CPPCHECK)
