@@ -24,9 +24,6 @@ function(cmut__build__enable_warning)
         ${ARGN}
     )
 
-cmut_info("cmut__build__enable_warning cmut__build__enable_warning ${__ARGS_AGGRESSIVE}")
-cmut_info("cmut__build__enable_warning cmut__build__enable_warning ${__ARGS_WARNING_AS_ERROR}")
-
     # define common variable for any gcc compatible flags, like clang
     set(__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER "-Wextra -Wall -Wpedantic")
     set(__CMUT_WARNING_PATTERN_GNU_COMPAT_COMPILER "-W[a-zA-Z0-9-+=]*")

@@ -8,8 +8,6 @@ function(cmut__target__generate_version_header target version_h_in)
 
     configure_file("${version_h_in}" "include/${version_h_path}")
 
-    cmut_info("    configure_file(\"${version_h_in}\" \"include/${version_h_path}\")")
-
     set_target_properties(${target} PROPERTIES CMUT__TARGET__VERSION_HEADER "${version_h_path}")
 
     target_sources(

@@ -36,7 +36,6 @@ function(cmut__install__install_config_and_version)
     foreach(component IN LISTS __CMUT__INSTALL__PROJECT_SUPPORTED_COMPONENTS)
 
         get_target_property(dependencies ${component} INTERFACE_LINK_LIBRARIES)
-        cmut_info("dependencies = ${dependencies}")
         foreach(dependency IN LISTS dependencies)
             get_target_property(is_imported ${dependency} IMPORTED)
             if( NOT is_imported )

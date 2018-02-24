@@ -65,7 +65,6 @@ function(cmut__install__install_library target)
 
 
     if(CMUT__CONFIG__DEVELOPER_MODE)
-        message("install ${PROJECT_BINARY_DIR}/${cmut__install__config_dir}/${target}/${target_export_name}.cmake")
         export(
             EXPORT ${target_export_name}
             NAMESPACE ${cmut__install__export_namespace}
