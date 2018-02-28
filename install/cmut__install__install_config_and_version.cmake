@@ -37,16 +37,23 @@ function(cmut__install__install_config_and_version)
 
         get_target_property(dependencies ${component} INTERFACE_LINK_LIBRARIES)
         foreach(dependency IN LISTS dependencies)
+
+            if(NOT TARGET ${dependency})
+                continue()
+            endif()
+
             get_target_property(is_imported ${dependency} IMPORTED)
             if( NOT is_imported )
                 list( APPEND __cmut__install__${component}_dependencies ${dependency})
             endif()
+
         endforeach()
 
         if(DEFINED __cmut__install__${component}_dependencies)
             set(__CMUT__INSTALL__PER_COMPONENT_DEPENDENCIES
                 "${__CMUT__INSTALL__PER_COMPONENT_DEPENDENCIES}\nset(${component}_dependencies ${__cmut__install__${component}_dependencies})")
         endif()
+
     endforeach()
 
 
