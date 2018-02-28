@@ -3,7 +3,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/../../target/cmut__target__append_property.cm
 function(cmut__package__boost__disable_warning target)
 
     if(MSVC)
-        libunocxx__target__append_property(${target} INTERFACE_COMPILE_OPTIONS
+        cmut__target__append_property(${target} INTERFACE_COMPILE_OPTIONS
             -wd4127
             -wd4244
             -wd4503
