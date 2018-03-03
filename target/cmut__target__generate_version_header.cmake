@@ -12,7 +12,7 @@ function(cmut__target__generate_version_header target version_h_in)
 
     target_sources(
         ${target}
-        PUBLIC
+        PRIVATE
             "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/${version_h_path}>"
     )
 
