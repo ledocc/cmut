@@ -2,6 +2,11 @@
 
 function(cmut__system__get_osx_sdk_short_name result)
 
+    if(NOT APPLE)
+        return()
+    endif()
+
+
     if(NOT "${CMAKE_OSX_SYSROOT}" STREQUAL "")
 
         get_filename_component(name "${CMAKE_OSX_SYSROOT}" NAME)
