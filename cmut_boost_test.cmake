@@ -33,7 +33,7 @@ function(cmut_test__find_boost_test version)
         )
 
     if(NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
-        cmut_warn("Can't found boost::unit_test_framework. Tests skipped.")
+        cmut_warn("[cmut][test][boost_test] - Can't found boost::unit_test_framework. Tests skipped.")
         return()
     endif()
     set(Boost_UNIT_TEST_FRAMEWORK_FOUND ${Boost_UNIT_TEST_FRAMEWORK_FOUND} PARENT_SCOPE)
@@ -81,6 +81,10 @@ endfunction()
 function(cmut_add_boost_test namespace test_src_file)
 
     cmut__test__make_test_name(${namespace} ${test_src_file} name)
+    if(NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
+        cmut_info("[cmut][test][boost_test] - ${name} skipped.")
+        return()
+    endif()
 
     add_executable(${name} ${test_src_file} ${ARGN})
 
