@@ -5,7 +5,8 @@
 
 include(CMakePrintHelpers)
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__find.cmake")
-
+include("${CMAKE_CURRENT_LIST_DIR}/cmut__test.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/cmut__target.cmake")
 
 function(cmut__test__get_required_boost_components result)
 
@@ -32,7 +33,7 @@ function(cmut_test__find_boost_test version)
         )
 
     if(NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
-        cmut_warn("Can't found boost::unit_test_framework. Tests skipped.")
+        cmut_warn("[cmut][test][boost_test] - Can't found boost::unit_test_framework. Tests skipped.")
         return()
     endif()
     set(Boost_UNIT_TEST_FRAMEWORK_FOUND ${Boost_UNIT_TEST_FRAMEWORK_FOUND} PARENT_SCOPE)
@@ -48,6 +49,10 @@ function(cmut_test__find_boost_test version)
     endif()
     add_definitions(-DBOOST_ALL_NO_LIB)
 
+
+    if( MSVC )
+        cmut__target__append_property(Boost::unit_test_framework INTERFACE_COMPILE_OPTIONS -wd4389 )
+    endif()
 
 endfunction()
 
@@ -72,23 +77,16 @@ function(cmut_test__find_turtle)
 endfunction()
 
 
+
 function(cmut_add_boost_test namespace test_src_file)
 
-    get_filename_component(_test_exec_name ${test_src_file} NAME_WE)
+    cmut__test__make_test_name(${namespace} ${test_src_file} name)
+    if(NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
+        cmut_info("[cmut][test][boost_test] - ${name} skipped.")
+        return()
+    endif()
 
-    get_filename_component(_path ${test_src_file} DIRECTORY)
-    while(_path)
-
-
-        get_filename_component(_dirname ${_path} NAME_WE)
-        set(_test_exec_name "${_dirname}_${_test_exec_name}")
-        get_filename_component(_path ${_path} DIRECTORY)
-
-    endwhile()
-
-    set(name ${namespace}__${_test_exec_name})
-
-    add_executable(${name} ${test_src_file})
+    add_executable(${name} ${test_src_file} ${ARGN})
 
     add_test(NAME "${name}" COMMAND ${name})
 
@@ -112,7 +110,14 @@ function(cmut_add_boost_tests namespace)
 
     foreach(file ${ARGN})
         #message("add test ${file}")
-        cmut_add_boost_test(${namespace} ${file})
+        cmut_add_boost_test(${namespace} ${file} "")
     endforeach()
+
+endfunction()
+
+function(cmut_add_boost_test_single namespace test_source)
+
+    #message("add test ${test_source}")
+    cmut_add_boost_test(${namespace} ${test_source} ${ARGN})
 
 endfunction()

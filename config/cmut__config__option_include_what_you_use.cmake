@@ -18,7 +18,7 @@ function(cmut__config__option_include_what_you_use defaultValue)
     endif()
 
     option(CMUT__CONFIG__IWYU "Set to ON to use iwyu (include_what_you_use)."  ${defaultValue})
-    cmut_info("IWYU (include what you use) mode is ${CMUT__CONFIG__IWYU}")
+    cmut_info("[cmut][config] - IWYU (include what you use) mode is ${CMUT__CONFIG__IWYU}")
 
     if(CMUT__CONFIG__IWYU)
         set(CMAKE_C_INCLUDE_WHAT_YOU_USE   "${IncludeWhatYouUse_COMMAND}" PARENT_SCOPE)

@@ -11,6 +11,6 @@ cmut__utils__define_header_guard()
 function(cmut__config__option_developer_mode)
 
     option(CMUT__CONFIG__DEVELOPER_MODE "Set to ON to install/export Config file in build tree." OFF)
-    cmut_info("Developer mode is ${CMUT__CONFIG__DEVELOPER_MODE}")
+    cmut_info("[cmut][config] - Developer mode is ${CMUT__CONFIG__DEVELOPER_MODE}")
 
 endfunction()

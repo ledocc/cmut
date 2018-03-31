@@ -35,20 +35,9 @@ function(cmut__install__install_library target)
     get_target_property(target_type ${target} TYPE)
     if(NOT target_type STREQUAL INTERFACE_LIBRARY)
 
-        get_target_property(export_header ${target} CMUT__TARGET__EXPORT_HEADER)
+        __cmut__install__install_generated_header(${target} CMUT__TARGET__EXPORT_HEADER)
+        __cmut__install__install_generated_header(${target} CMUT__TARGET__VERSION_HEADER)
 
-        set(export_header_filepath "${CMAKE_CURRENT_BINARY_DIR}/include/${export_header}")
-        if (EXISTS ${export_header_filepath})
-
-            get_filename_component(export_header_dirname "${export_header}" DIRECTORY)
-
-            install(
-                FILES       "${export_header_filepath}"
-                DESTINATION "${cmut__install__include_dir}/${export_header_dirname}"
-                COMPONENT   devel
-            )
-
-        endif()
     endif()
 
 
@@ -76,7 +65,6 @@ function(cmut__install__install_library target)
 
 
     if(CMUT__CONFIG__DEVELOPER_MODE)
-        message("install ${PROJECT_BINARY_DIR}/${cmut__install__config_dir}/${target}/${target_export_name}.cmake")
         export(
             EXPORT ${target_export_name}
             NAMESPACE ${cmut__install__export_namespace}
@@ -102,5 +90,28 @@ function(cmut__install__install_library target)
 
     cmut__install__add_component_dependency(devel ${target})
     cmut__install__add_component_dependency(runtime ${target})
+
+endfunction()
+
+
+
+
+function(__cmut__install__install_generated_header target target_property)
+
+    get_target_property(generated_header_path ${target} ${target_property})
+    set(generated_header_filepath "${CMAKE_CURRENT_BINARY_DIR}/include/${generated_header_path}")
+
+    if(EXISTS ${generated_header_filepath})
+
+        get_filename_component(generated_header_dirname "${generated_header_path}" DIRECTORY)
+
+        install(
+            FILES       "${generated_header_filepath}"
+            DESTINATION "${cmut__install__include_dir}/${generated_header_dirname}"
+            COMPONENT   devel
+            )
+
+    endif()
+
 
 endfunction()

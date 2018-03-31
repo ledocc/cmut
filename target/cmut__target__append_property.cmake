@@ -20,7 +20,6 @@ function(cmut__target__append_property target property)
 
 
     if(NOT __value STREQUAL "")
-        message(STATUS "set_target_properties(${target} PROPERTIES ${property} ${__value})")
         set_target_properties(${target} PROPERTIES ${property} "${__value}")
     endif()
 

@@ -18,7 +18,7 @@ function(cmut__config__option_clang_tidy defaultValue)
     endif()
 
     option(CMUT__CONFIG__CLANG_TIDY "Set to ON to use clang-tidy ()." ${defaultValue})
-    cmut_info("clang-tidy mode is ${CMUT__CONFIG__CLANG_TIDY}")
+    cmut_info("[cmut][config] - clang-tidy mode is ${CMUT__CONFIG__CLANG_TIDY}")
 
 
     if(CMUT__CONFIG__CLANG_TIDY)

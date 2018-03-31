@@ -20,7 +20,7 @@ function(cmut__target__generate_export_header target)
 
     target_sources(
         ${target}
-        PUBLIC
+        PRIVATE
             "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/${export_filename}>"
     )
 

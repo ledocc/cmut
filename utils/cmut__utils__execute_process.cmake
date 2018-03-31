@@ -64,8 +64,6 @@ function(cmut__utils__execute_process)
 
         if(ARG_FATAL)
             cmut_fatal("execute_process failed.")
-        else()
-            cmut_fatal("execute_process failed.")
         endif()
 
     endif()

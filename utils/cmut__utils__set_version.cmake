@@ -31,3 +31,16 @@ function(cmut__utils__set_project_version version_)
     set(PROJECT_VERSION ${version_} PARENT_SCOPE)
 
 endfunction()
+
+function(cmut__utils__set_project_version_from_file file_path_)
+
+    if(NOT EXISTS "${file_path_}")
+        cmut_fatal("[cmut][utils] set_project_version_from_file : no such file : ${file_path_}")
+    endif()
+
+    file(STRINGS "${file_path_}" version LIMIT_COUNT 1)
+
+    __cmut__utils__set_version(${PROJECT_NAME} ${version} cmut__utils__set_project_version_from_file)
+    set(PROJECT_VERSION ${version} PARENT_SCOPE)
+
+endfunction()

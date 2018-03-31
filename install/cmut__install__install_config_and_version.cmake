@@ -31,6 +31,33 @@ function(cmut__install__install_config_and_version)
         PROPERTY
         CMUT__INSTALL__${PROJECT_NAME}_SUPPORTED_COMPONENTS
     )
+
+    unset(__CMUT__INSTALL__PER_COMPONENT_DEPENDENCIES)
+    foreach(component IN LISTS __CMUT__INSTALL__PROJECT_SUPPORTED_COMPONENTS)
+
+        get_target_property(dependencies ${component} INTERFACE_LINK_LIBRARIES)
+        foreach(dependency IN LISTS dependencies)
+
+            if(NOT TARGET ${dependency})
+                continue()
+            endif()
+
+            get_target_property(is_imported ${dependency} IMPORTED)
+            if( NOT is_imported )
+                list( APPEND __cmut__install__${component}_dependencies ${dependency})
+            endif()
+
+        endforeach()
+
+        if(DEFINED __cmut__install__${component}_dependencies)
+            set(__CMUT__INSTALL__PER_COMPONENT_DEPENDENCIES
+                "${__CMUT__INSTALL__PER_COMPONENT_DEPENDENCIES}\nset(${component}_dependencies ${__cmut__install__${component}_dependencies})")
+        endif()
+
+    endforeach()
+
+
+
     configure_package_config_file(
         "${config_in_filepath}"
         "${cmut__install__project_config}"

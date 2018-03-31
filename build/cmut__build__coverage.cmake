@@ -91,19 +91,19 @@ function(__cmut__build__init_coverage)
     ENDIF() # CHECK VALID COMPILER
 
     SET(CMAKE_CXX_FLAGS_COVERAGE
-        "-g -O0 --coverage -fprofile-arcs -ftest-coverage"
+        "-g -O0 --coverage"
         CACHE STRING "Flags used by the C++ compiler during coverage builds."
         FORCE )
     SET(CMAKE_C_FLAGS_COVERAGE
-        "-g -O0 --coverage -fprofile-arcs -ftest-coverage"
+        "-g -O0 --coverage"
         CACHE STRING "Flags used by the C compiler during coverage builds."
         FORCE )
     SET(CMAKE_EXE_LINKER_FLAGS_COVERAGE
-        ""
+        "--coverage"
         CACHE STRING "Flags used for linking binaries during coverage builds."
         FORCE )
     SET(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
-        ""
+        "--coverage"
         CACHE STRING "Flags used by the shared libraries linker during coverage builds."
         FORCE )
     MARK_AS_ADVANCED(
@@ -180,7 +180,15 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
 
         # Capturing lcov counters and generating report
         COMMAND ${LCOV_PATH} --directory . --capture --output-file ${coverage_info}
-        COMMAND ${LCOV_PATH} --remove ${coverage_info} '${PROJECT_SOURCE_DIR}/test/*' '${PROJECT_SOURCE_DIR}/tests/*' '/usr/*' '*/_install/*' --output-file ${coverage_cleaned}
+        COMMAND ${LCOV_PATH}
+            --remove ${coverage_info}
+            '${PROJECT_SOURCE_DIR}/test/*'
+            '${PROJECT_SOURCE_DIR}/tests/*'
+            '${PROJECT_SOURCE_DIR}/*/mocks/*'
+            '*.moc'
+            '/usr/*'
+            '*/_install/*'
+            --output-file ${coverage_cleaned}
         COMMAND ${GENHTML_PATH} -o ${_outputname} ${coverage_cleaned} -p ${PROJECT_SOURCE_DIR}
         COMMAND ${CMAKE_COMMAND} -E remove ${coverage_info} ${coverage_cleaned}
 
