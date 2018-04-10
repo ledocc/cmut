@@ -42,7 +42,7 @@ function(cmut__utils__create_header_from_file input_file header_file source_file
     # Read the data form the input file
     file(READ "${input_file}" contents HEX)
     string(REGEX MATCHALL ".." output "${contents}")
-    string(REGEX REPLACE ";" "),\n  static_cast<std::uint8_t>(0x" output "${output}")
+    string(REGEX REPLACE ";" "),\n  std::uint8_t(0x" output "${output}")
 
 
 
@@ -103,8 +103,8 @@ extern std::string ${variable_name}__FileName;
 
 namespace ${namespace} {
 
-std::vector<uint8_t> ${variable_name} = {
-    static_cast<std::uint8_t>(0x${output})
+std::vector<std::uint8_t> ${variable_name} = {
+    std::uint8_t(0x${output})
 };
 
 std::string ${variable_name}__FileName = \"${input_name}\";
