@@ -33,6 +33,11 @@ function(cmut__utils__fixup_dylib_id item)
     # remove end line
     string(REPLACE "\n" "" id_value "${id_value}")
 
+    # if no id, return
+    if("${id_value}" STREQUAL "")
+        return()
+    endif()
+
     get_filename_component(filename "${id_value}" NAME)
     set(rpath_filename "@rpath/${filename}")
 
