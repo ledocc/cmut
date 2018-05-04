@@ -16,6 +16,10 @@ function(cmut__build__enable_cxx_standard version)
         ${ARGN}
     )
 
+    if(NOT DEFINED ARG__CXX_EXTENSIONS)
+        set(ARG__CXX_EXTENSIONS OFF)
+    endif()
+
     set(CMAKE_CXX_EXTENSIONS ${ARG__CXX_EXTENSIONS} PARENT_SCOPE)
     set(CMAKE_CXX_STANDARD ${version} PARENT_SCOPE)
     set(CMAKE_CXX_STANDARD_REQUIRED ON PARENT_SCOPE)
