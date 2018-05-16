@@ -41,7 +41,7 @@ function(cmut__install__install_target target)
 
     # install generated "export header"
     get_target_property(target_type ${target} TYPE)
-    if(NOT target_type STREQUAL INTERFACE_LIBRARY)
+    if((target_type STREQUAL SHARED_LIBRARY) OR (target_type STREQUAL STATIC_LIBRARY))
 
         __cmut__install__install_generated_header(${target} CMUT__TARGET__EXPORT_HEADER)
         __cmut__install__install_generated_header(${target} CMUT__TARGET__VERSION_HEADER)
@@ -62,6 +62,10 @@ function(cmut__install__install_target target)
         COMPONENT "runtime"
         RUNTIME  DESTINATION "${cmut__install__runtime_dir}"
         COMPONENT "runtime"
+        FRAMEWORK DESTINATION "${cmut__install__framework_dir}"
+        COMPONENT "runtime"
+        BUNDLE DESTINATION "${cmut__install__bundle_dir}"
+        COMPONENT "runtime"
         PRIVATE_HEADER DESTINATION "${cmut__install__private_header_dir}"
         COMPONENT "devel"
         PUBLIC_HEADER  DESTINATION "${cmut__install__public_header_dir}"
@@ -71,6 +75,30 @@ function(cmut__install__install_target target)
         INCLUDES DESTINATION "${cmut__install__include_dir}"
         )
 
+    if( (target_type STREQUAL SHARED_LIBRARY)
+            OR (target_type STREQUAL STATIC_LIBRARY)
+            OR (target_type STREQUAL INTERFACE_LIBRARY) )
+
+        __cmut__install__export_library()
+        cmut__install__add_component_dependency(devel ${target})
+
+    endif()
+
+    set_property(
+        GLOBAL
+        APPEND
+        PROPERTY
+            CMUT__INSTALL__${PROJECT_NAME}_SUPPORTED_COMPONENTS
+        "${target}"
+    )
+
+    cmut__install__add_component_dependency(runtime ${target})
+
+endfunction()
+
+
+
+function(__cmut__install__export_library)
 
     if(CMUT__CONFIG__DEVELOPER_MODE)
         export(
@@ -88,19 +116,7 @@ function(cmut__install__install_target target)
         COMPONENT devel
     )
 
-    set_property(
-        GLOBAL
-        APPEND
-        PROPERTY
-            CMUT__INSTALL__${PROJECT_NAME}_SUPPORTED_COMPONENTS
-        "${target}"
-    )
-
-    cmut__install__add_component_dependency(devel ${target})
-    cmut__install__add_component_dependency(runtime ${target})
-
 endfunction()
-
 
 
 
