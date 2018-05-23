@@ -17,7 +17,7 @@ function(cmut__install__install_target target)
 
     # test the target
     if(NOT TARGET ${target})
-        cmut_error("cmut__install__install_library : TARGET \"${target}\" not defined.")
+        cmut_error("cmut__install__install_target : TARGET \"${target}\" not defined.")
         return()
     endif()
 
@@ -80,7 +80,7 @@ function(cmut__install__install_target target)
             OR (target_type STREQUAL INTERFACE_LIBRARY) )
 
         __cmut__install__export_library()
-        cmut__install__add_component_dependency(devel ${target})
+        cmut__install__add_component_dependencies(devel ${target})
 
     endif()
 
@@ -92,7 +92,7 @@ function(cmut__install__install_target target)
         "${target}"
     )
 
-    cmut__install__add_component_dependency(runtime ${target})
+    cmut__install__add_component_dependencies(runtime ${target})
 
 endfunction()
 
