@@ -19,3 +19,5 @@ include("${CMUT_ROOT}/cmut__utils.cmake")
 include("${CMUT_ROOT}/cmut__system.cmake")
 include("${CMUT_ROOT}/cmut__target.cmake")
 include("${CMUT_ROOT}/cmut__test.cmake")
+
+include("${CMUT_ROOT}/cmut_deprecated.cmake")

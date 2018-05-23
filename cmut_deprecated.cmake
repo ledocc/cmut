@@ -6,3 +6,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/cmut_message.cmake")
 function(cmut_deprecated old new)
     cmut_warn("cmut file \"${old}\" is deprecated, prefer \"${new}\" instead")
 endfunction()
+
+function(cmut_deprecated_function old new)
+    cmut_warn("cmut function \"${old}\" is deprecated, prefer \"${new}\" instead")
+endfunction()
