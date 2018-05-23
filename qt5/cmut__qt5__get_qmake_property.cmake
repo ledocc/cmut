@@ -3,7 +3,12 @@
 function(cmut__qt5__get_qmake_property result property_name)
 
     if(NOT QT5_QMAKE_COMMAND)
-        find_file(QT5_QMAKE_COMMAND qmake)
+        if(TARGET Qt5::qmake)
+            get_target_property(qmake_location Qt5::qmake IMPORTED_LOCATION)
+            set(QT5_QMAKE_COMMAND ${qmake_location} CACHE FILEPATH "")
+        else()
+            find_file(QT5_QMAKE_COMMAND qmake)
+        endif()
 
         if(NOT QT5_QMAKE_COMMAND)
             cmut_fatal("Can't find qmake, check if it is installed.")
