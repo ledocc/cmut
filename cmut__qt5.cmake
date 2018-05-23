@@ -1,1 +1,6 @@
 include("${CMAKE_CURRENT_LIST_DIR}/qt5/cmut__qt5__get_qmake_property.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/qt5/cmut__qt5__install_opengl32sw.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/qt5/cmut__qt5__install_plugins.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/qt5/cmut__qt5__install_qml.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/qt5/cmut__qt5__install_qtWebEngine.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/qt5/cmut__qt5__install_qt_conf.cmake")
