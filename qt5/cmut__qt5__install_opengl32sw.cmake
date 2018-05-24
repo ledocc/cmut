@@ -2,7 +2,7 @@
 
 function(cmut__qt5__download_opengl32sw result)
 
-    find_file(7Z_COMMAND "7z")
+    find_file(7Z_COMMAND NAMES 7z 7z.exe)
     if(NOT 7Z_COMMAND)
         cmut_error("7z executable is required to unzip opengl32sw archive.")
     endif()
@@ -59,9 +59,6 @@ function(cmut__qt5__install_opengl32sw)
 
     install(
         FILES
-            ${QT5_INSTALL_PREFIX}/bin/libEGL$<$<CONFIG:Debug>:d>.dll
-            ${QT5_INSTALL_PREFIX}/bin/libGLESv2$<$<CONFIG:Debug>:d>.dll
-            ${D3DCOMPILER}
             ${OPENGL32SW_FILE}
         DESTINATION "${ARG_DESTINATION}"
         COMPONENT "${ARG_COMPONENT}"
@@ -84,9 +81,12 @@ function(cmut__qt5__install_angle)
         cmut_debug("[cmut][qt5][install_angle] - DESTINATION is required.")
     endif()
 
-
+    list(APPEND CMAKE_MODULE_PATH "${CMUT_ROOT}/find")
     find_package(D3Dcompiler)
 
+    cmut__qt5__get_qmake_property(QT5_INSTALL_PREFIX INSTALL_PREFIX)
+
+    
     install(
         FILES
             ${QT5_INSTALL_PREFIX}/bin/libEGL$<$<CONFIG:Debug>:d>.dll
