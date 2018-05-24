@@ -1,5 +1,5 @@
 
-
+include("${CMUT_ROOT}/cmut_is_release_bin.cmake")
 
 function(cmut__qt5__install_qml)
 
