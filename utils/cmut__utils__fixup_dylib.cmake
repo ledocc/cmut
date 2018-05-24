@@ -25,9 +25,10 @@ function(cmut__otool__get_id result dylib)
         COMMAND "${OTOOL_CMD}" -DX "${dylib}"
         OUTPUT_VARIABLE id_value
         )
-
+    cmut_info("id_value = ${id_value}")
     # remove end line
     string(REPLACE "\n" "" id_value "${id_value}")
+    cmut_info("id_value = ${id_value}")
 
     set(${result} ${id_value} PARENT_SCOPE)
 
@@ -39,26 +40,29 @@ function(cmut__utils__fixup_dylib_id item)
     cmut__otool__get_id(id "${item}")
 
     # if no id, return
-    if("${id_value}" STREQUAL "")
+    if("${id}" STREQUAL "")
+        cmut_info("[cmut][utils][fixup_dylib_id] - ${item} have no id. Skipped")
         return()
     endif()
 
 
-    get_filename_component(filename "${id_value}" NAME)
+    get_filename_component(filename "${id}" NAME)
     set(rpath_filename "@rpath/${filename}")
 
-    if(NOT rpath_filename STREQUAL id_value)
+    if("${rpath_filename}" STREQUAL "${id}")
+        cmut_info("[cmut][utils][fixup_dylib_id] - ${item} id already use rpath (\"${id}\")")
+    else()
 
         execute_process(
             COMMAND "${INSTALL_NAME_TOOL_CMD}" -id "${rpath_filename}" "${item}"
 	    RESULT_VARIABLE cmd_result
-            OUTPUT_VARIABLE id_value
+            OUTPUT_VARIABLE cmd_output
             )
 
         if(cmd_result EQUAL 0)
-            cmut_info("[cmut][utils][fixup_dylib] - ${item} id: ${id_value} ==>> ${rpath_filename}")
+            cmut_info("[cmut][utils][fixup_dylib_id] - ${item} id changed from \"${id}\" to \"${rpath_filename}\"")
         else()
-            cmut_error("[cmut][utils][fixup_dylib] - ${item} id failed")
+            cmut_error("[cmut][utils][fixup_dylib_id] - ${item} : change id failed : ${cmd_output}")
         endif()
 
     endif()
@@ -75,7 +79,7 @@ function(cmut__utils__fixup_dylib_dependencies item install_dir)
 
     get_filename_component(item "${item}" REALPATH)
     if(NOT EXISTS "${item}")
-        cmut_warning("[cmut][utils][fixup_dylib] - file ${item} not found. Fixup dylib id skipped.")
+        cmut_warning("[cmut][utils][fixup_dylib] - file ${item} not found. Fixup dylib dependencies skipped.")
         return()
     endif()
 
@@ -91,7 +95,7 @@ function(cmut__utils__fixup_dylib_dependencies item install_dir)
 
     cmut__otool__get_id(item_id "${item}")
     get_filename_component(item_dirname "${item}" DIRECTORY)
-
+    
 
     foreach(dependency ${dependencies_value})
         cmut_debug("[cmut][utils][fixup_dylib] - dependency = ${dependency}")
@@ -118,8 +122,12 @@ function(cmut__utils__fixup_dylib_dependencies item install_dir)
 
 
 	if (dirname)
-            file(RELATIVE_PATH dylib_dir_to_dependency "${item_dirname}" "${dependency}")
-	    set(rpath_filename "@rpath/${dylib_dir_to_dependency}")
+            if(IS_ABSOLUTE "${dependency}")
+                file(RELATIVE_PATH dylib_dir_to_dependency "${item_dirname}" "${dependency}")
+	        set(rpath_filename "@rpath/${dylib_dir_to_dependency}")
+            else()
+                string(REPLACE "${install_dir}" "@rpath" rpath_filename ${dependency})
+            endif()
         else()
             set(rpath_filename "@rpath/${dependency}")
         endif()

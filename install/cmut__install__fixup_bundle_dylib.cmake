@@ -1,8 +1,8 @@
 
 
 
-include("${CMUT_DIR}/utils/cmut__utils__fixup_dylib.cmake")
-include("${CMUT_DIR}/utils/cmut__utils__chmod.cmake")
+include("${CMUT_ROOT}/utils/cmut__utils__fixup_dylib.cmake")
+include("${CMUT_ROOT}/utils/cmut__utils__chmod.cmake")
 
 cmake_policy(SET CMP0011 NEW)
 cmake_policy(SET CMP0009 NEW)
