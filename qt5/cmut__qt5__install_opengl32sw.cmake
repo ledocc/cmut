@@ -18,20 +18,44 @@ function(cmut__qt5__download_opengl32sw result)
         SHOW_PROGRESS
         EXPECTED_HASH SHA1=e742e9d4e16b9c69b6d844940861d3ef1748356b)
 
+
+
     execute_process(
         COMMAND "${CMAKE_COMMAND}" -E remove -f "${OPENGL32SW_FILE}"
-        COMMAND "7z" "x" "${OPENGL32SW_7Z_FILE}"
-        WORKING_DIRECTORY ${TMP_DIR}
+        WORKING_DIRECTORY "${TMP_DIR}"
+        RESULT_VARIABLE remove_result
+        OUTPUT_VARIABLE remove_output
+        ERROR_VARIABLE remove_error
+        )
+
+    if(remove_result)
+        cmut_info("fail to remove ${OPENGL32SW_FILE}")
+        cmut_info("result : ${remove_result}")
+        cmut_info("output : ${remove_output}")
+        cmut_info("error  : ${remove_error}")
+        cmut_fatal("error")
+    endif()
+
+
+    file(TO_NATIVE_PATH "${OPENGL32SW_7Z_FILE}" OPENGL32SW_7Z_FILE__NATIVE_PATH)
+
+    cmut__utils__find_program(7z REQUIRED)
+    cmut_info("7Z_CMD = ${7Z_CMD}")
+    execute_process(
+        COMMAND "${7Z_CMD}" x "${OPENGL32SW_7Z_FILE__NATIVE_PATH}"
+        WORKING_DIRECTORY "${TMP_DIR}"
         RESULT_VARIABLE 7z_result
         OUTPUT_VARIABLE 7z_output
         ERROR_VARIABLE 7z_error
         )
 
     if(7z_result)
-        cmut_info("fail to decompress ${OPENGL32SW_FILE}")
-        cmut_info("output : ${OUTPUT_VARIABLE}")
-        cmut_info("error : ${ERROR_VARIABLE}")
-        cmut_fatal("output : ${OUTPUT_VARIABLE}")
+        cmut_info("7z used :  ${7Z_CMD}")
+        cmut_info("fail to decompress ${OPENGL32SW_7Z_FILE}")
+        cmut_info("result : ${7z_result}")
+        cmut_info("output : ${7z_output}")
+        cmut_info("error  : ${7z_error}")
+        cmut_fatal("error")
     endif()
 
     set(${result} "${OPENGL32SW_FILE}" PARENT_SCOPE)
