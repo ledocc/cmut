@@ -44,6 +44,7 @@ function(cmut__install__install_target target)
     if((target_type STREQUAL SHARED_LIBRARY) OR (target_type STREQUAL STATIC_LIBRARY))
 
         __cmut__install__install_generated_header(${target} CMUT__TARGET__EXPORT_HEADER)
+        __cmut__install__install_generated_header(${target} CMUT__TARGET__FORWARD_HEADER)
         __cmut__install__install_generated_header(${target} CMUT__TARGET__VERSION_HEADER)
 
     endif()
@@ -123,19 +124,26 @@ endfunction()
 function(__cmut__install__install_generated_header target target_property)
 
     get_target_property(generated_header_path ${target} ${target_property})
-    set(generated_header_filepath "${CMAKE_CURRENT_BINARY_DIR}/include/${generated_header_path}")
-
-    if(EXISTS ${generated_header_filepath})
-
-        get_filename_component(generated_header_dirname "${generated_header_path}" DIRECTORY)
-
-        install(
-            FILES       "${generated_header_filepath}"
-            DESTINATION "${cmut__install__include_dir}/${generated_header_dirname}"
-            COMPONENT   devel
-            )
-
+    if (NOT generated_header_path)
+        return()
     endif()
 
+    foreach(filepath IN LISTS generated_header_path)
+
+        set(generated_header_filepath "${CMAKE_CURRENT_BINARY_DIR}/include/${filepath}")
+
+        if(EXISTS "${generated_header_filepath}")
+
+            get_filename_component(generated_header_dirname "${filepath}" DIRECTORY)
+
+            install(
+                FILES       "${generated_header_filepath}"
+                DESTINATION "${cmut__install__include_dir}/${generated_header_dirname}"
+                COMPONENT   devel
+                )
+
+        endif()
+
+    endforeach()
 
 endfunction()

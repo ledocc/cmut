@@ -1,0 +1,25 @@
+#ifndef ${header_guard}
+#define ${header_guard}
+
+
+
+#include <memory>
+
+
+
+${namespaces_begin}
+
+class ${class_name};
+
+using ${class_name}Ptr = std::shared_ptr<${class_name}>;
+using ${class_name}ConstPtr = std::shared_ptr<const ${class_name}>;
+
+using ${class_name}WPtr = std::weak_ptr<${class_name}>;
+using ${class_name}WConstPtr = std::weak_ptr<const ${class_name}>;
+
+using ${class_name}UPtr = std::unique_ptr<${class_name}>;
+using ${class_name}UConstPtr = std::unique_ptr<const ${class_name}>;
+
+${namespaces_end}
+
+#endif // ${header_guard}
