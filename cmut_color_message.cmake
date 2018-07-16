@@ -4,8 +4,9 @@ cmut__utils__define_header_guard()
 
 include(${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__get_num_colors_to_screen.cmake)
 
+option(CMUT_COLOR "use color in cmut log." ON)
 cmut__utils__get_num_colors_to_screen(__cmut_num_colors)
-if($ENV{CMUT_DISABLE_COLOR_MESSAGE})
+if( "$ENV{CMUT_DISABLE_COLOR_MESSAGE}" OR ( NOT CMUT_COLOR ) )
     set(__cmut_num_colors 1)
 endif()
 
