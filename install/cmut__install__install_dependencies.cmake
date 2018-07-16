@@ -173,6 +173,10 @@ function(cmut__install__install_directory_items directory_)
 
     foreach(__dir IN LISTS items)
 
+        if(NOT IS_DIRECTORY ${__dir})
+            continue()
+        endif()
+
         install(
             DIRECTORY   "${directory_}/${__dir}"
             DESTINATION "."
