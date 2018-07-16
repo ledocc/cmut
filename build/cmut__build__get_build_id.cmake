@@ -7,6 +7,16 @@
 #      android  : Android
 function(cmut__build__get_executable_build_id result)
 
+    cmut__utils__parse_arguments(
+        cmut__build__get_executable_build_id
+        ARG
+        "LINUX_AGNOSTIC"
+        ""
+        ""
+        ${ARGN}
+        )
+
+
     set(system_name ${CMAKE_SYSTEM_NAME})
     if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
@@ -18,16 +28,14 @@ function(cmut__build__get_executable_build_id result)
 
     elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
-        cmut__system__get_distribution_name(distribution_name)
-        cmut__system__get_distribution_version(distribution_version)
-
-        if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-            set(abi x86_64)
+        if(ARG_LINUX_AGNOSTIC)
+            cmut__build__get_linux_system_name(system_name)
         else()
-            set(abi x86)
+            cmut__build__get_linux_system_name(system_name
+                USE_DISTRIBUTION_NAME
+                USE_DISTRIBUTION_VERSION
+                )
         endif()
-
-        set(system_name "${distribution_name}-${distribution_version}-${abi}")
 
     elseif(CMAKE_SYSTEM_NAME MATCHES "Android")
         set(system_name "Android-api-${CMAKE_SYSTEM_VERSION}-${CMAKE_ANDROID_ARCH_ABI}")
@@ -48,6 +56,17 @@ endfunction()
 #      android  : Android-<api_level>-<abi>
 function(cmut__build__get_library_build_id result)
 
+    cmut__utils__parse_arguments(
+        cmut__build__get_library_build_id
+        ARG
+        "LINUX_AGNOSTIC"
+        ""
+        ""
+        ${ARGN}
+        )
+
+
+
     set(system_name ${CMAKE_SYSTEM_NAME})
     if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
@@ -59,16 +78,14 @@ function(cmut__build__get_library_build_id result)
 
     elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
-        cmut__system__get_distribution_name(distribution_name)
-        cmut__system__get_distribution_version(distribution_version)
-
-        if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-            set(abi x86_64)
+        if(ARG_LINUX_AGNOSTIC)
+            cmut__build__get_linux_system_name(system_name)
         else()
-            set(abi x86)
+            cmut__build__get_linux_system_name(system_name
+                USE_DISTRIBUTION_NAME
+                USE_DISTRIBUTION_VERSION
+                )
         endif()
-
-        set(system_name "${distribution_name}-${distribution_version}-${abi}")
 
     elseif(CMAKE_SYSTEM_NAME MATCHES "Android")
         set(system_name "Android-api-${CMAKE_SYSTEM_VERSION}-${CMAKE_ANDROID_ARCH_ABI}")
@@ -79,5 +96,40 @@ function(cmut__build__get_library_build_id result)
     endif()
 
     set(${result} ${system_name} PARENT_SCOPE)
+
+endfunction()
+
+
+
+function(cmut__build__get_linux_system_name result)
+
+    cmut__utils__parse_arguments(
+        cmut__build__get_linux_system_name
+        ARG
+        "USE_DISTRIBUTION_NAME;USE_DISTRIBUTION_VERSION"
+        ""
+        ""
+        ${ARGN}
+        )
+
+
+
+    if(ARG_USE_DISTRIBUTION_NAME)
+        cmut__system__get_distribution_name(distribution_name)
+        if(ARG_USE_DISTRIBUTION_VERSION)
+            cmut__system__get_distribution_version(distribution_version)
+            set(distribution_name "${distribution_name}-${distribution_version}")
+        endif()
+    else()
+        set(distribution_name "Linux")
+    endif()
+
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(abi x86_64)
+    else()
+        set(abi x86)
+    endif()
+
+    set(${result} "${distribution_name}-${abi}" PARENT_SCOPE)
 
 endfunction()
