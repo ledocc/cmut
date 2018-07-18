@@ -1,8 +1,13 @@
 
 
 
-
 function(cmut__install__add_component_dependency component)
+    cmut_deprecated_function(cmut__install__add_component_dependency cmut__install__add_component_dependencies)
+    cmut__install__add_component_dependencies(${component} ${ARGN})
+endfunction()
+
+
+function(cmut__install__add_component_dependencies component)
 
     if(ARGC LESS 2)
         return()
@@ -18,7 +23,7 @@ function(cmut__install__add_component_dependency component)
     )
 
     if(TARGET install_${component})
-        add_dependencies(install_${component} "${ARGN}")
+        add_dependencies(install_${component} ${ARGN})
     endif()
 
 endfunction()

@@ -40,3 +40,13 @@ macro(cmut__utils__parse_arguments function_name
     endif()
 
 endmacro()
+
+
+
+macro(cmut__utils__set_default_argument arg value)
+
+    if(NOT DEFINED ${arg})
+        set(${arg} "${value}")
+    endif()
+
+endmacro()

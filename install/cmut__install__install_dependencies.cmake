@@ -134,7 +134,18 @@ endfunction()
 
 
 
-function(cmut__install__install_directory_items directory_ component_)
+function(cmut__install__install_directory_items directory_)
+
+    cmut__utils__parse_arguments(
+        cmut__install__install_directory_items
+        ARG
+        "EXCLUDE_FROM_ALL"
+        "COMPONENT"
+        ""
+        ${ARGN}
+        )
+
+
 
     file(
         GLOB items
@@ -152,15 +163,24 @@ function(cmut__install__install_directory_items directory_ component_)
 
     __cmut__install__define_variables()
 
-    if(NOT ${component_} STREQUAL "")
-        set(__component_directive COMPONENT ${component_})
+    if(DEFINED ARG_COMPONENT)
+        set(__component_directive COMPONENT ${ARG_COMPONENT})
+    endif()
+
+    if(DEFINED ARG_EXCLUDE_FROM_ALL)
+        set(__exclude_from_all_directive EXCLUDE_FROM_ALL)
     endif()
 
     foreach(__dir IN LISTS items)
 
+        if(NOT IS_DIRECTORY ${__dir})
+            continue()
+        endif()
+
         install(
             DIRECTORY   "${directory_}/${__dir}"
             DESTINATION "."
+            ${__exclude_from_all_directive}
             ${__component_directive}
         )
 
