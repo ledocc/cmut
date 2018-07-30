@@ -110,11 +110,25 @@ function(cmut__qt5__install_angle)
 
     cmut__qt5__get_qmake_property(QT5_INSTALL_PREFIX INSTALL_PREFIX)
 
-    
+
+
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(QT_LIB_POSTFIX d)
+    else()
+        set(QT_LIB_POSTFIX)
+    endif()
+
+    set(files_to_install)
+    if(EXISTS "${QT5_INSTALL_PREFIX}/bin/libEGL${QT_LIB_POSTFIX}.dll")
+        list(APPEND files_to_install "${QT5_INSTALL_PREFIX}/bin/libEGL${QT_LIB_POSTFIX}.dll")
+    endif()
+    if(EXISTS "${QT5_INSTALL_PREFIX}/bin/libGLESv2${QT_LIB_POSTFIX}.dll")
+        list(APPEND files_to_install "${QT5_INSTALL_PREFIX}/bin/libGLESv2${QT_LIB_POSTFIX}.dll")
+    endif()
+
     install(
         FILES
-            ${QT5_INSTALL_PREFIX}/bin/libEGL$<$<CONFIG:Debug>:d>.dll
-            ${QT5_INSTALL_PREFIX}/bin/libGLESv2$<$<CONFIG:Debug>:d>.dll
+            ${files_to_install}
             ${D3DCOMPILER}
         DESTINATION "${ARG_DESTINATION}"
         COMPONENT "${ARG_COMPONENT}"
