@@ -173,7 +173,7 @@ function(cmut__install__install_directory_items directory_)
 
     foreach(__dir IN LISTS items)
 
-        if(NOT IS_DIRECTORY ${__dir})
+        if(NOT IS_DIRECTORY "${directory_}/${__dir}")
             continue()
         endif()
 
