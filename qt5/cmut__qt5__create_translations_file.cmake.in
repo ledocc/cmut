@@ -1,0 +1,16 @@
+
+
+include(@CMUT_ROOT@/cmut.cmake)
+
+set(QT5_QMAKE_COMMAND @QT5_QMAKE_COMMAND@)
+
+
+set(output_prefix @ARG_OUTPUT_FILE_PREFIX@)
+
+cmut__qt5__create_translations_file(
+    QT_MODULES @ARG_QT_MODULES@
+    LANGUAGES @ARG_LANGUAGES@
+    OUTPUT_FILE_PREFIX "${output_prefix}"
+    )
+
+file(TOUCH "${output_prefix}-done")
