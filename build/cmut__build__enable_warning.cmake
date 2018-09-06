@@ -18,9 +18,9 @@ function(cmut__build__enable_warning)
     cmut__utils__parse_arguments(
         cmut__build__enable_warning
         __ARGS
-        "AGGRESSIVE;WARNING_AS_ERROR"
+        "AGGRESSIVE;ERROR"
         ""
-        ""
+        "NO_ERROR"
         ${ARGN}
     )
 
@@ -32,8 +32,14 @@ function(cmut__build__enable_warning)
         set(__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER "${__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER} -Wnon-virtual-dtor -Wshadow")
     endif()
 
-    if(__ARGS_WARNING_AS_ERROR)
+    if(__ARGS_ERROR)
         set(__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER "${__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER} -Werror")
+    endif()
+
+    if(__ARGS_NO_ERROR)
+        foreach(error IN LISTS __ARGS_NO_ERROR)
+            set(__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER "${__CMUT_WARNING_FLAGS_GNU_COMPAT_COMPILER} -Wno-error=${error}")
+        endforeach()
     endif()
 
     #workaround to use MSVC variable as string (cf CMP0054 policy)
