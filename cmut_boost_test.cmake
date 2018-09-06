@@ -74,7 +74,7 @@ function(cmut_test__find_turtle)
 
     include_directories(${TURTLE_INCLUDE_DIR})
 
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         add_compile_options( -Wno-gnu-zero-variadic-macro-arguments )
     endif()
 
