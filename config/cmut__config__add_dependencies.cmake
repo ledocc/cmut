@@ -8,7 +8,7 @@ function(cmut__config__add_dependencies project package)
 
     cmake_parse_arguments(
         ARG_
-        ""
+        "REQUIRED"
         "VERSION"
         "COMPONENTS"
         ${ARGN}
@@ -17,6 +17,11 @@ function(cmut__config__add_dependencies project package)
     list(APPEND ${project}_DEPENDENCIES ${package})
     export_to_parent_scope(${project}_DEPENDENCIES)
 
+
+    if(DEFINED ARG__REQUIRED)
+        set(${project}_DEPENDENCIES_${package}_REQUIRED REQUIRED)
+        export_to_parent_scope(${project}_DEPENDENCIES_${package}_REQUIRED)
+    endif()
 
     if(DEFINED ARG__VERSION)
         set(${project}_DEPENDENCIES_${package}_VERSION ${ARG__VERSION})
@@ -34,3 +39,20 @@ function(cmut__config__add_dependencies project package)
 
 
 endfunction()
+
+
+
+
+macro(cmut__config__find_dependencies project)
+
+    foreach(package IN LISTS ${project}_DEPENDENCIES)
+
+        message(STATUS "Looking for ${package}")
+        find_package(${package} ${${project}_DEPENDENCIES_${package}_VERSION} ${${project}_DEPENDENCIES_${package}_REQUIRED}
+            COMPONENTS
+            ${${project}_DEPENDENCIES_${package}_COMPONENTS}
+            )
+
+    endforeach()
+
+endmacro()
