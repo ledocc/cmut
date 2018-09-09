@@ -127,7 +127,7 @@ function(cmut__build__get_linux_system_name result)
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(abi x86_64)
     else()
-        set(abi x86)
+        set(abi i386)
     endif()
 
     set(${result} "${distribution_name}-${abi}" PARENT_SCOPE)
