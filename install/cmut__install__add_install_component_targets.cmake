@@ -27,7 +27,7 @@ function(cmut__install__add_install_component_targets)
         list(LENGTH dependencies dependenciesSize)
 
         if(dependenciesSize)
-            add_dependencies(install_${component} ${dependencies})
+            cmut__install__add_component_dependencies__impl(install_${component} ${dependencies})
         endif()
 
 

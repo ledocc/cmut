@@ -23,8 +23,14 @@ function(cmut__install__add_component_dependencies component)
     )
 
     if(TARGET install_${component})
-        add_dependencies(install_${component} ${ARGN})
+        cmut__install__add_component_dependencies__impl(install_${component} ${ARGN})
     endif()
+
+endfunction()
+
+function(cmut__install__add_component_dependencies__impl target )
+
+        add_dependencies(${target} ${ARGN})
 
 endfunction()
 

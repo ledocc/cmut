@@ -93,7 +93,7 @@ function(cmut__install__install_target target)
         "${target}"
     )
 
-    cmut__install__add_component_dependencies(runtime ${target})
+    cmut__install__add_component_dependencies(${ARG__COMPONENT} ${target})
 
 endfunction()
 
