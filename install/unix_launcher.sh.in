@@ -1,0 +1,33 @@
+#!/bin/sh
+
+
+EXEC_NAME=@ARG_EXEC_NAME@
+EXEC_DIR=@ARG_EXEC_DIR@
+
+
+# find the name of this script
+THIS_SCRIPT_FILENAME=$(basename $0)
+
+# find the full path of directory that contain this script
+THIS_SCRIPT_PATH=$(cd $(dirname $0); pwd)
+
+EXEC_FULLDIR=${THIS_SCRIPT_PATH}/${EXEC_DIR}
+EXEC_FULLPATH=${THIS_SCRIPT_PATH}/${EXEC_DIR}/${EXEC_NAME}
+
+
+# test if executable file exist
+if [ ! -f ${EXEC_FULLPATH} ]
+then
+    echo "${THIS_SCRIPT_FILENAME} : can't found ${EXEC_FULLPATH}."
+    exit 1
+fi
+
+
+# export library path
+export LD_LIBRARY_PATH=${EXEC_FULLDIR}
+
+# run executable
+${EXEC_FULLPATH} > ${THIS_SCRIPT_PATH}/${EXEC_NAME}.log.txt 2> ${THIS_SCRIPT_PATH}/${EXEC_NAME}.err.txt
+
+# return executable return code
+exit $?
