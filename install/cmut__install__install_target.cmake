@@ -17,7 +17,7 @@ function(cmut__install__install_target target)
 
     # test the target
     if(NOT TARGET ${target})
-        cmut_error("cmut__install__install_target : TARGET \"${target}\" not defined.")
+        cmut_error("[cmut][install][install_target] : TARGET \"${target}\" not defined.")
         return()
     endif()
 
@@ -25,17 +25,25 @@ function(cmut__install__install_target target)
         cmut__install__install_library
         ARG_
         ""
-        ""
+        "HEADER_COMPONENT;COMPONENT"
         "INCLUDE_DIRECTORIES"
         ${ARGN}
         )
+    if(NOT ARG__HEADER_COMPONENT)
+        set(ARG__HEADER_COMPONENT devel)
+    endif()
+    if(NOT ARG__COMPONENT)
+        set(ARG__COMPONENT runtime)
+    endif()
+
+
 
     # install header
     if(DEFINED ARG__INCLUDE_DIRECTORIES)
         install(
-            DIRECTORY "${ARG__INCLUDE_DIRECTORIES}"
+            DIRECTORY   "${ARG__INCLUDE_DIRECTORIES}"
             DESTINATION "${cmut__install__include_dir}"
-            COMPONENT   devel
+            COMPONENT   ${ARG__HEADER_COMPONENT}
         )
     endif()
 
@@ -58,15 +66,15 @@ function(cmut__install__install_target target)
         TARGETS  ${target}
         EXPORT   ${target_export_name}
         ARCHIVE  DESTINATION "${cmut__install__archive_dir}"
-        COMPONENT "runtime"
+        COMPONENT "${ARG__COMPONENT}"
         LIBRARY  DESTINATION "${cmut__install__library_dir}"
-        COMPONENT "runtime"
+        COMPONENT "${ARG__COMPONENT}"
         RUNTIME  DESTINATION "${cmut__install__runtime_dir}"
-        COMPONENT "runtime"
+        COMPONENT "${ARG__COMPONENT}"
         FRAMEWORK DESTINATION "${cmut__install__framework_dir}"
-        COMPONENT "runtime"
+        COMPONENT "${ARG__COMPONENT}"
         BUNDLE DESTINATION "${cmut__install__bundle_dir}"
-        COMPONENT "runtime"
+        COMPONENT "${ARG__COMPONENT}"
         PRIVATE_HEADER DESTINATION "${cmut__install__private_header_dir}"
         COMPONENT "devel"
         PUBLIC_HEADER  DESTINATION "${cmut__install__public_header_dir}"
