@@ -25,7 +25,7 @@ function(cmut__install__install_target target)
         cmut__install__install_target
         ARG_
         ""
-        "HEADER_COMPONENT;COMPONENT"
+        "INCLUDES_COMPONENT;COMPONENT"
         "INCLUDE_DIRECTORIES"
         ${ARGN}
         )
