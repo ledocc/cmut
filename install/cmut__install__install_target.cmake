@@ -22,7 +22,7 @@ function(cmut__install__install_target target)
     endif()
 
     cmut__utils__parse_arguments(
-        cmut__install__install_library
+        cmut__install__install_target
         ARG_
         ""
         "HEADER_COMPONENT;COMPONENT"
