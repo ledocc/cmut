@@ -9,9 +9,9 @@ function(cmut_get_git_revision_count revisionCount)
         ERROR_VARIABLE error
 	OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    
+
     if(error)
-        message(SEND_ERROR "cmut : Can't retrive revision count from local git repository.")
+        message(SEND_ERROR "cmut : Can't retrieve revision count from local git repository.")
     endif()
 
     set(${revisionCount} ${output} PARENT_SCOPE)
@@ -33,10 +33,9 @@ function(cmut_get_git_revision_hash revisionHash)
     )
 
     if(error)
-        message(SEND_ERROR "cmut : Can't retrive hash from local git repository.")
+        message(SEND_ERROR "cmut : Can't retrieve hash from local git repository.")
     endif()
 
     set(${revisionHash} ${output} PARENT_SCOPE)
 
 endfunction()
-
