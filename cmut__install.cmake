@@ -13,6 +13,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_dependencies.c
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_hunter_3rd_party.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_library.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_or_update.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_qml.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_system_library.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_target.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_unix_launcher.cmake")
