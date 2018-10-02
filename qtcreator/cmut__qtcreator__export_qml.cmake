@@ -1,8 +1,8 @@
 # In order to use qtcreator inspector to load modules QML dynamically
-# and propose code completion in client
-# - install QML files
-# - set and export a target property QML_IMPORT_PATH
-function(cmut__qtcreator__export__qml target qml_directories)
+# and propose code completion in multi libraries environment we have to export
+# QML files and set QML_IMPORT_PATH variable.
+
+function(cmut__qtcreator__export_qml target qml_directories)
 
     if(NOT ARGC)
         return()
