@@ -7,7 +7,10 @@ include("${CMAKE_CURRENT_LIST_DIR}/cmut__install__define_variables.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__install__component_dependency.cmake")
 
 
-# cmut__install__install_target( target [INCLUDE_DIRECTORIES include/MyLib [include/MyLib2]] )
+# cmut__install__install_target( target
+#                                [COMPONENT component]
+#                                [INCLUDES_COMPONENT component]
+#                                [INCLUDE_DIRECTORIES include/MyLib [include/MyLib2]] )
 # - install library and headers of target
 # - generate and install <target name>Target.cmake
 #
@@ -29,8 +32,8 @@ function(cmut__install__install_target target)
         "INCLUDE_DIRECTORIES"
         ${ARGN}
         )
-    if(NOT ARG__HEADER_COMPONENT)
-        set(ARG__HEADER_COMPONENT devel)
+    if(NOT ARG__INCLUDES_COMPONENT)
+        set(ARG__INCLUDES_COMPONENT devel)
     endif()
     if(NOT ARG__COMPONENT)
         set(ARG__COMPONENT runtime)
@@ -43,7 +46,7 @@ function(cmut__install__install_target target)
         install(
             DIRECTORY   "${ARG__INCLUDE_DIRECTORIES}"
             DESTINATION "${cmut__install__include_dir}"
-            COMPONENT   ${ARG__HEADER_COMPONENT}
+            COMPONENT   ${ARG__INCLUDES_COMPONENT}
         )
     endif()
 
