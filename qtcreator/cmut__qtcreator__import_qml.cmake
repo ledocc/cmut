@@ -6,9 +6,9 @@ function(cmut__qtcreator__import_qml target)
 
     get_target_property(_target_dependencies ${target} LINK_LIBRARIES)
 
-    __cmut__qtcreator__get_qml_import_paths(_qml_import_paths "${_target_dependencies}")
+    __cmut__qtcreator__get_qml_import_paths(_qml_directories "${_target_dependencies}")
 
-    set( QML_IMPORT_PATH "${_qml_import_paths}" CACHE STRING "Qml import path" FORCE)
+    set( QML_IMPORT_PATH "${_qml_directories}" CACHE STRING "Qml import path" FORCE)
 
 endfunction()
 
@@ -35,20 +35,24 @@ endfunction()
 
 function(__cmut__qtcreator__get_qml_import_paths target_qml_import_paths target_dependencies)
 
-    set(_qml_import_paths)
+    set(_qml_directories)
     foreach(_dependency IN LISTS target_dependencies)
-        get_target_property(_qml ${_dependency} QML_LOCATION)
+        get_target_property(_qml ${_dependency} CMUT__QML_DIRECTORIES)
 
         if( NOT _qml)
             continue()
         endif()
 
         __cmut__qtcreator__get_dependency_install_directory(_dependency_install_dir ${_dependency})
-        list(APPEND _qml_import_paths "${_dependency_install_dir}/${_qml}")
+        list(APPEND _qml_directories "${_dependency_install_dir}/${_qml}")
     endforeach()
 
-    list(REMOVE_DUPLICATES _qml_import_paths)
+    if( NOT _qml_directories)
+        return()
+    endif()
 
-    set(${target_qml_import_paths} ${_qml_import_paths} PARENT_SCOPE)
+    list(REMOVE_DUPLICATES _qml_directories)
+
+    set(${target_qml_import_paths} ${_qml_directories} PARENT_SCOPE)
 
 endfunction()

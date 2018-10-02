@@ -32,10 +32,10 @@ function(cmut__install__install_qml target)
              PATTERN "*.qml"
              PATTERN "qmldir" )
 
-     set_target_properties(${target} PROPERTIES QML_LOCATION ${ARG__DESTINATION})
+     set_target_properties(${target} PROPERTIES CMUT__QML_DIRECTORIES ${ARG__DESTINATION})
 
      get_target_property(_export_properties ${target} EXPORT_PROPERTIES)
-     list(APPEND _export_properties QML_LOCATION)
+     list(APPEND _export_properties CMUT__QML_DIRECTORIES)
 
      set_target_properties(${target} PROPERTIES EXPORT_PROPERTIES "${_export_properties}")
 
