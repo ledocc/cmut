@@ -37,7 +37,7 @@ function(__cmut__qtcreator__get_qml_import_paths target_qml_import_paths target_
 
     set(_qml_import_paths)
     foreach(_dependency IN LISTS target_dependencies)
-        get_target_property(_qml ${_dependency} QML_IMPORT_PATH)
+        get_target_property(_qml ${_dependency} QML_LOCATION)
 
         if( NOT _qml)
             continue()
