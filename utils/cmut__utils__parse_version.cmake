@@ -6,12 +6,18 @@ cmut__utils__define_header_guard()
 include(${CMAKE_CURRENT_LIST_DIR}/../cmut_message.cmake)
 
 
-macro(__cmut__utils__set_or_default_in_parent_scope name value default)
+macro(__cmut__utils__set_or_default_version_in_parent_scope project_name version_component_name value default)
+
     if("${value}" STREQUAL "")
-        set(${name} ${default} PARENT_SCOPE)
+        set(version_component_value ${default})
     else()
-        set(${name} ${value} PARENT_SCOPE)
+        set(version_component_value ${value})
     endif()
+
+    set(${project_name}_${version_component_name} ${version_component_value} PARENT_SCOPE)
+    set(PROJECT_${version_component_name}         ${version_component_value} PARENT_SCOPE)
+    set(CMAKE_PROJECT_${version_component_name}   ${version_component_value} PARENT_SCOPE)
+
 endmacro()
 
 macro(__cmut__utils__parse_version name_ version_ functionName_)
@@ -23,11 +29,13 @@ macro(__cmut__utils__parse_version name_ version_ functionName_)
     endif()
 
 
-    __cmut__utils__set_or_default_in_parent_scope(${name_}_VERSION_MAJOR     "${CMAKE_MATCH_1}" 0 PARENT_SCOPE)
-    __cmut__utils__set_or_default_in_parent_scope(${name_}_VERSION_MINOR     "${CMAKE_MATCH_3}" 0 PARENT_SCOPE)
-    __cmut__utils__set_or_default_in_parent_scope(${name_}_VERSION_PATCH     "${CMAKE_MATCH_5}" 0 PARENT_SCOPE)
-    __cmut__utils__set_or_default_in_parent_scope(${name_}_VERSION_TWEAK     "${CMAKE_MATCH_7}" 0 PARENT_SCOPE)
-    __cmut__utils__set_or_default_in_parent_scope(${name_}_RELEASE_CANDIDATE "${CMAKE_MATCH_9}" 0 PARENT_SCOPE)
+    __cmut__utils__set_or_default_version_in_parent_scope(${name_} VERSION                   "${version_}" 0 )
+    __cmut__utils__set_or_default_version_in_parent_scope(${name_} VERSION_MAJOR             "${CMAKE_MATCH_1}" 0 )
+    __cmut__utils__set_or_default_version_in_parent_scope(${name_} VERSION_MINOR             "${CMAKE_MATCH_3}" 0 )
+    __cmut__utils__set_or_default_version_in_parent_scope(${name_} VERSION_PATCH             "${CMAKE_MATCH_5}" 0 )
+    __cmut__utils__set_or_default_version_in_parent_scope(${name_} VERSION_TWEAK             "${CMAKE_MATCH_7}" 0 )
+    __cmut__utils__set_or_default_version_in_parent_scope(${name_} VERSION_RELEASE_CANDIDATE "${CMAKE_MATCH_9}" 0 )
+    __cmut__utils__set_or_default_version_in_parent_scope(${name_} RELEASE_CANDIDATE         "${CMAKE_MATCH_9}" 0 )
 
 endmacro()
 
