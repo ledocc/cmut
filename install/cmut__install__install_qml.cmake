@@ -41,7 +41,13 @@ endfunction()
 function (__cmut__append_qml_directories target qml_directories)
 
     get_target_property( _cmut__qml_directory ${target} CMUT__QML_DIRECTORIES)
-    list(APPEND _cmut__qml_directory ${qml_directories})
+
+    if(NOT _cmut__qml_directory)
+        set(_cmut__qml_directory ${qml_directories})
+    else()
+        list(APPEND _cmut__qml_directory ${qml_directories})
+    endif()
+
     set_target_properties(${target} PROPERTIES CMUT__QML_DIRECTORIES "${_cmut__qml_directory}")
 
 endfunction()
