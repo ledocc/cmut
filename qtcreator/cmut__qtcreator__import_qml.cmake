@@ -2,13 +2,39 @@
 # and propose code completion in multi libraries environment we have to export
 # QML files and set QML_IMPORT_PATH variable.
 
+# cmut__qtcreator__import_qml(target [DIRECTORY qml])
+# - import target qml if DIRECTORY is specified
+# - import dependencies qml defin in dependency property CMUT__QML_DIRECTORIES
 function(cmut__qtcreator__import_qml target)
 
-    get_target_property(_target_dependencies ${target} LINK_LIBRARIES)
+    cmut__utils__parse_arguments(
+        cmut__install__install_qml
+        ARG_
+        ""
+        ""
+        "DIRECTORY"
+        ${ARGN}
+    )
 
+    if(NOT ARG__DIRECTORY)
+        set(ARG__DIRECTORY "")
+    endif()
+
+    __cmut__qtcreator__get_dependencies_qml_directories(${target} _dependencies_qml_directories)
+
+    set( QML_IMPORT_PATH ${ARG__DIRECTORY} ${_dependencies_qml_directories}
+         CACHE STRING "Qml import path" FORCE
+    )
+
+endfunction()
+
+
+function(__cmut__qtcreator__get_dependencies_qml_directories target qml_directories)
+
+    get_target_property(_target_dependencies ${target} LINK_LIBRARIES)
     __cmut__qtcreator__get_qml_import_paths(_qml_directories "${_target_dependencies}")
 
-    set( QML_IMPORT_PATH "${_qml_directories}" CACHE STRING "Qml import path" FORCE)
+    set(${qml_directories} ${_qml_directories} PARENT_SCOPE)
 
 endfunction()
 
