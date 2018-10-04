@@ -61,24 +61,27 @@ endfunction()
 
 function(__cmut__qtcreator__get_qml_import_paths target_qml_import_paths target_dependencies)
 
-    set(_qml_directories)
+    set(_qml_import_paths)
     foreach(_dependency IN LISTS target_dependencies)
-        get_target_property(_qml ${_dependency} CMUT__QML_DIRECTORIES)
+        get_target_property(_qml_directories ${_dependency} CMUT__QML_DIRECTORIES)
 
-        if( NOT _qml)
+        if( NOT _qml_directories)
             continue()
         endif()
 
-        __cmut__qtcreator__get_dependency_install_directory(_dependency_install_dir ${_dependency})
-        list(APPEND _qml_directories "${_dependency_install_dir}/${_qml}")
+        foreach( _qml_directory IN LISTS _qml_directories)
+            __cmut__qtcreator__get_dependency_install_directory(_dependency_install_dir ${_dependency})
+            list(APPEND _qml_import_paths "${_dependency_install_dir}/${_qml_directory}")
+        endforeach()
+
     endforeach()
 
-    if( NOT _qml_directories)
+    if( NOT _qml_import_paths)
         return()
     endif()
 
-    list(REMOVE_DUPLICATES _qml_directories)
+    list(REMOVE_DUPLICATES _qml_import_paths)
 
-    set(${target_qml_import_paths} ${_qml_directories} PARENT_SCOPE)
+    set(${target_qml_import_paths} ${_qml_import_paths} PARENT_SCOPE)
 
 endfunction()
