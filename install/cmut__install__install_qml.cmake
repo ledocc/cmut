@@ -1,4 +1,4 @@
-# cmut__install__install_qml( target [DIRECTORY qml] [DESTINATION qml] [COMPONENT runtime] )
+# cmut__install__install_qml( target DIRECTORY qml [DESTINATION qml] [COMPONENT runtime] )
 # - install qml
 # - export qml files location in QML_LOCATION
 function(cmut__install__install_qml target)
@@ -13,7 +13,7 @@ function(cmut__install__install_qml target)
     )
 
     if(NOT ARG__DIRECTORY)
-        set(ARG__DIRECTORY "qml/${target}")
+        cmut_error("Argument DIRECTORY is mandatory")
     endif()
 
     if(NOT ARG__DESTINATION)
@@ -32,11 +32,25 @@ function(cmut__install__install_qml target)
              PATTERN "*.qml"
              PATTERN "qmldir" )
 
-     set_target_properties(${target} PROPERTIES CMUT__QML_DIRECTORIES ${ARG__DESTINATION})
+     __cmut__append_qml_directories(${target} ${ARG__DESTINATION})
+     __cmut__export_qml_directories(${target})
 
-     get_target_property(_export_properties ${target} EXPORT_PROPERTIES)
-     list(APPEND _export_properties CMUT__QML_DIRECTORIES)
+endfunction()
 
-     set_target_properties(${target} PROPERTIES EXPORT_PROPERTIES "${_export_properties}")
+
+function (__cmut__append_qml_directories target qml_directories)
+
+    get_target_property( _cmut__qml_directory ${target} CMUT__QML_DIRECTORIES)
+    list(APPEND _cmut__qml_directory ${qml_directories})
+    set_target_properties(${target} PROPERTIES CMUT__QML_DIRECTORIES "${_cmut__qml_directory}")
+
+endfunction()
+
+
+function(__cmut__export_qml_directories target)
+
+    get_target_property(_export_properties ${target} EXPORT_PROPERTIES)
+    list(APPEND _export_properties CMUT__QML_DIRECTORIES)
+    set_target_properties(${target} PROPERTIES EXPORT_PROPERTIES "${_export_properties}")
 
 endfunction()
