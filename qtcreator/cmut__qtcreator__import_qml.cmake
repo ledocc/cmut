@@ -23,7 +23,7 @@ function(cmut__qtcreator__import_qml target)
     __cmut__qtcreator__get_dependencies_qml_directories(${target} _dependencies_qml_directories)
 
     set( QML_IMPORT_PATH ${ARG__DIRECTORY} ${_dependencies_qml_directories}
-         CACHE STRING "Qml import path" FORCE
+         CACHE INTERNAL "Qml import path" FORCE
     )
 
 endfunction()
@@ -42,14 +42,15 @@ endfunction()
 function(__cmut__qtcreator__get_dependency_install_directory dependency_install_directory dependency)
 # PREDICATE Library directory is one delph children of install directory
 
-    if( ${CMAKE_BUILD_TYPE} STREQUAL "Release" )
-         get_target_property(_dependency_location ${dependency} IMPORTED_LOCATION_RELEASE)
-     else()
-         get_target_property(_dependency_location ${dependency} IMPORTED_LOCATION_DEBUG)
+    string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
+    get_target_property(_dependency_location ${dependency} IMPORTED_LOCATION_${CMAKE_BUILD_TYPE})
+    if(NOT _dependency_location)
+        get_target_property(_dependency_location ${dependency} IMPORTED_LOCATION)
     endif()
 
     if( NOT _dependency_location )
-        cmut_error("We can't find your dependency location. Verify your build type (Release, Debug, Coverage)")
+        cmut_error("[cmut][qtcreator][import_qml] - We can't find your dependency location.
+                    Verify your build type (Release, Debug, Coverage)")
     endif()
 
     get_filename_component(_dependency_directory ${_dependency_location} DIRECTORY)
@@ -71,7 +72,9 @@ function(__cmut__qtcreator__get_qml_import_paths target_qml_import_paths target_
 
         foreach( _qml_directory IN LISTS _qml_directories)
             __cmut__qtcreator__get_dependency_install_directory(_dependency_install_dir ${_dependency})
-            list(APPEND _qml_import_paths "${_dependency_install_dir}/${_qml_directory}")
+            if(EXIST ${_dependency_install_dir})
+                list(APPEND _qml_import_paths "${_dependency_install_dir}/${_qml_directory}")
+            endif()
         endforeach()
 
     endforeach()
