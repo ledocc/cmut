@@ -20,9 +20,19 @@ function(cmut__qtcreator__import_qml target)
         set(ARG__DIRECTORY "")
     endif()
 
+
     __cmut__qtcreator__get_dependencies_qml_directories(${target} _dependencies_qml_directories)
 
-    set( QML_IMPORT_PATH ${ARG__DIRECTORY} ${_dependencies_qml_directories}
+
+    get_property( _qml_import_path CACHE QML_IMPORT_PATH PROPERTY VALUE)
+    list(APPEND _qml_import_path ${ARG__DIRECTORY} ${_dependencies_qml_directories})
+
+    if(NOT _qml_import_path)
+        return()
+    endif()
+
+    list(REMOVE_DUPLICATES _qml_import_path)
+    set( QML_IMPORT_PATH ${_qml_import_path}
          CACHE INTERNAL "Qml import path" FORCE
     )
 
@@ -43,7 +53,7 @@ function(__cmut__qtcreator__get_dependency_install_directory dependency_install_
 # PREDICATE Library directory is one delph children of install directory
 
     string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
-    get_target_property(_dependency_location ${dependency} IMPORTED_LOCATION_${CMAKE_BUILD_TYPE})
+    get_target_property(_dependency_location ${dependency} IMPORTED_LOCATION_${BUILD_TYPE_UPPER})
     if(NOT _dependency_location)
         get_target_property(_dependency_location ${dependency} IMPORTED_LOCATION)
     endif()
@@ -72,7 +82,7 @@ function(__cmut__qtcreator__get_qml_import_paths target_qml_import_paths target_
 
         foreach( _qml_directory IN LISTS _qml_directories)
             __cmut__qtcreator__get_dependency_install_directory(_dependency_install_dir ${_dependency})
-            if(EXIST ${_dependency_install_dir})
+            if(EXISTS ${_dependency_install_dir})
                 list(APPEND _qml_import_paths "${_dependency_install_dir}/${_qml_directory}")
             endif()
         endforeach()
