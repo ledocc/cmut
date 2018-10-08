@@ -25,10 +25,9 @@ function(cmut__otool__get_id result dylib)
         COMMAND "${OTOOL_CMD}" -DX "${dylib}"
         OUTPUT_VARIABLE id_value
         )
-    cmut_info("id_value = ${id_value}")
+
     # remove end line
     string(REPLACE "\n" "" id_value "${id_value}")
-    cmut_info("id_value = ${id_value}")
 
     set(${result} ${id_value} PARENT_SCOPE)
 
