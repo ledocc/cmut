@@ -55,7 +55,7 @@ endfunction()
 
 function(__cmut__export_qml_directories target)
 
-    if(NOT CMUT__QML_DIRECTORIES IN LIST EXPORT_PROPERTIES)
+    if(NOT CMUT__QML_DIRECTORIES IN_LIST EXPORT_PROPERTIES)
         get_target_property(_export_properties ${target} EXPORT_PROPERTIES)
         list(APPEND _export_properties CMUT__QML_DIRECTORIES)
         set_target_properties(${target} PROPERTIES EXPORT_PROPERTIES "${_export_properties}")
