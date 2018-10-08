@@ -19,8 +19,15 @@ function(cmut__qt5__install_qt_conf)
         cmut_error("[cmut][qt5][install_qt_conf] - DESTINATION is required.")
     endif()
 
+
+    get_filename_component(QT_CONF_FILE "${ARG_QT_CONF_FILE}" NAME)
     install(
-        FILES ${QT_CONF_FILE}
+	CODE
+	"file(REMOVE \"\${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${QT_CONF_FILE}\")"
+	COMPONENT "${ARG_COMPONENT}"
+    )
+    install(
+        FILES "${ARG_QT_CONF_FILE}"
         DESTINATION "${ARG_DESTINATION}"
         COMPONENT "${ARG_COMPONENT}"
         )
