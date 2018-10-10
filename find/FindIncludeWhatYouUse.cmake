@@ -1,6 +1,6 @@
 
 
-set(__IncludeWhatYouUse_NAME iwyu include-what-you-use)
+set(__IncludeWhatYouUse_NAME include-what-you-use iwyu)
 find_program(IncludeWhatYouUse_COMMAND NAMES ${__IncludeWhatYouUse_NAME})
 
 include(FindPackageHandleStandardArgs)
