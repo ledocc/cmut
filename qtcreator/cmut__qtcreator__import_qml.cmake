@@ -19,7 +19,7 @@ function(cmut__qtcreator__import_qml target)
     if(NOT ARG__DIRECTORY)
         set(ARG__DIRECTORY "")
     else()
-        cmut_info("[cmut][qtcreator][import_qml] - set ${ARG__DIRECTORY} in qml import path")
+        cmut_info("[cmut][qtcreator][import_qml] - add ${ARG__DIRECTORY} in qml import path")
     endif()
 
 
