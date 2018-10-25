@@ -25,7 +25,7 @@ function(cmut__qtcreator__import_qml target)
 
     __cmut__qtcreator__get_dependencies_qml_directories(${target} _dependencies_qml_directories)
     if(_dependencies_qml_directories)
-        cmut_info("[cmut][qtcreator][import_qml] - set ${_dependencies_qml_directories} in qml import path")
+        cmut_info("[cmut][qtcreator][import_qml] - add ${_dependencies_qml_directories} in qml import path")
     endif()
 
 
