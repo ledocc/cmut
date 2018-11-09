@@ -50,3 +50,11 @@ macro(cmut__utils__set_default_argument arg value)
     endif()
 
 endmacro()
+
+macro(cmut__utils__test_required_argument arg message)
+
+    if(NOT DEFINED ${arg})
+        cmut_fatal(${message})
+    endif()
+
+endmacro()
