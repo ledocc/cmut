@@ -16,10 +16,12 @@ function(cmut_test__find_boost_test version)
 
     cmut_deprecated_function("cmut_test__find_boost_test" "cmut__test__boost__find_required_components")
 
+    cmut__test__boost__get_required_components( components )
     cmut__test__boost__find_required_components( ${version} )
 
+    set(Boost_UNIT_TEST_FRAMEWORK_FOUND 1 PARENT_SCOPE)
 
-    foreach(component ${boost_test_components})
+    foreach(component IN LISTS components)
         link_libraries( Boost::${component} )
     endforeach()
 

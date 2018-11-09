@@ -12,6 +12,12 @@ endfunction()
 
 ##--------------------------------------------------------------------------------------------------------------------##
 
+function( cmut__test__qtest__find_dependencies version)
+
+    cmut_deprecated_function("cmut__test__qtest__find_dependencies" "cmut__test__qtest__find_required_components")
+    cmut__test__qtest__find_required_components( ${version} )
+endfunction()
+
 function( cmut__test__qtest__find_required_components version )
 
     cmut__test__qtest__get_required_components( qtest_components )
