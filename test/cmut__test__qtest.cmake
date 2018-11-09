@@ -1,39 +1,43 @@
 
 
 
-function(cmut__test__qtest__get_required_components result)
+function( cmut__test__qtest__get_required_components result )
 
-    set(components
-        Test
-        )
-    set(${result} "${components}" PARENT_SCOPE)
+    set( components
+         Test
+    )
+    set( ${result} "${components}" PARENT_SCOPE )
 
 endfunction()
 
+##--------------------------------------------------------------------------------------------------------------------##
 
-function(cmut__test__qtest__find_dependencies version)
+function( cmut__test__qtest__find_required_components version )
 
-    cmut__test__qtest__get_required_components(qtest_components)
+    cmut__test__qtest__get_required_components( qtest_components )
     find_package(
         Qt5 ${version}
         REQUIRED COMPONENTS
             ${qtest_components}
         )
 
-    if(NOT TARGET Qt5::Test)
-        cmut_warn("[cmut][test][qtest] - Can't found Qt5::Test. Qt5 tests based skipped.")
-        return()
-    endif()
+endfunction()
 
+##--------------------------------------------------------------------------------------------------------------------##
 
-    foreach(component ${qtest_components})
-        link_libraries( Qt5::${component} )
+function(cmut__test__qtest__link_target target)
+
+    cmut__test__qtest__get_required_components( components )
+
+    foreach( component IN LISTS components )
+        target_link_libraries( ${target} PUBLIC Qt5::${component} )
     endforeach()
 
 endfunction()
 
+##--------------------------------------------------------------------------------------------------------------------##
 
-function(cmut__test__qtest__add namespace test_name)
+function( cmut__test__qtest__add namespace test_name )
 
     cmut__utils__parse_arguments(
         cmut__test__qtest__add
@@ -43,14 +47,7 @@ function(cmut__test__qtest__add namespace test_name)
         "FILES;LIBRARIES"
     )
 
-    cmut__test__make_test_name(${namespace} ${test_name} name)
-
-    cmut__test__qtest__get_required_components(qtest_components)
-    foreach(component ${qtest_components})
-        if( NOT TARGET Qt5::${component} )
-            cmut_info("[cmut][test][qtest] - ${name} skipped.")
-        endif()
-    endforeach()
+    cmut__test__make_test_name( ${namespace} ${test_name} name )
 
 
     if("${ARG_FILES}" STREQUAL "")
@@ -74,11 +71,7 @@ function(cmut__test__qtest__add namespace test_name)
         target_link_libraries(${name} "${ARG_LIBRARIES}")
     endif()
 
-    cmut__test__qtest__get_required_components(qtest_components)
-    foreach(component ${qtest_components})
-        link_libraries( Qt5::${component} )
-    endforeach()
-
+    cmut__test__qtest__link_target( ${name} )
 
     add_test(NAME "${name}" COMMAND ${name})
 

@@ -7,52 +7,27 @@ include(CMakePrintHelpers)
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__find.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__test.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/cmut__target.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/test/cmut__test__boost.cmake")
 
-function(cmut__test__get_required_boost_components result)
-
-    set(components
-        chrono
-        timer
-        unit_test_framework
-        )
-    set(${result} "${components}" PARENT_SCOPE)
-
-endfunction()
-
-
-cmut__test__get_required_boost_components( CMUT_TEST__BOOST_TEST_COMPONENTS )
+cmut__test__boost__get_required_components( CMUT_TEST__BOOST_TEST_COMPONENTS )
 
 
 function(cmut_test__find_boost_test version)
 
-    cmut__test__get_required_boost_components(boost_test_components)
-    find_package(
-        Boost ${version}
-        REQUIRED COMPONENTS
-            ${boost_test_components}
-        )
+    cmut_deprecated_function("cmut_test__find_boost_test" "cmut__test__boost__find_required_components")
 
-    if(NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
-        cmut_warn("[cmut][test][boost_test] - Can't found boost::unit_test_framework. Tests skipped.")
-        return()
-    endif()
-    set(Boost_UNIT_TEST_FRAMEWORK_FOUND ${Boost_UNIT_TEST_FRAMEWORK_FOUND} PARENT_SCOPE)
+    cmut__test__boost__find_required_components( ${version} )
+
 
     foreach(component ${boost_test_components})
         link_libraries( Boost::${component} )
     endforeach()
-
 
     get_target_property(BUILD_TYPE Boost::unit_test_framework TYPE)
     if(NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY)
         add_definitions(-DBOOST_TEST_DYN_LINK)
     endif()
     add_definitions(-DBOOST_ALL_NO_LIB)
-
-
-    if( MSVC )
-        cmut__target__append_property(Boost::unit_test_framework INTERFACE_COMPILE_OPTIONS -wd4389 )
-    endif()
 
 endfunction()
 
