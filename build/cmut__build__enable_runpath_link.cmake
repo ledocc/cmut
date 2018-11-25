@@ -8,7 +8,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../cmut_message.cmake)
 # on unix except apple, add linker flag to use RUNPATH instead of deprecated RPATH
 function(cmut__build__enable_runpath_link)
 
-    if((CMAKE_HOST_UNIX) AND (NOT CMAKE_HOST_APPLE))
+    if((CMAKE_UNIX) AND (NOT CMAKE_APPLE))
 
         set(CMUT_LINKER_FLAGS_USE_RUNPATH "-Wl,--enable-new-dtags")
         cmut_info("Use RUNPATH instead of deprecated RPATH.")
