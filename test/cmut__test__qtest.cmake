@@ -76,6 +76,7 @@ function( cmut__test__qtest__add namespace test_name )
     endif()
 
     cmut__test__qtest__link_target( ${name} )
+    cmut__test__turtle__link_target( ${name} )
 
     add_test(NAME "${name}" COMMAND ${name})
 

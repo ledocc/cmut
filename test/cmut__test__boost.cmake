@@ -58,10 +58,7 @@ function( cmut__test__boost__link_target target )
     # link to special Boost::disable_autolinking
     target_link_libraries( ${target} PUBLIC Boost::disable_autolinking )
 
-
-    if(TURTLE_FOUND)
-        cmut__test__turtle__link_target( ${target} )
-    endif()
+    cmut__test__turtle__link_target( ${target} )
 
 endfunction()
 
