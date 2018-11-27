@@ -41,20 +41,27 @@ endfunction()
 
 function( cmut__test__boost__link_target target )
 
+    # link to boost test libraries
     cmut__test__boost__get_required_components( components )
-
     foreach( component IN LISTS components )
         target_link_libraries( ${target} PUBLIC Boost::${component} )
     endforeach()
 
 
+    # link to special Boost::dynamic_linking if not static build
     __cmut__test__boost__get_main_component( main_component )
-
     get_target_property( BUILD_TYPE Boost::${main_component} TYPE )
     if( NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY )
-        target_compile_definitions( ${target} PUBLIC BOOST_TEST_DYN_LINK )
+        target_link_libraries( ${target} PUBLIC Boost::dynamic_linking )
     endif()
-    target_compile_definitions( ${target} PUBLIC BOOST_ALL_NO_LIB )
+
+    # link to special Boost::disable_autolinking
+    target_link_libraries( ${target} PUBLIC Boost::disable_autolinking )
+
+
+    if(TURTLE_FOUND)
+        cmut__test__turtle__link_target( ${target} )
+    endif()
 
 endfunction()
 

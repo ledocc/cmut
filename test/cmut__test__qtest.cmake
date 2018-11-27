@@ -16,6 +16,7 @@ function( cmut__test__qtest__find_dependencies version)
 
     cmut_deprecated_function("cmut__test__qtest__find_dependencies" "cmut__test__qtest__find_required_components")
     cmut__test__qtest__find_required_components( ${version} )
+
 endfunction()
 
 function( cmut__test__qtest__find_required_components version )
@@ -53,20 +54,17 @@ function( cmut__test__qtest__add namespace test_name )
         "FILES;LIBRARIES"
     )
 
+    cmut__utils__set_default_argument(ARG_FILES ${test_name}.test.cpp)
+
+
     cmut__test__make_test_name( ${namespace} ${test_name} name )
-
-
-    if("${ARG_FILES}" STREQUAL "")
-        set(ARG_FILES ${test_name}.test.cpp)
-    endif()
-
     add_executable(${name} ${ARG_FILES})
 
     foreach(file IN LISTS ARG_FILES)
 
         get_filename_component(filename "${file}" NAME)
         QT5_GENERATE_MOC("${file}" "${CMAKE_CURRENT_BINARY_DIR}/${filename}.moc")
-        target_sources(${name} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/${filename}.moc")
+        target_sources(${name} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${filename}.moc")
 
     endforeach()
 

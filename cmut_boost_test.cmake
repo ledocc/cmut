@@ -36,6 +36,8 @@ endfunction()
 
 function(cmut_test__find_turtle)
 
+    cmut_deprecated_function("cmut_test__find_turtle" "cmut__test__turtle__find_required_components")
+
     if(HUNTER_ENABLED)
         hunter_add_package(turtle)
     endif()
@@ -61,38 +63,15 @@ endfunction()
 
 function(cmut_add_boost_test namespace test_src_file)
 
-    cmut__test__make_test_name(${namespace} ${test_src_file} name)
-    if(NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
-        cmut_info("[cmut][test][boost_test] - ${name} skipped.")
-        return()
-    endif()
-
-    add_executable(${name} ${test_src_file} ${ARGN})
-
-    add_test(NAME "${name}" COMMAND ${name})
-
-
-#    file(READ "${test_src_file}" _contents)
-#    string(REGEX MATCHALL "BOOST_[A-Z]+_TEST_CASE\\([:*, A-Za-z_0-9]+\\)"
-#        _test_instances ${_contents})
-
-#    foreach(_test ${_test_instances})
-
-#        string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+).*\\).*" "\\1" test_name ${_test})
-
-#        add_test(NAME "${_test_exec_name}.${test_name}"
-#            COMMAND ${_test_exec_name}
-#            --run_test=${test_name} --catch_system_error=yes)
-#    endforeach()
+    cmut_deprecated_function("cmut_add_boost_test" "cmut__test__boost__add_test")
+    cmut__test__boost__add_test(${namespace} ${test_src_file} ${ARGN})
 
 endfunction()
 
 function(cmut_add_boost_tests namespace)
 
-    foreach(file ${ARGN})
-        #message("add test ${file}")
-        cmut_add_boost_test(${namespace} ${file} "")
-    endforeach()
+    cmut_deprecated_function("cmut_add_boost_tests" "cmut__test__boost__add_tests")
+    cmut__test__boost__add_tests( ${namespace} ${ARGN} )
 
 endfunction()
 
