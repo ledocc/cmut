@@ -40,8 +40,6 @@ macro(__cmut__utils__parse_version name_ version_ functionName_)
 endmacro()
 
 
-
-
 function(cmut__utils__parse_version name_ version_)
 
     __cmut__utils__parse_version(${name_} ${version_} cmut__utils__parse_version)

@@ -45,8 +45,20 @@ endmacro()
 
 macro(cmut__utils__set_default_argument arg value)
 
-    if(NOT DEFINED ${arg})
-        set(${arg} "${value}")
+    if( NOT DEFINED ${arg} )
+        set( ${arg} "${value}" )
+    endif()
+
+endmacro()
+
+macro(cmut__utils__set_cmake_or_default_argument arg cmake_variabe value)
+
+    if( NOT DEFINED ${arg} )
+        if( DEFINED ${cmake_variable} )
+            set( ${arg} "${cmake_variable}" )
+        else()
+            set( ${arg} "${value}" )
+        endif()
     endif()
 
 endmacro()
