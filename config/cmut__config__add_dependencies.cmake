@@ -2,37 +2,35 @@
 
 function(cmut__config__add_dependencies project package)
 
-    macro(export_to_parent_scope var)
-        set(${var} ${${var}} PARENT_SCOPE)
+    macro(set_if_define var)
+        if(DEFINED ARG__${var})
+            set(${project}_DEPENDENCIES_${package}_${var} ${ARG__${var}})
+            cmut__utils__set_in_parent_scope(${project}_DEPENDENCIES_${package}_${var})
+        endif()
     endmacro()
 
 
     cmake_parse_arguments(
         ARG_
         "REQUIRED"
-        "VERSION"
-        "COMPONENTS"
+        "VERSION;FIND_PACKAGE_NAME"
+        "COMPONENTS;NAMES"
         ${ARGN}
         )
 
     list(APPEND ${project}_DEPENDENCIES ${package})
-    export_to_parent_scope(${project}_DEPENDENCIES)
+    cmut__utils__set_in_parent_scope(${project}_DEPENDENCIES)
 
 
     if(DEFINED ARG__REQUIRED)
         set(${project}_DEPENDENCIES_${package}_REQUIRED REQUIRED)
-        export_to_parent_scope(${project}_DEPENDENCIES_${package}_REQUIRED)
+        cmut__utils__set_in_parent_scope(${project}_DEPENDENCIES_${package}_REQUIRED)
     endif()
 
-    if(DEFINED ARG__VERSION)
-        set(${project}_DEPENDENCIES_${package}_VERSION ${ARG__VERSION})
-        export_to_parent_scope(${project}_DEPENDENCIES_${package}_VERSION)
-    endif()
-
-    if(DEFINED ARG__COMPONENTS)
-        list(APPEND ${project}_DEPENDENCIES_${package}_COMPONENTS ${ARG__COMPONENTS})
-        export_to_parent_scope(${project}_DEPENDENCIES_${package}_COMPONENTS)
-    endif()
+    set_if_define(VERSION)
+    set_if_define(FIND_PACKAGE_NAME)
+    set_if_define(COMPONENTS)
+    set_if_define(NAMES)
 
 
     string(REPLACE ";" " " args "${ARGN}")
@@ -70,13 +68,20 @@ macro(__cmut__config__copy_dependencies_package_required package project_source 
 
 endmacro()
 
-macro(__cmut__config__copy_dependencies_package_component package project_source project_destination)
+macro(__cmut__config__copy_dependencies_package__variable variable package project_source project_destination)
 
-    if( DEFINED ${project_source}_DEPENDENCIES_${package}_COMPONENTS )
-        list( APPEND ${project_destination}_DEPENDENCIES_${package}_COMPONENTS "${${project_source}_DEPENDENCIES_${package}_COMPONENTS}" )
-        list( REMOVE_DUPLICATES ${project_destination}_DEPENDENCIES_${package}_COMPONENTS )
+    if( DEFINED ${project_source}_DEPENDENCIES_${package}_${variable} )
+        set( ${project_destination}_DEPENDENCIES_${package}_${variable} ${${project_source}_DEPENDENCIES_${package}_${variable}} )
     endif()
 
+endmacro()
+
+macro(__cmut__config__copy_dependencies_package__list list_name package project_source project_destination)
+
+    if( DEFINED ${project_source}_DEPENDENCIES_${package}_${list_name} )
+        list( APPEND ${project_destination}_DEPENDENCIES_${package}_${list_name} "${${project_source}_DEPENDENCIES_${package}_${list_name}}" )
+        list( REMOVE_DUPLICATES ${project_destination}_DEPENDENCIES_${package}_${list_name} )
+    endif()
 
 endmacro()
 
@@ -90,8 +95,10 @@ function(cmut__config__copy_dependencies project_source project_destination)
     foreach(package IN LISTS ${project_source}_DEPENDENCIES)
 
         __cmut__config__copy_dependencies_package_version( ${package} ${project_source} ${project_destination} )
-        __cmut__config__copy_dependencies_package_required( ${package} ${project_source} ${project_destination} )
-        __cmut__config__copy_dependencies_package_component( ${package} ${project_source} ${project_destination} )
+        __cmut__config__copy_dependencies_package__variable( REQUIRED ${package} ${project_source} ${project_destination} )
+        __cmut__config__copy_dependencies_package__variable( FIND_PACKAGE_NAME ${package} ${project_source} ${project_destination} )
+        __cmut__config__copy_dependencies_package__list( COMPONENTS ${package} ${project_source} ${project_destination} )
+        __cmut__config__copy_dependencies_package__list( NAMES ${package} ${project_source} ${project_destination} )
 
     endforeach()
 
@@ -104,25 +111,50 @@ macro(cmut__config__set_dependencies_in_parent_scope project )
 
     foreach(package IN LISTS ${project}_DEPENDENCIES)
 
-        cmut__utils__set_variable_in_parent_scope_if_defined( ${project}_DEPENDENCIES_${package}_VERSION )
-        cmut__utils__set_variable_in_parent_scope_if_defined( ${project}_DEPENDENCIES_${package}_REQUIRED )
-        cmut__utils__set_variable_in_parent_scope_if_defined( ${project}_DEPENDENCIES_${package}_COMPONENTS )
+        cmut__utils__set_in_parent_scope_if_defined( ${project}_DEPENDENCIES_${package}_VERSION )
+        cmut__utils__set_in_parent_scope_if_defined( ${project}_DEPENDENCIES_${package}_REQUIRED )
+        cmut__utils__set_in_parent_scope_if_defined( ${project}_DEPENDENCIES_${package}_FIND_PACKAGE_NAME )
+        cmut__utils__set_in_parent_scope_if_defined( ${project}_DEPENDENCIES_${package}_COMPONENTS )
+        cmut__utils__set_in_parent_scope_if_defined( ${project}_DEPENDENCIES_${package}_NAMES )
 
     endforeach()
 
-    cmut__utils__set_variable_in_parent_scope_if_defined( ${project}_DEPENDENCIES )
+    cmut__utils__set_in_parent_scope_if_defined( ${project}_DEPENDENCIES )
 
 endmacro()
 
 
+
+macro( __cmut__config__set_if_defined opt )
+
+    if( DEFINED ${current_project}_DEPENDENCIES_${package}_${opt} )
+        set( ${opt}_OPTION ${ARGN} ${${current_project}_DEPENDENCIES_${package}_${opt}} )
+    else()
+        set( ${opt}_OPTION )
+    endif()
+endmacro()
+
 macro(cmut__config__find_dependencies project)
 
+    set(current_project ${project})
     foreach(package IN LISTS ${project}_DEPENDENCIES)
 
+        __cmut__config__set_if_defined( VERSION )
+        __cmut__config__set_if_defined( REQUIRED )
+        __cmut__config__set_if_defined( COMPONENTS COMPONENTS )
+        __cmut__config__set_if_defined( NAMES      NAMES )
+
+        if(DEFINED ${project}_DEPENDENCIES_${package}_FIND_PACKAGE_NAME)
+            set(package ${${project}_DEPENDENCIES_${package}_FIND_PACKAGE_NAME})
+        endif()
+
         message(STATUS "Looking for ${package}")
-        find_package(${package} ${${project}_DEPENDENCIES_${package}_VERSION} ${${project}_DEPENDENCIES_${package}_REQUIRED}
-            COMPONENTS
-            ${${project}_DEPENDENCIES_${package}_COMPONENTS}
+
+        find_package(${package}
+            ${VERSION_OPTION}
+            ${REQUIRED_OPTION}
+            ${COMPONENTS_OPTION}
+            ${NAMES_OPTION}
             )
 
     endforeach()
