@@ -4,7 +4,9 @@ cmut__utils__define_header_guard()
 
 
 function(__cmut_deprecated_message type old new)
-    cmut_warn("cmut ${type} \"${old}\" is deprecated, prefer \"${new}\" instead")
+    if(NOT $ENV{CMUT__DISABLE_DEPRECATED_WARNING})
+        cmut_warn("cmut ${type} \"${old}\" is deprecated, prefer \"${new}\" instead")
+    endif()
 endfunction()
 
 include("${CMAKE_CURRENT_LIST_DIR}/cmut_message.cmake")
