@@ -16,7 +16,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__is_running_in_terminal.cma
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__list_prepend.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__parse_arguments.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__parse_version.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__set_variable_in_parent_scope.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__set_in_parent_scope.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__set_version.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__set_if_defined.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__value_to_variable_name.cmake")
