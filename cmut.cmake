@@ -11,6 +11,7 @@ endif()
 
 include("${CMUT_ROOT}/cmut__build.cmake")
 include("${CMUT_ROOT}/cmut__config.cmake")
+include("${CMUT_ROOT}/cmut__dependency.cmake")
 include("${CMUT_ROOT}/cmut__find.cmake")
 include("${CMUT_ROOT}/cmut__install.cmake")
 include("${CMUT_ROOT}/cmut__package.cmake")
