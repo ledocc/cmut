@@ -60,7 +60,7 @@ function(cmut__build__enable_warning)
     endif()
 
     # add CMUT_CXX_FLAGS_WARNING in cache
-    set(CMUT__BUILD__CXX_FLAGS_WARNING ${__CMUT_WARNING_FLAGS} CACHE STRING "Flags use by the compiler to enable warning.")
+    set(CMUT__BUILD__CXX_FLAGS_WARNING ${__CMUT_WARNING_FLAGS})
     cmut_info("Use C++ flags for warning : ${CMUT__BUILD__CXX_FLAGS_WARNING}.")
 
     if(CMAKE_CXX_FLAGS AND MSVC)
@@ -74,6 +74,6 @@ function(cmut__build__enable_warning)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} PARENT_SCOPE)
 
     # debug only
-    #message("CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
+    #message(STATUS "CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
 
 endfunction()
