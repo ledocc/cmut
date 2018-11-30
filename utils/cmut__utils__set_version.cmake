@@ -22,16 +22,16 @@ function(cmut__utils__set_version name_ version_)
 
 endfunction()
 
-function(cmut__utils__set_project_version version_)
+macro(cmut__utils__set_project_version version_)
 
     cmut_deprecated_function( cmut__utils__set_project_version cmut__project__set_version )
     cmut__project__set_version( ${file_path_} )
 
-endfunction()
+endmacro()
 
-function(cmut__utils__set_project_version_from_file file_path_)
+macro(cmut__utils__set_project_version_from_file file_path_)
 
     cmut_deprecated_function(cmut__utils__set_project_version_from_file cmut__project__set_version_from_file)
     cmut__project__set_version_from_file( ${file_path_} )
 
-endfunction()
+endmacro()

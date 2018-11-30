@@ -6,6 +6,6 @@ function(cmut__config__resolve_install_prefix)
         return()
     endif()
 
-    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" CACHE PATH "" FORCE)
+    set(CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}" CACHE PATH "" FORCE)
 
 endfunction()

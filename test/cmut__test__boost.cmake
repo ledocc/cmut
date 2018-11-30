@@ -1,4 +1,11 @@
 
+function(cmut__test__get_required_boost_components result)
+
+    cmut_deprecated_function(cmut__test__get_required_boost_components cmut__test__boost__get_required_components)
+    cmut__test__boost__get_required_components(result_)
+    set(${result} ${result_} PARENT_SCOPE)
+
+endfunction()
 
 function(cmut__test__boost__get_required_components result)
 

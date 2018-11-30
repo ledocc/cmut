@@ -23,8 +23,8 @@ function( cmut__test__qtest__find_required_components version )
 
     cmut__test__qtest__get_required_components( qtest_components )
     find_package(
-        Qt5 ${version}
-        REQUIRED COMPONENTS
+        Qt5 ${version} REQUIRED
+        COMPONENTS
             ${qtest_components}
         )
 

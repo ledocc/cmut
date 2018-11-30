@@ -43,21 +43,23 @@ find_package_handle_standard_args(
 
 if(libproxy_FOUND)
 
-    add_library(libproxy::libproxy UNKNOWN IMPORTED)
-    set_target_properties(
-        libproxy::libproxy
-        PROPERTIES
+    if(NOT TARGET libproxy::libproxy)
+        add_library(libproxy::libproxy UNKNOWN IMPORTED)
+        set_target_properties(
+            libproxy::libproxy
+            PROPERTIES
             INTERFACE_INCLUDE_DIRECTORIES "${LIBPROXY_INCLUDE_DIRS}"
-    )
+        )
 
-    set_target_properties(
-        libproxy::libproxy
-        PROPERTIES
-            IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
-            IMPORTED_LOCATION "${LIBPROXY_LIBRARY}"
+        set_target_properties(
+            libproxy::libproxy
+            PROPERTIES
+                IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
+                IMPORTED_LOCATION "${LIBPROXY_LIBRARY}"
 
-            IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-            IMPORTED_LOCATION_RELEASE "${LIBPROXY_LIBRARY}"
-    )
+                IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+                IMPORTED_LOCATION_RELEASE "${LIBPROXY_LIBRARY}"
+        )
+    endif()
 
 endif()
