@@ -24,6 +24,7 @@ function(cmut__dependency__add project package)
         )
 
     list(APPEND ${project}_DEPENDENCIES ${package})
+    list(REMOVE_DUPLICATES ${project}_DEPENDENCIES)
     set_in_parent_scope(${project}_DEPENDENCIES)
 
 
