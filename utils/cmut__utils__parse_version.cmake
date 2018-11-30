@@ -16,7 +16,10 @@ macro(__cmut__utils__set_or_default_version_in_parent_scope project_name version
 
     set(${project_name}_${version_component_name} ${version_component_value} PARENT_SCOPE)
     set(PROJECT_${version_component_name}         ${version_component_value} PARENT_SCOPE)
-    set(CMAKE_PROJECT_${version_component_name}   ${version_component_value} PARENT_SCOPE)
+
+    if(CMAKE_PROJECT_NAME STREQUAL "${project_name}")
+        set(CMAKE_PROJECT_${version_component_name}   ${version_component_value} PARENT_SCOPE)
+    endif()
 
 endmacro()
 
