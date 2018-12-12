@@ -4,18 +4,15 @@
 
 function(cmut__qt5__find_qmake)
 
-    if(QT5_QMAKE_COMMAND)
+    if(QT_QMAKE_EXECUTABLE)
         return()
     endif()
 
-    if(TARGET Qt5::qmake)
-        get_target_property(qmake_location Qt5::qmake IMPORTED_LOCATION)
-        set(QT5_QMAKE_COMMAND ${qmake_location} CACHE FILEPATH "")
-    else()
-        find_file(QT5_QMAKE_COMMAND qmake)
+    if(NOT QT_QMAKE_EXECUTABLE)
+        find_program(QT_QMAKE_EXECUTABLE qmake)
     endif()
 
-    if(NOT QT5_QMAKE_COMMAND)
+    if(NOT QT_QMAKE_EXECUTABLE)
         cmut_fatal("Can't find qmake, check if it is installed.")
     endif()
 
@@ -31,7 +28,7 @@ function(cmut__qt5__get_qmake_property result property_name)
 
 
     execute_process(
-        COMMAND ${QT5_QMAKE_COMMAND} "-query" "QT_${property_name}"
+        COMMAND ${QT_QMAKE_EXECUTABLE} "-query" "QT_${property_name}"
         OUTPUT_VARIABLE property_value
         OUTPUT_STRIP_TRAILING_WHITESPACE
         )
