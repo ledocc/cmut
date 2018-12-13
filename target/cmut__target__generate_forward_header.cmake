@@ -11,6 +11,7 @@ set(__CMUT__TARGET__CREATE_FORWARD_HEADER__DEFAULT_MODEL "${CMAKE_CURRENT_LIST_D
 ## @param[in] target : target that have ownership of class(s)
 ## @param[in] CLASS : class(s) to forward
 ## @param[in] NAMESPACE : namespace(s) of class(s)
+## @param[in] OUTPUT_DIR : directory where forward is generated, default is <target_binary_dir>/include
 ## @param[in] HEADER_EXTENSION : extension of generated header. default is ".h".
 ## @param[in] FORWARD_HEADER_MODEL : model to use in configure_file(...) function to generate header
 ##                variable available in this model are:
@@ -26,7 +27,7 @@ function(cmut__target__create_forward_header target)
         cmut__target__create_forward_header
         ARG
         ""
-        "HEADER_EXTENSION;FORWARD_HEADER_MODEL"
+        "HEADER_EXTENSION;FORWARD_HEADER_MODEL:OUTPUT_DIR"
         "CLASS;NAMESPACE"
         "${ARGN}"
         )
@@ -34,6 +35,8 @@ function(cmut__target__create_forward_header target)
     cmut__utils__set_default_argument(ARG_HEADER_EXTENSION     ".h")
     cmut__utils__set_default_argument(ARG_FORWARD_HEADER_MODEL "${__CMUT__TARGET__CREATE_FORWARD_HEADER__DEFAULT_MODEL}")
 
+    get_target_property(target_directory ${target} BINARY_DIR)
+    cmut__utils__set_default_argument(ARG_OUTPUT_DIR     "${target_directory}/include")
 
 
     foreach(namespace IN LISTS ARG_NAMESPACE)
@@ -54,14 +57,14 @@ function(cmut__target__create_forward_header target)
 
         cmut__utils__get_header_guard(header_guard ${header_path})
 
-        configure_file("${ARG_FORWARD_HEADER_MODEL}" "include/${header_path}")
+        configure_file("${ARG_FORWARD_HEADER_MODEL}" "${ARG_OUTPUT_DIR}/${header_path}")
 
         list(APPEND forward_header_files "${header_path}")
 
         target_sources(
             ${target}
             PRIVATE
-                "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/${header_path}>"
+                "$<BUILD_INTERFACE:${ARG_OUTPUT_DIR}/${header_path}>"
         )
 
     endforeach()
