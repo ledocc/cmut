@@ -14,6 +14,7 @@ function(cmut__project__set_version_from_file file_path_)
     endif()
 
     file( STRINGS "${file_path_}" version LIMIT_COUNT 1 )
+    set_directory_properties(PROPERTIES CMAKE_CONFIGURE_DEPENDS ${file_path_})
 
     __cmut__utils__set_version( ${PROJECT_NAME} ${version} cmut__project__set_version_from_file )
 
