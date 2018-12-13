@@ -1,6 +1,3 @@
-include(${CMAKE_CURRENT_LIST_DIR}/../utils/cmut__utils__header_guard.cmake)
-cmut__utils__define_header_guard()
-
 
 function(cmut__target__generate_version_header target version_h_in)
 
