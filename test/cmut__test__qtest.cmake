@@ -51,7 +51,8 @@ function( cmut__test__qtest__add namespace test_name )
         ARG
         ""
         ""
-        "FILES;LIBRARIES"
+        "FILES;LIBRARIES;ENV_VAR"
+        ${ARGN}
     )
 
     cmut__utils__set_default_argument(ARG_FILES ${test_name}.test.cpp)
@@ -79,5 +80,9 @@ function( cmut__test__qtest__add namespace test_name )
     cmut__test__turtle__link_target( ${name} )
 
     add_test(NAME "${name}" COMMAND ${name})
+
+    foreach( envVar IN LISTS ARG_ENV_VAR )
+        set_tests_properties(${name} PROPERTIES ENVIRONMENT "${envVar}")
+    endforeach()
 
 endfunction()
