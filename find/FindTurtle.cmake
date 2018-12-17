@@ -28,3 +28,15 @@ include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(TURTLE DEFAULT_MSG TURTLE_INCLUDE_DIR)
 
 mark_as_advanced(TURTLE_INCLUDE_DIR)
+
+if(TURTLE_FOUND)
+
+    add_library(turtle::turtle INTERFACE IMPORTED)
+    target_compile_definitions(turtle::turtle INTERFACE MOCK_NO_AUTO_PTR)
+
+    if(TURTLE_INCLUDE_DIR)
+        set_target_properties(turtle::turtle PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${TURTLE_INCLUDE_DIR}")
+    endif()
+
+endif()

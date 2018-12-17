@@ -12,15 +12,10 @@ endfunction()
 
 function(cmut__test__turtle__link_target target)
 
-    if(TURTLE_INCLUDE_DIR)
-        target_include_directories( ${target} PUBLIC ${TURTLE_INCLUDE_DIR} )
-    endif()
-
-    if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-        target_compile_options( ${target} PUBLIC -Wno-gnu-zero-variadic-macro-arguments )
-    endif()
-
-
-    target_link_libraries( ${target} PUBLIC Boost::unit_test_framework )
+    target_link_libraries( ${target}
+        PUBLIC
+            Boost::unit_test_framework
+            turtle::turtle
+    )
 
 endfunction()
