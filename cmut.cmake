@@ -10,6 +10,7 @@ if(NOT CMUT__MAIN_INCLUDE_QUIET)
 endif()
 
 include("${CMUT_ROOT}/cmut__build.cmake")
+include("${CMUT_ROOT}/cmut__conan.cmake")
 include("${CMUT_ROOT}/cmut__config.cmake")
 include("${CMUT_ROOT}/cmut__dependency.cmake")
 include("${CMUT_ROOT}/cmut__find.cmake")
