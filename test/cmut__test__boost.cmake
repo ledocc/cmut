@@ -60,6 +60,8 @@ function( cmut__test__boost__link_target target )
     get_target_property( BUILD_TYPE Boost::${main_component} TYPE )
     if( NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY )
         target_link_libraries( ${target} PUBLIC Boost::dynamic_linking )
+        # cmake 3.13 : Boost::dynamic_linking defined only if (WIN32)
+        target_compile_definitions( ${target} PUBLIC BOOST_ALL_DYN_LINK )
     endif()
 
     # link to special Boost::disable_autolinking
