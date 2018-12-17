@@ -10,6 +10,6 @@ function(cmut__qt5__collect_dependencies_recursively result target)
         endif()
     endforeach()
 
-    set( ${result} ${dependencies} )
+    set( ${result} ${qt_dependencies} PARENT_SCOPE )
 
  endfunction()

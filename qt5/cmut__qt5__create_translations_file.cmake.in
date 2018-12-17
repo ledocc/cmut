@@ -2,7 +2,7 @@
 
 include(@CMUT_ROOT@/cmut.cmake)
 
-set(QT5_QMAKE_COMMAND @QT5_QMAKE_COMMAND@)
+set(QT_QMAKE_EXECUTABLE @QT_QMAKE_EXECUTABLE@)
 
 
 set(output_prefix @ARG_OUTPUT_FILE_PREFIX@)

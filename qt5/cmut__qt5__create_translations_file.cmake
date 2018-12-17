@@ -39,7 +39,6 @@ endmacro()
 
 function( cmut__qt5__create_translations_file )
 
-
     cmut__qt5__get_qmake_property( translation_dir INSTALL_TRANSLATIONS )
     if( NOT EXISTS "${translation_dir}" )
         cmut_error( "[cmut][qt5][create_translations_file] : invalid QT_INSTALL_TRANSLATIONS directory : \"${translation_dir}\"" )
@@ -57,7 +56,6 @@ function( cmut__qt5__create_translations_file )
 
     cmut__qt5__create_translations_file__parse_argument( cmut__qt5__create_translations_file ${ARGN} )
 
-
     set( components )
     foreach( module IN LISTS ARG_QT_MODULES )
 
@@ -65,10 +63,10 @@ function( cmut__qt5__create_translations_file )
         list( APPEND components ${component} )
 
     endforeach()
+
     if( NOT components )
         return()
     endif()
-
 
 
     list( REMOVE_DUPLICATES components )
