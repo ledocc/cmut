@@ -15,6 +15,13 @@ set(__cmut__qt5__create_translations_file_target__input_script "${CMAKE_CURRENT_
 
 function( cmut__qt5__create_translations_file_target target )
 
+    cmut__qt5__get_qmake_property( bin_dir INSTALL_BINS )
+    if ( NOT TARGET Qt5::lconvert )
+        cmut_error( "[cmut][qt5][create_translations_file] : neither Qt5::lconvert target and QT5_LCONVERT_CMD are defined." )
+        return()
+    endif()
+    get_target_property(QT5_LCONVERT_CMD Qt5::lconvert IMPORTED_LOCATION)
+
     set(output_file "${CMAKE_CURRENT_BINARY_DIR}/cmut/qt5/cmut__qt5__create_translations_file.cmake")
 
     cmut__qt5__create_translations_file__parse_argument( cmut__qt5__create_translations_file_target "${ARGN}")

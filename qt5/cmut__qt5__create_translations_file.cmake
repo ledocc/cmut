@@ -45,13 +45,14 @@ function( cmut__qt5__create_translations_file )
         return()
     endif()
 
-    cmut__qt5__get_qmake_property( bin_dir INSTALL_BINS )
-    if( NOT EXISTS "${bin_dir}/lconvert" )
-        cmut_error( "[cmut][qt5][create_translations_file] : could not locate lconvert tool in Qt5 install bin directory \"${bin_dir}\"." )
-        return()
-    else()
-        set(LCONVERT_CMD "${bin_dir}/lconvert")
+    if( NOT DEFINED QT5_LCONVERT_CMD )
+        if ( NOT TARGET Qt5::lconvert )
+            cmut_error( "[cmut][qt5][create_translations_file] : neither Qt5::lconvert target and QT5_LCONVERT_CMD are defined." )
+            return()
+        endif()
+        get_target_property(QT5_LCONVERT_CMD Qt5::lconvert IMPORTED_LOCATION)
     endif()
+
 
 
     cmut__qt5__create_translations_file__parse_argument( cmut__qt5__create_translations_file ${ARGN} )
@@ -86,7 +87,7 @@ function( cmut__qt5__create_translations_file )
 
         cmut_info( "[cmut][qt5][create_translations_file] : generate \"${language}\" translations file." )
         cmut__utils__execute_process(
-            COMMAND "${LCONVERT_CMD}" -o "${ARG_OUTPUT_FILE_PREFIX}_${language}.qm" "${translations_files}"
+            COMMAND ${QT5_LCONVERT_CMD} -o "${ARG_OUTPUT_FILE_PREFIX}_${language}.qm" "${translations_files}"
             PRINT_LOG_ON_ERROR
         )
 

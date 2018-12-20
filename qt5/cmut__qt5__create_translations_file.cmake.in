@@ -3,7 +3,7 @@
 include(@CMUT_ROOT@/cmut.cmake)
 
 set(QT_QMAKE_EXECUTABLE @QT_QMAKE_EXECUTABLE@)
-
+set(QT5_LCONVERT_CMD @QT5_LCONVERT_CMD@)
 
 set(output_prefix @ARG_OUTPUT_FILE_PREFIX@)
 
