@@ -3,10 +3,10 @@
 function(cmut__qt5__make_qt_conf)
 
     cmut__utils__parse_arguments(
-        cmut__qt5__install_qt_conf
+        cmut__qt5__make_qt_conf
         ARG
         ""
-        "OUTPUT_FILE;PREFIX;PLUGINS;QML2IMPORTS"
+        "OUTPUT_FILE;PREFIX;PLUGINS;QML2IMPORTS;TRANSLATIONS"
         ""
         ${ARGN}
         )
@@ -33,6 +33,10 @@ function(cmut__qt5__make_qt_conf)
 
     if(DEFINED ARG_QML2IMPORTS)
         file(APPEND ${ARG_OUTPUT_FILE} "Qml2Imports = ${ARG_QML2IMPORTS}\n")
+    endif()
+
+    if(DEFINED ARG_TRANSLATIONS)
+        file(APPEND ${ARG_OUTPUT_FILE} "Translations = ${ARG_TRANSLATIONS}\n")
     endif()
 
 endfunction()

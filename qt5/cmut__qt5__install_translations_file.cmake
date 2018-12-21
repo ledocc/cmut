@@ -22,7 +22,7 @@ function( cmut__qt5__install_translations_file )
         cmut__qt5__install_translations_file
         ARG
         ""
-        "FILE_PREFIX;INSTALL_DIR;COMPONENT"
+        "FILE_PREFIX;INSTALL_DIR;DESTINATION;COMPONENT"
         "LANGUAGES"
         ${ARGN}
         )
@@ -32,11 +32,14 @@ function( cmut__qt5__install_translations_file )
         return()
     endif()
 
-    if( NOT ARG_INSTALL_DIR )
-        cmut_error( "[cmut][qt5][install_translations_file] : INSTALL_DIR argument required." )
+    if( NOT DEFINED ARG_DESTINATION AND NOT DEFINED ARG_INSTALL_DIR )
+        cmut_error( "[cmut][qt5][install_translations_file] : DESTINATION argument required." )
         return()
     endif()
-
+    if( DEFINED ARG_INSTALL_DIR AND NOT DEFINED ARG_DESTINATION )
+    	cmut_deprecated_parameter( INSTALL_DIR DESTINATION )
+	set( ARG_DESTINATION "${ARG_INSTALL_DIR}" )
+    endif()	
 
 
     set( translation_files )
@@ -48,7 +51,7 @@ function( cmut__qt5__install_translations_file )
         FILES
             ${translation_files}
         DESTINATION
-            "${ARG_INSTALL_DIR}"
+            "${ARG_DESTINATION}"
         COMPONENT
             "${ARG_COMPONENT}"
     )

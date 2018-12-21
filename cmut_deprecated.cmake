@@ -25,3 +25,7 @@ endfunction()
 function(cmut_deprecated_env_variable old new)
     __cmut_deprecated_message( "environment variable" "${old}" "${new}" )
 endfunction()
+
+function(cmut_deprecated_parameter old new)
+    __cmut_deprecated_message( "parameter" "${old}" "${new}" )
+endfunction()
