@@ -22,7 +22,7 @@ function( cmut__qt5__install_translations_file )
         cmut__qt5__install_translations_file
         ARG
         ""
-        "FILE_PREFIX;INSTALL_DIR"
+        "FILE_PREFIX;INSTALL_DIR;COMPONENT"
         "LANGUAGES"
         ${ARGN}
         )
@@ -49,6 +49,8 @@ function( cmut__qt5__install_translations_file )
             ${translation_files}
         DESTINATION
             "${ARG_INSTALL_DIR}"
+        COMPONENT
+            "${ARG_COMPONENT}"
     )
 
 endfunction()
