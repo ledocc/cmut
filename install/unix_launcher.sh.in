@@ -27,13 +27,7 @@ fi
 export LD_LIBRARY_PATH=${EXEC_FULLDIR}
 
 # run executable
-${EXEC_FULLPATH} > ${THIS_SCRIPT_PATH}/${EXEC_NAME}.log.txt 2> ${THIS_SCRIPT_PATH}/${EXEC_NAME}.err.txt
-EXEC_RETURN_VALUE=$?
-
-if [ ${EXEC_RETURN_VALUE} != 0 ]
-then
-    cat ${THIS_SCRIPT_PATH}/${EXEC_NAME}.err.txt
-fi
+${EXEC_FULLPATH}
 
 # return executable return code
-exit $EXEC_RETURN_VALUE
+exit $?
