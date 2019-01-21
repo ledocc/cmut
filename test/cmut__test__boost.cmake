@@ -31,6 +31,17 @@ endfunction()
 
 function(cmut__test__boost__find_required_components version)
 
+    cmut__lang__arg__set_params(PARAM STATIC_LIBS "" "")
+    cmut__lang__arg__parse_defined_options(
+        cmut__test__boost__find_required_components
+        ARG
+        PARAM
+        ${ARGN}
+        )
+
+    set(Boost_USE_STATIC_LIBS OFF)
+    cmut__lang__arg__set_if_option(STATIC_LIBS Boost_USE_STATIC_LIBS ON)
+
     cmut__test__boost__get_required_components( components )
     find_package(
         Boost ${version}
