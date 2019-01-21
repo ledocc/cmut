@@ -74,7 +74,25 @@ macro(cmut__lang__arg__parse
     endif()
 
     if(${prefix}_UNPARSED_ARGUMENTS)
-        cmut_fatal("${log_tag}: invalid argument(s): ${${prefix}_UNPARSED_ARGUMENTS}" )
+
+        string(APPEND message "invalid argument(s): ${${prefix}_UNPARSED_ARGUMENTS}\n")
+        string(APPEND message "available parameters are:\n")
+        string(APPEND message "options:\n")
+        foreach(v ${options})
+            string(APPEND message "  - ${v}\n")
+        endforeach()
+
+        string(APPEND message "one_value_keywords:\n")
+        foreach(v ${one_value_keywords})
+            string(APPEND message "  - ${v}\n")
+        endforeach()
+
+        string(APPEND message "multi_value_keywords:\n")
+        foreach(v ${multi_value_keywords})
+            string(APPEND message "  - ${v}\n")
+        endforeach()
+
+        cmut_fatal("${log_tag}: ${message}" )
     endif()
 
     set( __cmut__lang__arg__current_prefix ${prefix} )
