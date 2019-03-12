@@ -35,9 +35,8 @@ function(cmut__project__setup_library target)
     cmut__utils__set_default_argument( ARG_VERSION ${PROJECT_VERSION} )
     cmut__utils__set_default_argument( ARG_WINNT_VERSION 0X601 )
 
-
-    if(DEFINED ARG_CXX_STANDARD)
-        cmut_warning("CXX_EXTENSIONS, CXX_STANDARD_REQUIRED should not use for target description, use compile_features instead.")
+    if( ARG_CXX_EXTENSIONS OR ARG_CXX_STANDARD_REQUIRED )
+        cmut_warn("CXX_EXTENSIONS, CXX_STANDARD_REQUIRED should not be used for target description, use compile_features instead.")
     endif()
 
     if(DEFINED ARG_CXX_FEATURES)
