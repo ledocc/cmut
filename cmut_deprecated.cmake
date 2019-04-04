@@ -1,31 +1,40 @@
 include("${CMAKE_CURRENT_LIST_DIR}/utils/cmut__utils__header_guard.cmake")
 cmut__utils__define_header_guard()
 
+include("${CMAKE_CURRENT_LIST_DIR}/cmut_message.cmake")
 
-
-function(__cmut_deprecated_message type old new)
-    if(NOT $ENV{CMUT__DISABLE_DEPRECATED_WARNING})
-        cmut_warn("cmut ${type} \"${old}\" is deprecated, prefer \"${new}\" instead")
+function(cmut_deprecated_message what replacement)
+    if("$ENV{CMUT__DISABLE_DEPRECATED_WARNING}" STREQUAL "")
+        cmut_warn("cmut ${what} is deprecated, prefer ${replacement} instead")
     endif()
 endfunction()
 
-include("${CMAKE_CURRENT_LIST_DIR}/cmut_message.cmake")
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+
+function(cmut_deprecated_message__private type old new)
+    cmut_deprecated_message("${type} \"${old}\"" "\"${new}\"")
+endfunction()
+
+########################################################################################################################
+
 function(cmut_deprecated old new)
-    __cmut_deprecated_message( file "${old}" "${new}" )
+    cmut_deprecated_message__private( "file" "${old}" "${new}" )
 endfunction()
 
 function(cmut_deprecated_function old new)
-    __cmut_deprecated_message( function "${old}" "${new}" )
+    cmut_deprecated_message__private( "function" "${old}" "${new}" )
 endfunction()
 
 function(cmut_deprecated_variable old new)
-    __cmut_deprecated_message( variable "${old}" "${new}" )
+    cmut_deprecated_message__private( "variable" "${old}" "${new}" )
 endfunction()
 
 function(cmut_deprecated_env_variable old new)
-    __cmut_deprecated_message( "environment variable" "${old}" "${new}" )
+    cmut_deprecated_message__private( "environment variable" "${old}" "${new}" )
 endfunction()
 
 function(cmut_deprecated_parameter old new)
-    __cmut_deprecated_message( "parameter" "${old}" "${new}" )
+    cmut_deprecated_message__private( "parameter" "${old}" "${new}" )
 endfunction()
