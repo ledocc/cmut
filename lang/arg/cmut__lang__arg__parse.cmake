@@ -75,6 +75,7 @@ macro(cmut__lang__arg__parse
 
     if(${prefix}_UNPARSED_ARGUMENTS)
 
+        string(APPEND message "in function ${function_name}\n")
         string(APPEND message "invalid argument(s): ${${prefix}_UNPARSED_ARGUMENTS}\n")
         string(APPEND message "available parameters are:\n")
         string(APPEND message "options:\n")
