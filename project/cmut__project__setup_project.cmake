@@ -1,4 +1,4 @@
-
+include("${CMUT_ROOT}/cmut_deprecated.cmake")
 
 macro(cmut__project__setup_project)
 
@@ -49,6 +49,14 @@ macro(cmut__project__setup_project)
     cmut__lang__arg__set_default( DEBUG_POSTFIX "d" )
     set(CMAKE_DEBUG_POSTFIX ${ARG_DEBUG_POSTFIX})
 
+    if( DEFINED ARG_CXX_STANDARD )
+        cmut_deprecated_message(CXX_STANDARD "define compile feature by target")
+    endif()
+    if( ARG_CXX_EXTENSIONS )
+        cmut_deprecated_message(CXX_EXTENSIONS "define compile feature by target")
+    endif()
+
+
 
     # define CMAKE_*_OUTPUT_DIRECTORY
     cmut__lang__arg__set_if_option( OUTPUT_BASE_DIR OPTIONS "${ARG_OUTPUT_BASE_DIR}")
@@ -57,11 +65,6 @@ macro(cmut__project__setup_project)
 
     cmut__build__enable_color_with_ninja()
 
-
-    # enable C++14
-    cmut__lang__arg__set_default( CXX_STANDARD "14" )
-    cmut__lang__arg__set_if_option( CXX_EXTENSIONS OPTIONS CXX_EXTENSIONS )
-    cmut__build__enable_cxx_standard(${ARG_CXX_STANDARD} ${OPTIONS} )
 
     # enable warning
     cmut__lang__arg__set_if_option( WARNING_AGGRESSIVE OPTIONS AGGRESSIVE )
