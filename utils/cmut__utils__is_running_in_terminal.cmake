@@ -15,9 +15,10 @@ function(cmut__utils__is_running_in_terminal result)
     # check if file descriptor 1 is open on a terminal
     execute_process(
         COMMAND ${TEST_COMMAND} -t 1
-        RESULT_VARIABLE __result
+        RESULT_VARIABLE local_result
+        ERROR_QUIET
         )
 
-    set(${result} ${__result} PARENT_SCOPE)
-    
+    set(${result} ${local_result} PARENT_SCOPE)
+
 endfunction()

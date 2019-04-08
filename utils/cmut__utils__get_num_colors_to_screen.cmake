@@ -20,12 +20,13 @@ function(cmut__utils__get_num_colors_to_screen result)
         set(${result} 1 PARENT_SCOPE)
         return()
     endif()
-    
-    
+
+
     # check if file descriptor 1 is open on a terminal
     execute_process(
         COMMAND ${TPUT_COMMAND} colors
         OUTPUT_VARIABLE __result
+        ERROR_QUIET
         )
     set(${result} ${__result} PARENT_SCOPE)
 
@@ -37,15 +38,14 @@ function(cmut__utils__tput result)
         message(FATAL_ERROR "cmut__utils__tput : TPUT_COMMAND not defined. abort")
         return()
     endif()
-    
-    
+
+
     # check if file descriptor 1 is open on a terminal
     execute_process(
         COMMAND ${TPUT_COMMAND} ${ARGN}
-        OUTPUT_VARIABLE __result
+        OUTPUT_VARIABLE local_result
+        ERROR_QUIET
         )
-    set(${result} ${__result} PARENT_SCOPE)
+    set(${result} ${local_result} PARENT_SCOPE)
 
 endfunction()
-
-
