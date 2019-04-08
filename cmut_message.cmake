@@ -46,7 +46,7 @@ endfunction()
 
 
 function(cmut_debug message)
-    if(CMUT_DEBUG OR $ENV{CMUT_DEBUG})
+    if( CMUT_DEBUG OR ( NOT "$ENV{CMUT_DEBUG}" STREQUAL "" ) )
         cmut_message(STATUS "debug" "${message}" )
     endif()
 endfunction()
