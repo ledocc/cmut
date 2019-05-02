@@ -31,7 +31,7 @@ endfunction()
 
 function(cmut__test__boost__find_required_components version)
 
-    cmut__lang__arg__set_params(PARAM STATIC_LIBS "" "")
+    cmut__lang__arg__set_params(PARAM "" STATIC_LIBS "")
     cmut__lang__arg__parse_defined_options(
         cmut__test__boost__find_required_components
         ARG
@@ -39,9 +39,7 @@ function(cmut__test__boost__find_required_components version)
         ${ARGN}
         )
 
-    set(Boost_USE_STATIC_LIBS OFF)
-    cmut__lang__arg__set_if_option(STATIC_LIBS Boost_USE_STATIC_LIBS ON)
-
+    cmut__lang__arg__set_if_defined_or_unset(STATIC_LIBS Boost_USE_STATIC_LIBS ${ARG_STATIC_LIBS})
 
     cmut__test__boost__get_required_components( components )
     find_package(
@@ -69,8 +67,16 @@ function( cmut__test__boost__link_target target )
 
     # link to special Boost::dynamic_linking if not static build
     __cmut__test__boost__get_main_component( main_component )
-    get_target_property( BUILD_TYPE Boost::${main_component} TYPE )
-    if( NOT ${BUILD_TYPE} STREQUAL STATIC_LIBRARY )
+    get_target_property( LINK_TYPE Boost::${main_component} TYPE )
+
+        message(STATUS "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        boost's LINK_TYPE = ${LINK_TYPE}")
+    if( ${LINK_TYPE} STREQUAL UNKNOWN_LIBRARY )
+        get_target_property( library_path Boost::${main_component} IMPORTED_LOCATION )
+        message(STATUS "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        library_path = ${library_path}")
+        cmut__library__get_link_type( LINK_TYPE "${library_path}" )
+    endif()
+
+    if( NOT ${LINK_TYPE} STREQUAL STATIC_LIBRARY )
         target_link_libraries( ${target} PUBLIC Boost::dynamic_linking )
         # cmake 3.13 : Boost::dynamic_linking defined only if (WIN32)
         target_compile_definitions( ${target} PUBLIC BOOST_ALL_DYN_LINK )
