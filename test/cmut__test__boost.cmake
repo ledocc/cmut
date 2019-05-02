@@ -69,10 +69,8 @@ function( cmut__test__boost__link_target target )
     __cmut__test__boost__get_main_component( main_component )
     get_target_property( LINK_TYPE Boost::${main_component} TYPE )
 
-        message(STATUS "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        boost's LINK_TYPE = ${LINK_TYPE}")
     if( ${LINK_TYPE} STREQUAL UNKNOWN_LIBRARY )
         get_target_property( library_path Boost::${main_component} IMPORTED_LOCATION )
-        message(STATUS "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        library_path = ${library_path}")
         cmut__library__get_link_type( LINK_TYPE "${library_path}" )
     endif()
 
