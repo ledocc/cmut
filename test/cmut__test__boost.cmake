@@ -31,7 +31,7 @@ endfunction()
 
 function(cmut__test__boost__find_required_components version)
 
-    cmut__lang__arg__set_params(PARAM "" STATIC_LIBS "")
+    cmut__lang__arg__set_params(PARAM "" "STATIC_LIBS" "")
     cmut__lang__arg__parse_defined_options(
         cmut__test__boost__find_required_components
         ARG
@@ -39,7 +39,9 @@ function(cmut__test__boost__find_required_components version)
         ${ARGN}
         )
 
-    cmut__lang__arg__set_if_defined_or_unset(STATIC_LIBS Boost_USE_STATIC_LIBS ${ARG_STATIC_LIBS})
+    if( PARAM_STATIC_LIBS )
+        cmut__warn( "[cmut][test][boost][find_required_components] : STATIC_LIBS is deprecated, use global variable \"Boost_USE STATIC LIBS\" instead." )
+    endif()
 
     cmut__test__boost__get_required_components( components )
     find_package(
