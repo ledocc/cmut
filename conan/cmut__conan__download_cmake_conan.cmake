@@ -23,7 +23,7 @@ function( cmut__conan__download_cmake_conan )
 
 
     if(NOT EXISTS "${ARG_OUTPUT_PATH}")
-        message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+        cmut_info("Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
         file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v${ARG_VERSION}/conan.cmake"
             "${ARG_OUTPUT_PATH}")
     endif()
