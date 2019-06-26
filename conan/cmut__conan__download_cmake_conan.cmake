@@ -18,7 +18,7 @@ function( cmut__conan__download_cmake_conan )
         )
 
 
-    cmut__utils__set_default_argument(ARG_VERSION 0.13)
+    cmut__utils__set_default_argument(ARG_VERSION 0.14)
     cmut__utils__set_default_argument(ARG_OUTPUT_PATH ${CMAKE_BINARY_DIR}/conan.cmake)
 
 
