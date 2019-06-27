@@ -48,12 +48,15 @@ function(cmut__target__generate_version_source target version_cpp_in)
 
 
     set(version_cpp_cache "${CMAKE_CURRENT_BINARY_DIR}/version.cpp.cache.cmake")
+    set(cache)
     if(EXISTS "${version_cpp_cache}")
-        file(READ ${version_cpp_cache} cache)
-        if(NOT "${cache_string}" STREQUAL "${cache}")
-            file(WRITE "${version_cpp_cache}" "${cache_string}")
-        endif()
-    else()
+        file(READ "${version_cpp_cache}" cache)
+    endif()
+
+    cmut_debug("[cmut][target][generate_version_source]: cache_string = ${cache_string}")
+    cmut_debug("[cmut][target][generate_version_source]: cache = ${cache}")
+    if(NOT "${cache_string}" STREQUAL "${cache}")
+        cmut_info( "[cmut][target][generate_version_source]: write cache file \"${version_cpp_cache}\"." )
         file(WRITE "${version_cpp_cache}" "${cache_string}")
     endif()
 
