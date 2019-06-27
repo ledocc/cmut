@@ -39,7 +39,7 @@ function(cmut__install__install_config_directory)
         endif()
 
 
-        foreach(f ${files})
+       foreach(f ${files})
 
             file(RELATIVE_PATH dst_file "${absolute_src_dir}" "${f}")
             get_filename_component(dst_dir ${dst_file} DIRECTORY)
