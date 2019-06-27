@@ -1,13 +1,13 @@
 
 
 ## cmut__dependency__find( project_in )
-## brief: call cmake's "find_package" function with data regidtered by "cmut__dependency__add" for the project "project_in"
+## brief: call cmake's "find_package" function with data registered by "cmut__dependency__add" for the project "project_in"
 ##
 ## cmut__dependency__find have to be a macro to allow <packageName>Config.cmake script to define variable in global scope
 ## This is a big trouble when script find by find_package (Find<packageName>.cmake or <packageName>Config.cmake) use this same macro.
-## This start a recursive call of cmut__dependency__find, and project variable of outer call is replaced by the one in inner call, and so one.
+## This start a recursive call of cmut__dependency__find, and project variable of outer call is replaced by the one in inner call, and so on.
 ## When the inner call return, project variable still have the value of inner call, and all go bad.
-## To fix this, when create a stack that save the current project varible before call find_package, and pop it after call of find_variable.
+## To fix this, when create a stack that save the current project variable before call find_package, and pop it after call of find_variable.
 macro( cmut__dependency__find project_in )
 
 
