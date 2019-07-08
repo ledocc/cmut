@@ -110,7 +110,7 @@ function( __cmut__library__get_link_type__msvc result library_path )
     endif()
 
     execute_process(
-        COMMAND "${CMUT_ROOT}/library/windows/get_link_type.bat" "${DUMPBIN_COMMAND}" "${library_path}"
+        COMMAND "${DUMPBIN_COMMAND}" "${library_path}"
         OUTPUT_VARIABLE dumpbin_output
         RESULT_VARIABLE dumpbin_result
         ERROR_VARIABLE dumpbin_error
@@ -122,7 +122,13 @@ function( __cmut__library__get_link_type__msvc result library_path )
     endif()
 
 
-    if("${dumpbin_output}" EQUAL 0)
+# http://www.skyfree.org/linux/references/coff.pdf
+# 6.2. The .drectve Section (Object Only)
+#
+# The linker removes a .drectve section after processing the information,
+#  so the section does not appear in the image file being linked
+    string(REGEX MATCH ".*\.drectve.*" drectve_match "${dumpbin_output}")
+    if(drectve_match STREQUAL "")
         cmut__lang__return_value(DYNAMIC_LIBRARY)
     else()
         cmut__lang__return_value(STATIC_LIBRARY)
