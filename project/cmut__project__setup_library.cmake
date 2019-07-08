@@ -71,7 +71,7 @@ function(cmut__project__setup_library target)
             -wd4251 # disable warning about std type not exported in dll interface
             -wd4275 # disable warning about class derived from std type not exported in dll interface
         )
-        target_compile_options( ${target} PUBLIC ${MSVC_WARNING} )
+        target_compile_options( ${target} ${library_property_scope} ${MSVC_WARNING} )
     endif()
 
 endfunction()
