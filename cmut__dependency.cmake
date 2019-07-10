@@ -1,5 +1,6 @@
 
 include("${CMAKE_CURRENT_LIST_DIR}/dependency/cmut__dependency__add.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/dependency/cmut__dependency__build_with_conan.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/dependency/cmut__dependency__copy.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/dependency/cmut__dependency__find.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/dependency/cmut__dependency__print.cmake")
