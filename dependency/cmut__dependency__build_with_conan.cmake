@@ -33,17 +33,17 @@ endfunction()
 macro(cmut__dependency__build_with_conan )
 
     option(BUILD_DEPENDENCIES "use conan to install/build dependencies" OFF)
-    option(${PROJECT_NAME}__FORCE_INCLUDE_CONAN_PATHS_CMAKE "Include \"conan_paths.cmake\" generated in binary directory by conan." OFF)
 
     if(BUILD_DEPENDENCIES)
         __cmut__dependency__build_with_conan__implementation( ${ARGN} )
     endif()
 
-    if( BUILD_DEPENDENCIES OR CONAN_EXPORTED OR ${PROJECT_NAME}__FORCE_INCLUDE_CONAN_PATHS_CMAKE)
-        if(CONAN_EXPORTED OR ${PROJECT_NAME}__FORCE_INCLUDE_CONAN_PATHS_CMAKE)
-            cmut__conan__capture_cxx_standard()
-        endif()
+    if( BUILD_DEPENDENCIES OR CONAN_EXPORTED )
         include( "${PROJECT_BINARY_DIR}/conan_paths.cmake" )
+        if( CONAN_EXPORTED )
+            include( "${PROJECT_BINARY_DIR}/conanbuildinfo.cmake" )
+            conan_basic_setup()
+        endif()
     endif()
 
 endmacro()
