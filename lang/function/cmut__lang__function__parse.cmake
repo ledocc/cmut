@@ -1,8 +1,11 @@
 
 function( cmut__lang__function__init_param function_name )
 
+    cmake_parse_arguments( __cmut__lang__function__init_param__ARG "SKIP_UNPARSED" "" "" ${ARGN} )
+
     set( __cmut__lang__function__function_name ${function_name} PARENT_SCOPE)
     set( __cmut__lang__function__arg_prefix ARG PARENT_SCOPE)
+    set( __cmut__lang__function__arg_prefix__SKIP_UNPARSED __cmut__lang__function__init_param__ARG_SKIP_UNPARSED PARENT_SCOPE)
 
 endfunction()
 
@@ -57,7 +60,7 @@ macro( cmut__lang__function__parse_arguments )
         endforeach()
     endif()
 
-    if(${__cmut__lang__function__arg_prefix}_UNPARSED_ARGUMENTS)
+    if(${__cmut__lang__function__arg_prefix}_UNPARSED_ARGUMENTS AND NOT __cmut__lang__function__arg_prefix__SKIP_UNPARSED)
 
         string(APPEND message "in function ${__cmut__lang__function__function_name}\n")
         string(APPEND message "invalid argument(s): ${${__cmut__lang__function__arg_prefix}_UNPARSED_ARGUMENTS}\n")
