@@ -42,7 +42,11 @@ macro(cmut__dependency__build_with_conan )
         include( "${PROJECT_BINARY_DIR}/conan_paths.cmake" )
         if( CONAN_EXPORTED )
             include( "${PROJECT_BINARY_DIR}/conanbuildinfo.cmake" )
-            conan_basic_setup()
+            conan_check_compiler()
+            conan_set_libcxx()
+            conan_set_std()
+            conan_set_vs_runtime()
+
         endif()
     endif()
 
