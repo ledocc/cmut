@@ -3,15 +3,10 @@
 
 function(__cmut__dependency__build_with_conan__implementation )
 
-    cmut__lang__function__init_param(cmut__dependency__build_with_conan)
-    cmut__lang__function__add_param(DEFAULT_CXX_STANDARD)
+    cmut__lang__function__init_param(cmut__dependency__build_with_conan SKIP_UNPARSED)
     cmut__lang__function__add_param(CONAN_VERSION DEFAULT 1.17.0)
     cmut__lang__function__parse_arguments(${ARGN})
 
-
-    if(ARG_DEFAULT_CXX_STANDARD)
-        cmut__lang__set_default(CMAKE_CXX_STANDARD ${ARG_DEFAULT_CXX_STANDARD})
-    endif()
 
     cmut__conan__download_cmake_conan()
     include(${CMAKE_BINARY_DIR}/conan.cmake)
@@ -21,10 +16,10 @@ function(__cmut__dependency__build_with_conan__implementation )
     cmut__cmake_conan__get_compiler_cppstd_setting(compiler_cppstd_setting)
 
     conan_cmake_run(
-        CONANFILE conanfile.py
-        BUILD missing
+        ${ARGN}
         ${compiler_cppstd_setting}
         ${shared_option}
+        PROFILE_AUTO ALL
         )
 
 endfunction()
@@ -33,9 +28,15 @@ endfunction()
 macro(cmut__dependency__build_with_conan )
 
     option(BUILD_DEPENDENCIES "use conan to install/build dependencies" OFF)
+    set(CMUT_CONAN_PROFILE "" CACHE STRING "conan profile to use when build dependencies")
 
     if(BUILD_DEPENDENCIES)
-        __cmut__dependency__build_with_conan__implementation( ${ARGN} )
+        set(cmut__dependency__build_with_conan__profile)
+        if(CMUT_CONAN_PROFILE)
+            set(cmut__dependency__build_with_conan__profile PROFILE ${CMUT_CONAN_PROFILE})
+        endif()
+
+        __cmut__dependency__build_with_conan__implementation( ${ARGN} ${cmut__dependency__build_with_conan__profile} )
     endif()
 
     if( BUILD_DEPENDENCIES OR CONAN_EXPORTED )
