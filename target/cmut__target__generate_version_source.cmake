@@ -43,6 +43,9 @@ function(cmut__target__generate_version_source target version_cpp_in)
 
     cmut__target__generate_version_source__collect_variable_to_forward( variables "${version_cpp_in}")
     foreach( variable IN LISTS variables )
+        if(NOT DEFINED ${variable} )
+            cmut_warn( "[cmut][target][generate_version_source]: variable \"${variable}\" is required, but not defined." )
+        endif()
         cmut__cache__add_internal( cache_string ${variable} "${${variable}}")
     endforeach()
 
