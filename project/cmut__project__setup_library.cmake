@@ -57,15 +57,6 @@ function(cmut__project__setup_library target)
     cmut__target__win32__unicode( ${target} )
     cmut__target__win32__win32_lean_and_mean( ${target} )
 
-
-    target_include_directories(
-        ${target}
-        ${library_property_scope}
-            "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
-            "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>"
-        )
-
-
     if( MSVC )
         set( MSVC_WARNING
             -wd4251 # disable warning about std type not exported in dll interface
