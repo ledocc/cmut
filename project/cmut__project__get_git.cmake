@@ -13,7 +13,7 @@ function(cmut__project__get_git_revision_count revisionCount )
     )
 
     if(error)
-        message(SEND_ERROR "[cmut][project] : Can't retrieve revision count from local git repository.")
+        cmut__log__error( cmut__project__get_git_revision_count "Can't retrieve revision count from local git repository." )
     endif()
 
     set(${revisionCount} ${output} PARENT_SCOPE)
@@ -35,7 +35,7 @@ function(cmut__project__get_git_revision_hash revisionHash)
     )
 
     if(error)
-        message(SEND_ERROR "[cmut][project] : Can't retrieve hash from local git repository.")
+        cmut__log__error( cmut__project__get_git_revision_hash "Can't retrieve hash from local git repository." )
     endif()
 
     set(${revisionHash} ${output} PARENT_SCOPE)
