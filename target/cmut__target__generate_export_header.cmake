@@ -29,10 +29,6 @@ function(cmut__target__generate_export_header target)
         PUBLIC
             "$<BUILD_INTERFACE:${output_dir}>"
     )
-    target_include_directories( ${target}
-        PUBLIC
-            "$<BUILD_INTERFACE:${output_dir}>"
-    )
 
 
 endfunction()
