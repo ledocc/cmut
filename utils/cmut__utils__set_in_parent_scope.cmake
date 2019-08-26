@@ -1,14 +1,14 @@
 
 macro(cmut__utils__set_in_parent_scope variable)
 
-    set( ${variable} "${${variable}}" PARENT_SCOPE )
+    cmut_deprecated_function( cmut__utils__set_in_parent_scope cmut__lang__forward_in_parent_scope  )
+    cmut__lang__forward_parent_scope( ${variable} )
 
 endmacro()
 
 macro(cmut__utils__set_in_parent_scope_if_defined variable)
 
-    if(DEFINED ${variable})
-        cmut__utils__set_in_parent_scope( ${variable} )
-    endif()
+    cmut_deprecated_function( cmut__utils__set_in_parent_scope_if_defined cmut__lang__forward_in_parent_scope_if_defined )
+    cmut__lang__forward_in_parent_scope_if_defined( ${variable} )
 
 endmacro()

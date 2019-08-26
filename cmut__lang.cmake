@@ -2,4 +2,5 @@
 include("${CMAKE_CURRENT_LIST_DIR}/lang/cmut__lang__arg.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/lang/cmut__lang__function.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/lang/cmut__lang__return.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/lang/cmut__lang__set_in_parent_scope.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/lang/cmut__lang__set_default.cmake")
