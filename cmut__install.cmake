@@ -3,7 +3,7 @@ cmut__utils__define_header_guard()
 
 
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__add_install_component_targets.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__component_dependency.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__config_dependencies_directory.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__define_variables.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__fixup_bundle_dylib.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_cmut__dependency_files.cmake")
@@ -18,3 +18,4 @@ include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_qml.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_system_library.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_target.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/install/cmut__install__install_unix_launcher.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/install/component.cmake")

@@ -11,7 +11,7 @@ set(__CMUT__TARGET__CREATE_FORWARD_HEADER__DEFAULT_MODEL "${CMAKE_CURRENT_LIST_D
 ## @param[in] target : target that have ownership of class(s)
 ## @param[in] CLASS : class(s) to forward
 ## @param[in] NAMESPACE : namespace(s) of class(s)
-## @param[in] OUTPUT_DIR : directory where forward is generated, default is <target_binary_dir>/include
+## @param[in] OUTPUT_DIR : ignored (deprecated)
 ## @param[in] HEADER_EXTENSION : extension of generated header. default is ".h".
 ## @param[in] FORWARD_HEADER_MODEL : model to use in configure_file(...) function to generate header
 ##                variable available in this model are:
@@ -22,22 +22,20 @@ set(__CMUT__TARGET__CREATE_FORWARD_HEADER__DEFAULT_MODEL "${CMAKE_CURRENT_LIST_D
 ##
 function(cmut__target__create_forward_header target)
 
+    cmut__lang__function__init_param( cmut__target__create_forward_header )
+    cmut__lang__function__add_param( HEADER_EXTENSION     DEFAULT ".h" )
+    cmut__lang__function__add_param( FORWARD_HEADER_MODEL DEFAULT "${__CMUT__TARGET__CREATE_FORWARD_HEADER__DEFAULT_MODEL}" )
+    cmut__lang__function__add_param( OUTPUT_DIR )
+    cmut__lang__function__add_multi_param( CLASS )
+    cmut__lang__function__add_multi_param( NAMESPACE )
+    cmut__lang__function__parse_arguments( ${ARGN} )
 
-    cmut__utils__parse_arguments(
-        cmut__target__create_forward_header
-        ARG
-        ""
-        "HEADER_EXTENSION;FORWARD_HEADER_MODEL:OUTPUT_DIR"
-        "CLASS;NAMESPACE"
-        "${ARGN}"
-        )
+    if( ARG_OUTPUT_DIR )
+        cmut_deprecated_parameter( OUTPUT_DIR )
+    endif()
 
-    cmut__utils__set_default_argument(ARG_HEADER_EXTENSION     ".h")
-    cmut__utils__set_default_argument(ARG_FORWARD_HEADER_MODEL "${__CMUT__TARGET__CREATE_FORWARD_HEADER__DEFAULT_MODEL}")
 
-    get_target_property(target_directory ${target} BINARY_DIR)
-    cmut__utils__set_default_argument(ARG_OUTPUT_DIR     "${target_directory}/include")
-
+    cmut__target__get_generated_header_output_directory( output_dir ${target} )
 
     foreach(namespace IN LISTS ARG_NAMESPACE)
 
@@ -48,32 +46,35 @@ function(cmut__target__create_forward_header target)
 
     endforeach()
 
+    foreach( class_name IN LISTS ARG_CLASS )
 
+        set( header_path "${header_dir}${class_name}_fwd${ARG_HEADER_EXTENSION}" )
+        cmut__utils__get_header_guard( header_guard ${header_path} )
 
-    foreach(class_name IN LISTS ARG_CLASS)
-
-        set(header_path "${header_dir}${class_name}_fwd${ARG_HEADER_EXTENSION}")
-        cmut_debug("[cmut][target] - Create forward declaration: '${header_path}'")
-
-        cmut__utils__get_header_guard(header_guard ${header_path})
-
-        configure_file("${ARG_FORWARD_HEADER_MODEL}" "${ARG_OUTPUT_DIR}/${header_path}")
-
-        list(APPEND forward_header_files "${header_path}")
+        set( output_path "${output_dir}/${header_path}" )
+        configure_file( "${ARG_FORWARD_HEADER_MODEL}" "${output_path}" )
+        list( APPEND forward_header_files "${output_path}" )
 
         target_sources(
             ${target}
             PRIVATE
-                "$<BUILD_INTERFACE:${ARG_OUTPUT_DIR}/${header_path}>"
+                "${output_path}"
         )
 
     endforeach()
 
+    target_include_directories( ${target}
+        PUBLIC
+            "$<BUILD_INTERFACE:${output_dir}>"
+    )
 
-    get_target_property(forward_header_property ${target} CMUT__TARGET__FORWARD_HEADER)
-    if(forward_header_property)
-        list(APPEND forward_header_files "${forward_header_property}")
-    endif()
-    set_target_properties(${target} PROPERTIES CMUT__TARGET__FORWARD_HEADER "${forward_header_files}")
+    set_property( TARGET ${target} APPEND PROPERTY CMUT__TARGET__FORWARD_HEADERS ${forward_header_files} )
+
+endfunction()
+
+function( cmut__target__get_generated_forward_header_paths result target )
+
+    get_target_property( generated_forward_header_paths ${target} CMUT__TARGET__FORWARD_HEADERS )
+    cmut__lang__return( generated_forward_header_paths )
 
 endfunction()

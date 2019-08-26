@@ -16,113 +16,114 @@ include("${CMAKE_CURRENT_LIST_DIR}/cmut__install__component_dependency.cmake")
 #
 function(cmut__install__install_target target)
 
-    __cmut__install__define_variables()
-
     # test the target
     if(NOT TARGET ${target})
-        cmut_error("[cmut][install][install_target] : TARGET \"${target}\" not defined.")
+        cmut__log__error( cmut__install__install_target "TARGET \"${target}\" not defined.")
         return()
     endif()
 
-    cmut__utils__parse_arguments(
-        cmut__install__install_target
-        ARG_
-        ""
-        "INCLUDES_COMPONENT;COMPONENT"
-        "INCLUDE_DIRECTORIES"
-        ${ARGN}
-        )
-    if(NOT ARG__INCLUDES_COMPONENT)
-        set(ARG__INCLUDES_COMPONENT devel)
-    endif()
-    if(NOT ARG__COMPONENT)
-        set(ARG__COMPONENT runtime)
+
+    cmut__lang__function__init_param( cmut__install__install_target )
+    cmut__lang__function__add_param( COMPONENT          DEFAULT runtime )
+    cmut__lang__function__add_param( HEADERS_COMPONENT DEFAULT devel )
+    cmut__lang__function__add_param( INCLUDES_COMPONENT )
+    cmut__lang__function__add_multi_param( INCLUDE_DIRECTORIES )
+    cmut__lang__function__parse_arguments( ${ARGN} )
+
+    if(DEFINED ARG_INCLUDES_COMPONENT)
+        cmut_deprecated_parameter( INCLUDES_COMPONENT HEADERS_COMPONENT )
+        set( ARG_HEADERS_COMPONENT  "${ARG_INCLUDES_COMPONENT}" )
     endif()
 
-
-
-    # install header
-    if(DEFINED ARG__INCLUDE_DIRECTORIES)
-        install(
-            DIRECTORY   "${ARG__INCLUDE_DIRECTORIES}"
-            DESTINATION "${cmut__install__include_dir}"
-            COMPONENT   ${ARG__INCLUDES_COMPONENT}
-        )
-    endif()
-
-    # install generated "export header"
-    get_target_property(target_type ${target} TYPE)
-    if((target_type STREQUAL SHARED_LIBRARY) OR (target_type STREQUAL STATIC_LIBRARY))
-
-        __cmut__install__install_generated_header(${target} CMUT__TARGET__EXPORT_HEADER)
-        __cmut__install__install_generated_header(${target} CMUT__TARGET__FORWARD_HEADER)
-        __cmut__install__install_generated_header(${target} CMUT__TARGET__VERSION_HEADER)
-
+    if(DEFINED ARG_INCLUDE_DIRECTORIES)
+        cmut_deprecated_parameter( INCLUDE_DIRECTORIES "cmut__target__set_{public,private}_header_directories" )
+        cmut__target__set_public_header_directories( ${target} "${ARG_INCLUDE_DIRECTORIES}" )
     endif()
 
 
-    set(target_export_name "${target}${cmut__install__target_export_name_posfix}")
+    set( library_target_type SHARED_LIBRARY STATIC_LIBRARY INTERFACE_LIBRARY )
+    __cmut__install__define_variables()
 
 
-    # install lib
+    # install target
     install(
         TARGETS  ${target}
-        EXPORT   ${target_export_name}
+        EXPORT   ${target}
         ARCHIVE  DESTINATION "${cmut__install__archive_dir}"
-        COMPONENT "${ARG__COMPONENT}"
+        COMPONENT "${ARG_COMPONENT}"
         LIBRARY  DESTINATION "${cmut__install__library_dir}"
-        COMPONENT "${ARG__COMPONENT}"
+        COMPONENT "${ARG_COMPONENT}"
         RUNTIME  DESTINATION "${cmut__install__runtime_dir}"
-        COMPONENT "${ARG__COMPONENT}"
+        COMPONENT "${ARG_COMPONENT}"
         FRAMEWORK DESTINATION "${cmut__install__framework_dir}"
-        COMPONENT "${ARG__COMPONENT}"
+        COMPONENT "${ARG_COMPONENT}"
         BUNDLE DESTINATION "${cmut__install__bundle_dir}"
-        COMPONENT "${ARG__COMPONENT}"
+        COMPONENT "${ARG_COMPONENT}"
         PRIVATE_HEADER DESTINATION "${cmut__install__private_header_dir}"
-        COMPONENT "devel"
+        COMPONENT "${ARG_HEADERS_COMPONENT}"
         PUBLIC_HEADER  DESTINATION "${cmut__install__public_header_dir}"
-        COMPONENT "devel"
+        COMPONENT "${ARG_HEADERS_COMPONENT}"
         RESOURCE       DESTINATION "${cmut__install__resource_header_dir}"
-        COMPONENT "devel"
+        COMPONENT "${ARG_HEADERS_COMPONENT}"
         INCLUDES DESTINATION "${cmut__install__include_dir}"
         )
 
-    if( (target_type STREQUAL SHARED_LIBRARY)
-            OR (target_type STREQUAL STATIC_LIBRARY)
-            OR (target_type STREQUAL INTERFACE_LIBRARY) )
-
-        __cmut__install__export_library()
-        cmut__install__add_component_dependencies(devel ${target})
-
+    # install header directories
+    cmut__target__get_public_header_directories( public_header_directories ${target} )
+    if( public_header_directories )
+        install(
+            DIRECTORY   "${public_header_directories}"
+            DESTINATION "${cmut__install__include_dir}"
+            COMPONENT   ${ARG_HEADERS_COMPONENT}
+        )
+    endif()
+    cmut__target__get_private_header_directories( private_header_directories ${target} )
+    if( private_header_directories )
+        install(
+            DIRECTORY   "${private_header_directories}"
+            DESTINATION "${cmut__install__include_dir}"
+            COMPONENT   ${ARG_HEADERS_COMPONENT}
+        )
     endif()
 
-    set_property(
-        GLOBAL
-        APPEND
-        PROPERTY
-            CMUT__INSTALL__${PROJECT_NAME}_SUPPORTED_COMPONENTS
-        "${target}"
-    )
+    # install generated headers
+    get_target_property(target_type ${target} TYPE)
+    if( target_type IN_LIST library_target_type )
+        cmut__target__get_generated_header_output_directory( generated_header_output_directory ${target} )
+        cmut__target__get_generated_forward_header_paths( generated_forward_header_paths ${target} )
+        cmut__target__get_generated_export_header_path( generated_export_header_path ${target} )
+        cmut__target__get_generated_version_header_path( generated_version_header_path ${target} )
 
-    cmut__install__add_component_dependencies(${ARG__COMPONENT} ${target})
+        __cmut__install__install_header( ${target}
+            ${ARG_HEADERS_COMPONENT}
+            "${generated_header_output_directory}"
+            "${generated_forward_header_paths}"
+            "${generated_export_header_path}"
+            "${generated_version_header_path}"
+            )
+    endif()
+
+
+    if( target_type IN_LIST library_target_type )
+        __cmut__install__export_target( ${target} )
+    endif()
+
+    cmut__install__component__add_dependencies( ${ARG__COMPONENT} ${target} )
+    cmut__install__component__add_dependencies( "${ARG_HEADERS_COMPONENT}" ${target} )
+
+    cmut__project__add_components( ${target} )
 
 endfunction()
 
 
 
-function(__cmut__install__export_library)
+function(__cmut__install__export_target target)
 
-    if(CMUT__CONFIG__DEVELOPER_MODE)
-        export(
-            EXPORT ${target_export_name}
-            NAMESPACE ${cmut__install__export_namespace}
-            FILE "${PROJECT_BINARY_DIR}/${cmut__install__config_dir}/${target}/${target_export_name}.cmake"
-        )
-    endif()
+    cmut__export__target( ${target} )
 
     # install export file
     install(
-        EXPORT "${target_export_name}"
+        EXPORT "${target}"
         NAMESPACE "${cmut__install__export_namespace}"
         DESTINATION "${cmut__install__config_dir}/${target}"
         COMPONENT devel
@@ -132,28 +133,24 @@ endfunction()
 
 
 
-function(__cmut__install__install_generated_header target target_property)
+function(__cmut__install__install_header target install_component directory_base )
 
-    get_target_property(generated_header_path ${target} ${target_property})
-    if (NOT generated_header_path)
-        return()
-    endif()
+    foreach( filepath ${ARGN} )
 
-    foreach(filepath IN LISTS generated_header_path)
-
-        set(generated_header_filepath "${CMAKE_CURRENT_BINARY_DIR}/include/${filepath}")
-
-        if(EXISTS "${generated_header_filepath}")
-
-            get_filename_component(generated_header_dirname "${filepath}" DIRECTORY)
-
-            install(
-                FILES       "${generated_header_filepath}"
-                DESTINATION "${cmut__install__include_dir}/${generated_header_dirname}"
-                COMPONENT   devel
-                )
-
+        if( NOT EXISTS ${filepath} )
+            continue()
         endif()
+
+        get_filename_component( directory "${filepath}" DIRECTORY )
+        if( directory_base )
+            file( RELATIVE_PATH directory ${directory_base} ${directory} )
+        endif()
+
+        install(
+            FILES       "${filepath}"
+            DESTINATION "${cmut__install__include_dir}/${directory}"
+            COMPONENT   ${install_component}
+            )
 
     endforeach()
 

@@ -1,6 +1,3 @@
-include(${CMAKE_CURRENT_LIST_DIR}/../utils/cmut__utils__header_guard.cmake)
-cmut__utils__define_header_guard()
-
 
 function(cmut__target__generate_export_header target)
 
@@ -11,24 +8,38 @@ function(cmut__target__generate_export_header target)
         set(export_filename "${target_lower}_export.h")
     endif()
 
+
+    cmut__target__get_generated_header_output_directory( output_dir ${target} )
+
     include(GenerateExportHeader)
-    generate_export_header(${target}
-        EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/include/${export_filename}")
+    generate_export_header( ${target}
+        EXPORT_FILE_NAME "${output_dir}/${export_filename}"
+    )
 
-    set_target_properties(${target} PROPERTIES CMUT__TARGET__EXPORT_HEADER "${export_filename}")
+    set_target_properties( ${target}
+        PROPERTIES
+            CMUT__TARGET__EXPORT_HEADER "${output_dir}/${export_filename}"
+    )
 
-
-    target_sources(
-        ${target}
+    target_sources( ${target}
         PRIVATE
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/${export_filename}>"
+            "${output_dir}/${export_filename}"
     )
-
-    target_include_directories(
-        ${target}
+    target_include_directories( ${target}
         PUBLIC
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
+            "$<BUILD_INTERFACE:${output_dir}>"
+    )
+    target_include_directories( ${target}
+        PUBLIC
+            "$<BUILD_INTERFACE:${output_dir}>"
     )
 
+
+endfunction()
+
+function( cmut__target__get_generated_export_header_path result target )
+
+    get_target_property( generated_export_header_path ${target} CMUT__TARGET__EXPORT_HEADER )
+    cmut__lang__return( generated_export_header_path )
 
 endfunction()
