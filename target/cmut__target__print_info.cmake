@@ -25,6 +25,8 @@ function(cmut__target__print_info target_)
         set(targets ${target_})
     endif()
 
+    include(CMakePrintHelpers)
+
     foreach(target IN LISTS targets)
 
         if(NOT TARGET ${target})
