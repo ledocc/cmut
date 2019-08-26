@@ -1,0 +1,65 @@
+@PACKAGE_INIT@
+
+
+function( @PROJECT_NAME@_include_config_file component )
+
+    if( NOT component IN_LIST @PROJECT_NAME@_supported_components )
+        set(${CMAKE_FIND_PACKAGE_NAME}_FOUND False)
+        set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "Unsupported component: ${component}")
+        return()
+    endif()
+
+
+    @PROJECT_NAME@_include_dependency_config_file( ${component} )
+    if( DEFINED ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE )
+        return()
+    endif()
+
+
+    set_and_check(${component}_config_path "${CMAKE_CURRENT_LIST_DIR}/${component}/${component}.cmake")
+    include("${${component}_config_path}")
+
+    if(NOT DEFINED ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE)
+        set(${CMAKE_FIND_PACKAGE_NAME}_${component}_FOUND 1 PARENT_SCOPE)
+    else()
+        message(WARNING ${${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE})
+    endif()
+
+endfunction()
+
+
+function( @PROJECT_NAME@_include_dependency_config_file component )
+
+    foreach( dependency IN LISTS ${component}_dependencies )
+        @PROJECT_NAME@_include_config_file( ${dependency} )
+    endforeach()
+
+endfunction()
+
+
+
+@__CMUT__EXPORT__CONFIG__SUPPORTED_COMPONENT@
+@__CMUT__EXPORT__CONFIG__COMPONENT_DEPENDENCIES@
+
+
+# search dependencies
+set( __CMUT__EXPORT__CONFIG_FILE__FOR__@PROJECT_NAME@  1)
+
+set(find_dependencies_script_file "${CMAKE_CURRENT_LIST_DIR}/dependencies/find_dependencies.cmake")
+if(EXISTS "${find_dependencies_script_file}")
+    include("${find_dependencies_script_file}")
+else()
+    # keep for backware compatibility
+    set(find_dependencies_script_file "${CMAKE_CURRENT_LIST_DIR}/dependencies/include_all.cmake")
+    if(EXISTS "${find_dependencies_script_file}")
+        include("${find_dependencies_script_file}")
+    endif()
+endif()
+
+foreach(component ${@PROJECT_NAME@_FIND_COMPONENTS})
+    @PROJECT_NAME@_include_config_file( ${component} )
+endforeach()
+
+check_required_components("@PROJECT_NAME@")
+
+unset( __CMUT__EXPORT__CONFIG_FILE__FOR__@PROJECT_NAME@ )
