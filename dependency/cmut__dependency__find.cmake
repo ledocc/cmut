@@ -30,7 +30,7 @@ macro( cmut__dependency__find project_in )
     endmacro()
 
 
-    if(__CMUT__EXPORT__CONFIG_FILE__FOR_${project})
+    if(__CMUT__EXPORT__CONFIG_FILE__FOR__${project})
         include(CMakeFindDependencyMacro)
     endif()
 
@@ -45,9 +45,6 @@ macro( cmut__dependency__find project_in )
             set(package ${${project}_DEPENDENCIES_${package}_FIND_PACKAGE_NAME})
         endif()
 
-
-        message(STATUS "Looking for ${package}")
-
         stack__push( ${project} )
 
         set(find_package_PARAM
@@ -57,11 +54,9 @@ macro( cmut__dependency__find project_in )
             ${COMPONENTS_OPTION}
             ${NAMES_OPTION}
             )
-        if(__CMUT__EXPORT__CONFIG_FILE__FOR_${project})
-            message(STATUS "find_dependency( ${find_package_PARAM} )")
+        if(__CMUT__EXPORT__CONFIG_FILE__FOR__${project})
             find_dependency( ${find_package_PARAM} )
         else()
-            message(STATUS "find_package( ${find_package_PARAM} )")
             find_package( ${find_package_PARAM} )
         endif()
 
