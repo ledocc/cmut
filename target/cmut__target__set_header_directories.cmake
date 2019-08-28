@@ -1,4 +1,16 @@
 
+function( cmut__target__set_header_directories target scope header_directories )
+    set( valid_scope PUBLIC PRIVATE )
+    if( NOT scope IN_LIST valid_scope )
+        cmut__log__error( cmut__target__set_header_directories "invalid scope \"${scope}\", valid scope are PUBLIC or PRIVATE." )
+        return()
+    endif()
+
+    foreach( header_directory IN LISTS header_directories )
+        __cmut__target__set_header_directories( ${target} ${scope} ${header_directory} )
+    endforeach()
+endfunction()
+
 function( cmut__target__set_public_header_directories target header_directories )
     foreach( header_directory IN LISTS header_directories )
         __cmut__target__set_header_directories( ${target} PUBLIC ${header_directory} )
