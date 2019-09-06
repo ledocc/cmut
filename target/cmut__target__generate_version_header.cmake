@@ -6,7 +6,8 @@ function(cmut__target__generate_version_header target version_h_in)
 
     configure_file("${version_h_in}" "${version_h_path}")
 
-    set_target_properties(${target} PROPERTIES CMUT__TARGET__VERSION_HEADER "${version_h_path}")
+    cmut__target__get_property_prefix(prefix ${target})
+    set_target_properties(${target} PROPERTIES ${prefix}CMUT__TARGET__VERSION_HEADER "${version_h_path}")
 
     target_sources(
         ${target}
@@ -24,7 +25,9 @@ endfunction()
 
 function( cmut__target__get_generated_version_header_path result target )
 
-    get_target_property( generated_version_header_path ${target} CMUT__TARGET__VERSION_HEADER )
+    cmut__target__get_property_prefix(prefix ${target})
+
+    get_target_property( generated_version_header_path ${target} ${prefix}CMUT__TARGET__VERSION_HEADER )
     cmut__lang__return( generated_version_header_path )
 
 endfunction()

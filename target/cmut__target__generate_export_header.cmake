@@ -16,9 +16,10 @@ function(cmut__target__generate_export_header target)
         EXPORT_FILE_NAME "${output_dir}/${export_filename}"
     )
 
+    cmut__target__get_property_prefix(prefix ${target})
     set_target_properties( ${target}
         PROPERTIES
-            CMUT__TARGET__EXPORT_HEADER "${output_dir}/${export_filename}"
+           ${prefix}CMUT__TARGET__EXPORT_HEADER "${output_dir}/${export_filename}"
     )
 
     target_sources( ${target}
@@ -35,7 +36,9 @@ endfunction()
 
 function( cmut__target__get_generated_export_header_path result target )
 
-    get_target_property( generated_export_header_path ${target} CMUT__TARGET__EXPORT_HEADER )
+    cmut__target__get_property_prefix(prefix ${target})
+
+    get_target_property( generated_export_header_path ${target} ${prefix}CMUT__TARGET__EXPORT_HEADER )
     cmut__lang__return( generated_export_header_path )
 
 endfunction()

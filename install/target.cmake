@@ -33,6 +33,7 @@ function(cmut__install__target target)
 
 
     set( library_target_type SHARED_LIBRARY STATIC_LIBRARY INTERFACE_LIBRARY )
+    get_target_property(target_type ${target} TYPE)
     __cmut__install__define_variables()
 
 
@@ -60,25 +61,23 @@ function(cmut__install__target target)
         )
 
     # install header directories
-    cmut__target__get_public_header_directories( public_header_directories ${target} )
-    if( public_header_directories )
-        install(
-            DIRECTORY   "${public_header_directories}"
-            DESTINATION "${cmut__install__include_dir}"
-            COMPONENT   ${ARG_HEADERS_COMPONENT}
-        )
+
+    set( header_scopes INTERFACE )
+    if ( NOT target_type STREQUAL INTERFACE_LIBRARY )
+        list( APPEND header_scopes PUBLIC )
     endif()
-    cmut__target__get_private_header_directories( private_header_directories ${target} )
-    if( private_header_directories )
-        install(
-            DIRECTORY   "${private_header_directories}"
-            DESTINATION "${cmut__install__include_dir}"
-            COMPONENT   ${ARG_HEADERS_COMPONENT}
-        )
-    endif()
+    foreach( scope IN LISTS header_scopes )
+        cmut__target__get_header_directories( header_directories ${target} ${scope})
+        if( header_directories )
+            install(
+                DIRECTORY   "${header_directories}"
+                DESTINATION "${cmut__install__include_dir}"
+                COMPONENT   ${ARG_HEADERS_COMPONENT}
+            )
+        endif()
+    endforeach()
 
     # install generated headers
-    get_target_property(target_type ${target} TYPE)
     if( target_type IN_LIST library_target_type )
         cmut__target__get_generated_header_output_directory( generated_header_output_directory ${target} )
         cmut__target__get_generated_forward_header_paths( generated_forward_header_paths ${target} )

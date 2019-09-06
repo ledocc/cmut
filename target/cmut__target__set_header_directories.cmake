@@ -1,8 +1,8 @@
 
 function( cmut__target__set_header_directories target scope header_directories )
-    set( valid_scope PUBLIC PRIVATE )
+    set( valid_scope PUBLIC PRIVATE INTERFACE )
     if( NOT scope IN_LIST valid_scope )
-        cmut__log__error( cmut__target__set_header_directories "invalid scope \"${scope}\", valid scope are PUBLIC or PRIVATE." )
+        cmut__log__error( cmut__target__set_header_directories "invalid scope \"${scope}\", valid scope are PUBLIC, PRIVATE or INTERFACE." )
         return()
     endif()
 
@@ -29,7 +29,7 @@ function( __cmut__target__set_header_directories target scope header_directory )
 
     set_property( TARGET ${target}
         APPEND
-        PROPERTY CMUT__TARGET__${scope}_HEADER_DIRECTORIES
+        PROPERTY ${scope}__CMUT__TARGET__HEADER_DIRECTORIES
         "${header_directory}"
         )
 

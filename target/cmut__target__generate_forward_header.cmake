@@ -68,13 +68,16 @@ function(cmut__target__create_forward_header target)
             "$<BUILD_INTERFACE:${output_dir}>"
     )
 
-    set_property( TARGET ${target} APPEND PROPERTY CMUT__TARGET__FORWARD_HEADERS ${forward_header_files} )
+    cmut__target__get_property_prefix(prefix ${target})
+    set_property( TARGET ${target} APPEND PROPERTY ${prefix}CMUT__TARGET__FORWARD_HEADERS ${forward_header_files} )
 
 endfunction()
 
 function( cmut__target__get_generated_forward_header_paths result target )
 
-    get_target_property( generated_forward_header_paths ${target} CMUT__TARGET__FORWARD_HEADERS )
+    cmut__target__get_property_prefix(prefix ${target})
+
+    get_target_property( generated_forward_header_paths ${target} ${prefix}CMUT__TARGET__FORWARD_HEADERS )
     cmut__lang__return( generated_forward_header_paths )
 
 endfunction()
