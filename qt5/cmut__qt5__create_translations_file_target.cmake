@@ -29,12 +29,12 @@ function( cmut__qt5__create_translations_file_target target )
 
     configure_file(
         "${__cmut__qt5__create_translations_file_target__input_script}"
-        "${output_file}"
+        "${script_file}"
         @ONLY
         )
 
     add_custom_target(${target} ALL
-        "${CMAKE_COMMAND}" -P "${output_file}"
+        "${CMAKE_COMMAND}" -P "${script_file}"
         BYPRODUCTS "${ARG_OUTPUT_FILE_PREFIX}-done"
         COMMENT "Create Qt translations files"
     )
