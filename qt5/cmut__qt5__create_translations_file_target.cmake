@@ -22,7 +22,7 @@ function( cmut__qt5__create_translations_file_target target )
     endif()
     get_target_property(QT5_LCONVERT_CMD Qt5::lconvert IMPORTED_LOCATION)
 
-    set(output_file "${CMAKE_CURRENT_BINARY_DIR}/cmut/qt5/cmut__qt5__create_translations_file.cmake")
+    set(script_file "${CMAKE_CURRENT_BINARY_DIR}/cmut/qt5/cmut__qt5__create_translations_file.cmake")
 
     cmut__qt5__create_translations_file__parse_argument( cmut__qt5__create_translations_file_target "${ARGN}")
 
