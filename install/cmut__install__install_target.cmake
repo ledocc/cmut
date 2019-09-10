@@ -10,6 +10,6 @@
 function(cmut__install__install_target target)
 
     cmut_deprecated_function( cmut__install__install_target cmut__install__target )
-    cmut__install__install_target( ${target} )
+    cmut__install__target( ${target} )
 
 endfunction()
