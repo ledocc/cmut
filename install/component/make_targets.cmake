@@ -4,13 +4,13 @@ function(cmut__install__component__make_targets)
 
     foreach(component IN LISTS ARGV)
 
-        if( TARGET install_${component} )
+        if( NOT TARGET install_${component} )
             cmut__install__component__make_target__impl( ${component} )
         endif()
 
-        cmut__install__component__get_dependencies( ${component} dependencies )
+        cmut__install__component__get_dependencies( dependencies ${component} )
         if(dependencies)
-            cmut__install__component__add_dependencies__impl(install_${component} ${dependencies})
+            cmut__install__component__add_dependencies__impl( ${component} ${dependencies})
         endif()
 
     endforeach()
