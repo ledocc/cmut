@@ -12,7 +12,6 @@ function(__cmut__dependency__build_with_conan__implementation )
     include(${CMAKE_BINARY_DIR}/conan.cmake)
     conan_check(VERSION ${ARG_CONAN_VERSION} REQUIRED)
 
-    cmut__cmake_conan__get_shared_option(shared_option)
     cmut__cmake_conan__get_compiler_cppstd_setting(compiler_cppstd_setting)
 
     conan_cmake_run(
