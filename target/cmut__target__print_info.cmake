@@ -51,6 +51,21 @@ function(cmut__target__print_info target_)
             INTERFACE_LINK_LIBRARIES
         )
 
+        get_target_property(targetImported ${target} IMPORTED)
+        if(targetImported AND NOT (targetType STREQUAL "INTERFACE_LIBRARY"))
+            string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
+            list(APPEND targetPropertiesToPrint
+                IMPORTED_LINK_DEPENDENT_LIBRARIES
+                IMPORTED_LINK_DEPENDENT_LIBRARIES_${BUILD_TYPE}
+                IMPORTED_LINK_INTERFACE_LANGUAGES
+                IMPORTED_LINK_INTERFACE_LANGUAGES_${BUILD_TYPE}
+                IMPORTED_LOCATION
+                IMPORTED_LOCATION_${BUILD_TYPE}
+                IMPORTED_NO_SONAME
+                IMPORTED_NO_SONAME_${BUILD_TYPE}
+                )
+        endif()
+
         cmake_print_properties(
             TARGETS
                 ${target}
