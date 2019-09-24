@@ -7,7 +7,7 @@ function(cmut__qt5__install_qml)
         cmut__qt5__install_qml
         "ARG"
         ""
-        "BUILD_TYPE;DESTINATION;COMPONENT"
+        "BUILD_TYPE;DESTINATION;COMPONENT;SOURCE_DIR"
         "MODULE"
         ${ARGN}
         )
@@ -26,15 +26,18 @@ function(cmut__qt5__install_qml)
         endif()
 
         set(QT5_BUILD_TYPE ${CMAKE_BUILD_TYPE})
-
     endif()
+
 
     if(NOT DEFINED ARG_DESTINATION)
-        cmut_debug("[cmut][qt5][install_qml] - DESTINATION is required.")
+        cmut_error("[cmut][qt5][install_qml] - DESTINATION is required.")
+        return()
     endif()
 
 
-    cmut__qt5__get_qmake_property(QT5_INSTALL_QML INSTALL_QML)
+    if(NOT DEFINED ARG_SOURCE_DIR)
+        cmut__qt5__get_qmake_property(ARG_SOURCE_DIR INSTALL_QML)
+    endif()
 
 
     cmut_debug("[cmut][qt5][install_qml] - begin.")
@@ -43,7 +46,7 @@ function(cmut__qt5__install_qml)
 
         # install file in qml directory except libraries
         install(
-            DIRECTORY "${QT5_INSTALL_QML}/${qmlLib}"
+            DIRECTORY "${ARG_SOURCE_DIR}/${qmlLib}"
             DESTINATION ${ARG_DESTINATION}
             COMPONENT ${ARG_COMPONENT}
             PATTERN *${CMAKE_SHARED_LIBRARY_SUFFIX} EXCLUDE
@@ -52,8 +55,8 @@ function(cmut__qt5__install_qml)
         # collect all Qt's qml library
         file(
             GLOB_RECURSE QTQML_LIBS
-            RELATIVE ${QT5_INSTALL_QML}
-            ${QT5_INSTALL_QML}/${qmlLib}/*${CMAKE_SHARED_LIBRARY_SUFFIX}
+            RELATIVE ${ARG_SOURCE_DIR}
+            ${ARG_SOURCE_DIR}/${qmlLib}/*${CMAKE_SHARED_LIBRARY_SUFFIX}
             )
 
 
@@ -63,7 +66,7 @@ function(cmut__qt5__install_qml)
             # test if this is a release build
             set(IS_RELEASE_BUILDED 0)
             if(MSVC)
-                cmut_is_release_bin(IS_RELEASE_BUILDED "${QT5_INSTALL_QML}/${lib}")
+                cmut_is_release_bin(IS_RELEASE_BUILDED "${ARG_SOURCE_DIR}/${lib}")
             elseif(APPLE)
                 if(NOT (${lib} MATCHES ".*_debug.dylib"))
                     set(IS_RELEASE_BUILDED 1)
@@ -81,14 +84,12 @@ function(cmut__qt5__install_qml)
             # if qml lib is a release build
             if( TO_INSTALL )
 
-                list(APPEND _qml_installed ${QT5_INSTALL_QML}/${lib})
-
                 # get qml lib's directory relative path from qt5 qml install dir
                 get_filename_component(dir ${lib} DIRECTORY)
 
                 # install Qt qml in install dir, with the same directory hierarchy as in qt
                 install(
-                    FILES "${QT5_INSTALL_QML}/${lib}"
+                    FILES "${ARG_SOURCE_DIR}/${lib}"
                     DESTINATION "${ARG_DESTINATION}/${dir}"
                     COMPONENT ${ARG_COMPONENT}
                     )
