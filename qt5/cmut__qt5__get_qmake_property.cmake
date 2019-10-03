@@ -12,8 +12,12 @@ function(cmut__qt5__find_qmake)
         find_program(QT_QMAKE_EXECUTABLE qmake)
     endif()
 
-    if(NOT QT_QMAKE_EXECUTABLE)
+    if( NOT QT_QMAKE_EXECUTABLE )
         cmut_fatal("Can't find qmake, check if it is installed.")
+    endif()
+
+    if( NOT EXISTS "${QT_QMAKE_EXECUTABLE}" )
+        cmut_fatal("${QT_QMAKE_EXECUTABLE}: no such file.")
     endif()
 
 endfunction()
