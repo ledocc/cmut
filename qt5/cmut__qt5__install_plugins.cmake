@@ -17,7 +17,7 @@ function(cmut__qt5__install_plugins)
             cmut_info("[cmut][qt5][install_plugins] - BUILD_TYPE not defined. Fallback to CMAKE_BUILD_TYPE \(${CMAKE_BUILD_TYPE}\).")
             set(ARG_BUILD_TYPE ${CMAKE_BUILD_TYPE})
         else()
-            cmut_info("[cmut][qt5][install_plugins] - neither BUILD_TYPE or CMAKE_BUILD_TYPE defined. Use Release instead.")
+            cmut_info("[cmut][qt5][install_plugins] - neither BUILD_TYPE or CMAKE_BUILD_TYPE defined. Use \"Release\" instead.")
             set(ARG_BUILD_TYPE "Release")
         endif()
     endif()
@@ -30,7 +30,7 @@ function(cmut__qt5__install_plugins)
 
 
     if(NOT DEFINED ARG_DESTINATION)
-        cmut_debug("[cmut][qt5][install_plugins] - DESTINATION is required.")
+        cmut_fatal("[cmut][qt5][install_plugins] - DESTINATION is required.")
     endif()
 
 
