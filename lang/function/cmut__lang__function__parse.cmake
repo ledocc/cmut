@@ -33,8 +33,9 @@ function( cmut__lang__function__add_param param_name )
     cmake_parse_arguments( __cmut__lang__function__add_param__ARG "" "DEFAULT" "" ${ARGN} )
 
     if(DEFINED __cmut__lang__function__add_param__ARG_DEFAULT)
-        set(__cmut__lang__function__param_default__${param_name}
-            "${__cmut__lang__function__add_param__ARG_DEFAULT}" PARENT_SCOPE)
+        cmut__lang__set_in_parent_scope(
+            __cmut__lang__function__param_default__${param_name}
+            "${__cmut__lang__function__add_param__ARG_DEFAULT}")
     endif()
 
     list(APPEND __cmut__lang__function__param_list ${param_name} )
