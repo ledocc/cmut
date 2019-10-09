@@ -92,8 +92,12 @@ function( cmut__test__boost__link_target target )
 endfunction()
 
 ##--------------------------------------------------------------------------------------------------------------------##
-
 function( cmut__test__boost__add_test namespace test_src_file )
+    cmut_deprecated_function( cmut__test__boost__add_test cmut__test__boost__add_single_test )
+    cmut__test__boost__add_single_test( ${namespace} ${test_src_file} ${ARGN} )
+endfunction()
+
+function( cmut__test__boost__add_single_test namespace test_src_file )
 
     cmut__test__make_test_name( ${namespace} ${test_src_file} name )
 
@@ -122,7 +126,7 @@ endfunction()
 function( cmut__test__boost__add_tests namespace )
 
     foreach(file ${ARGN})
-        cmut__test__boost__add_test(${namespace} ${file} "")
+        cmut__test__boost__add_single_test(${namespace} ${file})
     endforeach()
 
 endfunction()
