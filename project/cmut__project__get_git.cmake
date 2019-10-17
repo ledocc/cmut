@@ -1,10 +1,11 @@
 
 
-
 function(cmut__project__get_git_revision_count revisionCount )
 
+    find_package(Git REQUIRED)
+
     execute_process(
-        COMMAND git rev-list --count HEAD
+        COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         RESULT_VARIABLE result
         OUTPUT_VARIABLE output
@@ -25,8 +26,10 @@ endfunction()
 
 function(cmut__project__get_git_revision_hash revisionHash)
 
+    find_package(Git REQUIRED)
+
     execute_process(
-        COMMAND git rev-list --max-count 1 --abbrev-commit HEAD
+        COMMAND ${GIT_EXECUTABLE} rev-list --max-count 1 --abbrev-commit HEAD
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         RESULT_VARIABLE result
         OUTPUT_VARIABLE output
