@@ -1,6 +1,7 @@
 include(${CMAKE_CURRENT_LIST_DIR}/cmut__utils__header_guard.cmake)
 cmut__utils__define_header_guard()
 
+cmake_policy(PUSH)
 cmake_policy(SET CMP0011 NEW)
 cmake_policy(SET CMP0054 NEW)
 
@@ -181,3 +182,5 @@ function(cmut__utils__install_name_tool output )
     set(${output} ${cmd_output} PARENT_SCOPE)
 
 endfunction()
+
+cmake_policy(POP)
