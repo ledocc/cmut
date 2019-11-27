@@ -1,4 +1,7 @@
 
+cmake_policy(PUSH)
+cmake_policy(SET CMP0057 NEW)
+
 set(CMUT__LOG__LEVEL_LIST fatal error warning info debug)
 set(CMUT__LOG__DEFAULT_LEVEL info)
 
@@ -48,3 +51,5 @@ endfunction()
 cmut__log__init()
 cmut__log__on_level_change()
 variable_watch(CMUT__LOG__LEVEL cmut__log__on_level_change)
+
+cmake_policy(POP)
