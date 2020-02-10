@@ -9,7 +9,7 @@ function(cmut__target__generate_export_header target)
     endif()
 
 
-    cmut__target__get_generated_header_output_directory( output_dir ${target} )
+    cmut__target__get_generated_header_output_directory( output_dir )
 
     include(GenerateExportHeader)
     generate_export_header( ${target}

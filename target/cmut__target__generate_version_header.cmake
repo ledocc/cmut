@@ -1,7 +1,7 @@
 
 function(cmut__target__generate_version_header target version_h_in)
 
-    cmut__target__get_generated_header_output_directory( output_dir ${target} )
+    cmut__target__get_generated_header_output_directory( output_dir )
     set(version_h_path "${output_dir}/${target}/version.h")
 
     configure_file("${version_h_in}" "${version_h_path}")

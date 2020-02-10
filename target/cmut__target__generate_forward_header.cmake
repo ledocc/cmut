@@ -35,7 +35,7 @@ function(cmut__target__create_forward_header target)
     endif()
 
 
-    cmut__target__get_generated_header_output_directory( output_dir ${target} )
+    cmut__target__get_generated_header_output_directory( output_dir )
 
     foreach(namespace IN LISTS ARG_NAMESPACE)
 
