@@ -1,46 +1,27 @@
 
 
-function(cmut__project__get_git_revision_count revisionCount )
+function(cmut__project__get_git_revision_count result )
+    set(CMAKE_CURRENT_FUNCTION cmut__project__get_git_revision_count)
 
-    find_package(Git REQUIRED)
 
-    execute_process(
-        COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE error
-	OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-
-    if(error)
-        cmut__log__error( cmut__project__get_git_revision_count "Can't retrieve revision count from local git repository." )
+    if ( NOT EXISTS "${PROJECT_SOURCE_DIR}/.git" )
+        cmut__lang__return_unset()
+        return()
     endif()
 
-    set(${revisionCount} ${output} PARENT_SCOPE)
+    cmut__git__get_revision_count( revision_count GIT_DIR "${PROJECT_SOURCE_DIR}" )
+    cmut__lang__return( revision_count )
 
 endfunction()
 
+function(cmut__project__get_git_revision_hash result)
 
-
-
-function(cmut__project__get_git_revision_hash revisionHash)
-
-    find_package(Git REQUIRED)
-
-    execute_process(
-        COMMAND ${GIT_EXECUTABLE} rev-list --max-count 1 --abbrev-commit HEAD
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE error
-	OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-
-    if(error)
-        cmut__log__error( cmut__project__get_git_revision_hash "Can't retrieve hash from local git repository." )
+    if ( NOT EXISTS "${PROJECT_SOURCE_DIR}/.git" )
+        cmut__lang__return_unset()
+        return()
     endif()
 
-    set(${revisionHash} ${output} PARENT_SCOPE)
+    cmut__git__get_revision_hash( revision_hash GIT_DIR "${PROJECT_SOURCE_DIR}" )
+    cmut__lang__return( revision_hash )
 
 endfunction()
