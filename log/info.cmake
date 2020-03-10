@@ -4,10 +4,10 @@ include("${CMAKE_CURRENT_LIST_DIR}/../cmut_message.cmake")
 
 
 
-function( cmut__log__dev origin message )
+function( cmut__log__info origin message )
 
     cmut__log__function_name_to_scope_name( scope_name ${origin} )
 
-    cmut_message(STATUS "dev" "${scope_name} :\n${message}")
+    cmut_message(STATUS "info" "${scope_name} : ${message}")
 
 endfunction()

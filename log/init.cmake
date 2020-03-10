@@ -1,3 +1,10 @@
+include_guard(GLOBAL)
+
+
+include("${CMAKE_CURRENT_LIST_DIR}/function_name_to_scope_name.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/../cmut_message.cmake")
+
+
 
 cmake_policy(PUSH)
 cmake_policy(SET CMP0057 NEW)
@@ -35,9 +42,9 @@ function( cmut__log__on_level_change )
     macro(set_is_enable level)
         string(TOUPPER ${level} levelUpper)
         if(CMUT__LOG__LEVEL_${CMUT__LOG__LEVEL}__VALUE GREATER_EQUAL CMUT__LOG__LEVEL_${level}__VALUE)
-            set(CMUT__LOG__IS_${levelUpper}_ENABLE 1)
+            set(CMUT__LOG__IS_${levelUpper}_ENABLE 1 PARENT_SCOPE)
         else()
-            set(CMUT__LOG__IS_${levelUpper}_ENABLE 0)
+            set(CMUT__LOG__IS_${levelUpper}_ENABLE 0 PARENT_SCOPE)
         endif()
     endmacro()
 
@@ -49,6 +56,7 @@ endfunction()
 
 
 cmut__log__init()
+#message(STATUS "[cmut][log] : CMUT__LOG__LEVEL = ${CMUT__LOG__LEVEL}.")
 cmut__log__on_level_change()
 variable_watch(CMUT__LOG__LEVEL cmut__log__on_level_change)
 
