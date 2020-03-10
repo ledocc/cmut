@@ -1,10 +1,14 @@
 
 # cmut__install__target( target
 #                        [COMPONENT component]
-#                        [HEADERS_COMPONENT component]
+#                        [HEADERS_COMPONENT header_component] )
+# 
 # - install library and headers of target
 # - generate and install <target name>Target.cmake
 #
+# component : name of target component
+# header_component : name of target header component
+# 
 function(cmut__install__target target)
 
     # test the target
