@@ -46,3 +46,7 @@ endfunction()
 function( cmut_deprecated_parameter old )
     cmut_deprecated_message__private( "parameter" "${old}" ${ARGN} )
 endfunction()
+
+function( cmut_deprecated_include old )
+    cmut_deprecated_message__private( "include" "${old}" ${ARGN} )
+endfunction()
