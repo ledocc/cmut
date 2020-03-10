@@ -13,7 +13,7 @@ function(cmut__target__generate_version_source__collect_variable_to_forward resu
         list(APPEND variables ${variable})
     endforeach()
 
-    set(${result} "${variables}" PARENT_SCOPE)
+    cmut__lang__return( variables )
 
 endfunction()
 
