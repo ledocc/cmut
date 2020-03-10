@@ -25,7 +25,7 @@ endmacro()
 
 macro(cmut__cache__add_internal output_string variable value)
 
-    cmut__cache__add( ${output_string} ${variable} ${value} INTERNAL )
+    cmut__cache__add( ${output_string} ${variable} "${value}" INTERNAL )
 
 endmacro()
 
