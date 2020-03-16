@@ -21,8 +21,6 @@ function(cmut__utils__get_num_colors_to_screen result)
         return()
     endif()
 
-
-    # check if file descriptor 1 is open on a terminal
     execute_process(
         COMMAND ${TPUT_COMMAND} colors
         OUTPUT_VARIABLE __result

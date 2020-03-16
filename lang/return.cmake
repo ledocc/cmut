@@ -1,5 +1,6 @@
+include_guard(GLOBAL)
 
-
+include("${CMAKE_CURRENT_LIST_DIR}/set_in_parent_scope.cmake")
 
 macro(cmut__lang__return variable)
     cmut__lang__set_in_parent_scope( ${result} "${${variable}}" )

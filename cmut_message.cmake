@@ -9,7 +9,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/cmut_color_message.cmake)
 
 set(cmut_message_cmut_color ${cmut_color_message_Bold}${cmut_color_message_Blue})
 set(cmut_message_info_color ${cmut_color_message_Green})
-set(cmut_message_info_message_color ${cmut_message_info_color})
+set(cmut_message_info_message_color )
 set(cmut_message_warn_color ${cmut_color_message_Red})
 set(cmut_message_warn_message_color ${cmut_message_warn_color})
 set(cmut_message_error_color ${cmut_color_message_Bold}${cmut_message_warn_color})
@@ -19,34 +19,27 @@ set(cmut_message_fatal_message_color ${cmut_message_error_color})
 
 
 
-set(ENV__cmut_message_count $ENV{__cmut_message_count})
-if("${ENV__cmut_message_count}" STREQUAL "")
-    set(ENV{__cmut_message_count} 0)
-endif()
-
 function(cmut_message status severity message)
 
     string(TIMESTAMP timestamp)
 
+    string(REPEAT " " ${CMUT__LOG__${level}_SPACE_TO_FILL}
+
     set(__message
 "\
-${cmut_message_cmut_color}[cmut] ${cmut_color_message_Reset} \
-[${timestamp}] $ENV{__cmut_message_count} \
+${cmut_message_cmut_color}[cmut]${cmut_color_message_Reset} [${timestamp}] \
 ${cmut_message_${severity}_color}<${severity}>${cmut_color_message_Reset} : \
 ${cmut_message_${severity}_message_color}${message}${cmut_color_message_Reset}"
         )
 
     message(${status} "${__message}")
 
-    math(EXPR result "$ENV{__cmut_message_count} + 1")
-    set(ENV{__cmut_message_count} ${result})
+
 
 endfunction()
 
-
-
 function(cmut_debug message)
-    if( CMUT_DEBUG OR ( NOT "$ENV{CMUT_DEBUG}" STREQUAL "" ) )
+    if( CMUT_DEBUG OR "$ENV{CMUT_DEBUG}" )
         cmut_message(STATUS "debug" "${message}" )
     endif()
 endfunction()

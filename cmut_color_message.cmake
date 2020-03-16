@@ -32,7 +32,7 @@ if( CMUT_COLOR AND NOT ENV_CMUT_DISABLE_COLOR_MESSAGE )
         set(cmut_color_message_Magenta       [35m)
         set(cmut_color_message_Cyan          [36m)
         set(cmut_color_message_White         [37m)
-        
+
     else()
     
         cmut__utils__get_num_colors_to_screen(__cmut_num_colors)

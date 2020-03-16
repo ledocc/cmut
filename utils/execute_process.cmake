@@ -12,7 +12,7 @@ function(__cmut__utils__test_and_log_execute_process_error result__ )
         endforeach()
         cmut_fatal("${msg}")
     endif()
-    
+
 endfunction()
 
 function(cmut__utils__execute_process)
@@ -33,5 +33,5 @@ function(cmut__utils__execute_process)
         RESULT_VARIABLE result
         )
     __cmut__utils__test_and_log_execute_process_error(result ${exec_COMMAND})
-    
+
 endfunction()
