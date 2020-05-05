@@ -1,35 +1,35 @@
 
-function( cmut__target__set_header_directories target scope header_directories )
+function( cmut__target__set_header_directories target scope )
     set( valid_scope PUBLIC PRIVATE INTERFACE )
     if( NOT scope IN_LIST valid_scope )
         cmut__log__error( cmut__target__set_header_directories "invalid scope \"${scope}\", valid scope are PUBLIC, PRIVATE or INTERFACE." )
         return()
     endif()
 
-    foreach( header_directory IN LISTS header_directories )
-        __cmut__target__set_header_directories( ${target} ${scope} ${header_directory} )
+    foreach( header_directory IN LISTS ARGN )
+        __cmut__target__set_header_directory( ${target} ${scope} ${header_directory} )
     endforeach()
 endfunction()
 
-function( cmut__target__set_public_header_directories target header_directories )
-    foreach( header_directory IN LISTS header_directories )
-        __cmut__target__set_header_directories( ${target} PUBLIC ${header_directory} )
+function( cmut__target__set_public_header_directories target )
+    foreach( header_directory IN LISTS ARGN )
+        __cmut__target__set_header_directory( ${target} PUBLIC ${header_directory} )
     endforeach()
 endfunction()
 
-function( cmut__target__set_private_header_directories target header_directories )
-    foreach( header_directory IN LISTS header_directories )
-        __cmut__target__set_header_directories( ${target} PRIVATE ${header_directory} )
+function( cmut__target__set_private_header_directories target )
+    foreach( header_directory IN LISTS ARGN )
+        __cmut__target__set_header_directory( ${target} PRIVATE ${header_directory} )
     endforeach()
 endfunction()
 
 
 
-function( __cmut__target__set_header_directories target scope header_directory )
+function( __cmut__target__set_header_directory target scope header_directory )
 
     set_property( TARGET ${target}
         APPEND
-        PROPERTY ${scope}__CMUT__TARGET__HEADER_DIRECTORIES
+        PROPERTY CMUT__TARGET__${scope}__HEADER_DIRECTORIES
         "${header_directory}"
         )
 
