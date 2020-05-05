@@ -46,8 +46,10 @@ function(cmut__project__setup_library target)
     if( NOT target_type STREQUAL INTERFACE_LIBRARY )
         cmut__target__define_debug_postfix( ${target} ${ARG_DEBUG_POSTFIX} )
         cmut__target__define_output_directory( ${target} PREFIX "${ARG_OUTPUT_PREFIX}" )
-        cmut__target__generate_export_header( ${target} "${target}/export.h" )
-        cmut__target__set_library_version( ${target} ${ARG_VERSION} )
+	if( target_type MATCHES "^(SHARED|STATIC)_LIBRARY$")
+            cmut__target__generate_export_header( ${target} "${target}/export.h" )
+            cmut__target__set_library_version( ${target} ${ARG_VERSION} )
+	endif()
     endif()
 
 
