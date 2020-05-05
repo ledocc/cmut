@@ -3,7 +3,7 @@
 function(cmut__install__header_directories target)
 
     cmut__lang__function__init_param( cmut__install__header )
-    cmut__lang__function__add_param( DESTINATION    DEFAULT ${CMAKE_INSTALL_INCLUDEDIR} )
+    cmut__lang__function__add_param( DESTINATION    DEFAULT ${cmut__install__include_dir} )
     cmut__lang__function__add_param( COMPONENT      DEFAULT devel )
     cmut__lang__function__parse_arguments( ${ARGN} )
 
