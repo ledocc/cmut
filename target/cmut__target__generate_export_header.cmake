@@ -19,7 +19,7 @@ function(cmut__target__generate_export_header target)
     cmut__target__get_property_prefix(prefix ${target})
     set_target_properties( ${target}
         PROPERTIES
-           ${prefix}CMUT__TARGET__EXPORT_HEADER "${output_dir}/${export_filename}"
+            ${prefix}CMUT__TARGET__EXPORT_HEADER "${output_dir}/${export_filename}"
     )
 
     target_sources( ${target}
