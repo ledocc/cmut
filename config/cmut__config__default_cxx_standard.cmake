@@ -17,9 +17,9 @@ function(cmut__config__default_cxx_standard default_cxx_standard )
             return()
         endif()
 
-        cmut_info( "[cmut][config][default_cxx_standard]: Setting cxx standard to '${default_cxx_standard}${with_extension_msg}' as none was specified." )
-        set( CMAKE_CXX_STANDARD "${default_cxx_standard}" PARENT_SCOPE )
-        set( CMAKE_CXX_EXTENSIONS ${ARG_EXTENSIONS} PARENT_SCOPE )
+        cmut_info( "[cmut][config][default_cxx_standard]: Setting cxx standard to '${default_cxx_standard}${with_extension_msg}' as no one is specified." )
+        set( CMAKE_CXX_STANDARD "${default_cxx_standard}" CACHE STRING "Specifies the C++ standard." )
+        set( CMAKE_CXX_EXTENSIONS ${ARG_EXTENSIONS} CACHE BOOL "Enable C++ standard extension." )
 
     endif()
 
