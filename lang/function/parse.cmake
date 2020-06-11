@@ -9,6 +9,7 @@ function( cmut__lang__function__init_param function_name )
     cmut__lang__set_in_parent_scope( __cmut__lang__function__skip_unparsed __cmut__lang__function__init_param__ARG_SKIP_UNPARSED)
 
     cmut__lang__set_in_parent_scope( __cmut__lang__function__option_list "" )
+    cmut__lang__set_in_parent_scope( __cmut__lang__function__exclusive_option_list "" )
     cmut__lang__set_in_parent_scope( __cmut__lang__function__param_list "" )
     cmut__lang__set_in_parent_scope( __cmut__lang__function__multi_param_list "" )
 
@@ -47,31 +48,41 @@ endfunction()
 
 function( cmut__lang__function__add_param param_name )
 
-    cmake_parse_arguments( __cmut__lang__function__add_param__ARG "" "DEFAULT" "" ${ARGN} )
+    cmake_parse_arguments( ARG "" "DEFAULT" "" ${ARGN} )
 
-    if(DEFINED __cmut__lang__function__add_param__ARG_DEFAULT)
+    if(DEFINED ARG_DEFAULT)
         cmut__lang__set_in_parent_scope(
             __cmut__lang__function__param_default__${param_name}
-            "${__cmut__lang__function__add_param__ARG_DEFAULT}")
+            "${ARG_DEFAULT}")
     endif()
 
     list(APPEND __cmut__lang__function__param_list ${param_name} )
     cmut__lang__forward_in_parent_scope( __cmut__lang__function__param_list )
 
     cmut__log__debug_if( cmut__lang__function__add_param
-                         "add parameter \"${param_name}\", (default:${__cmut__lang__function__add_param__ARG_DEFAULT})."
-                         CMUT__LANG__FUNCTION__DEBUG )
+        "add parameter \"${param_name}\", (default:${ARG_DEFAULT})."
+        CMUT__LANG__FUNCTION__DEBUG
+    )
 
 endfunction()
 
 function( cmut__lang__function__add_multi_param multi_param_name )
 
+    cmake_parse_arguments( ARG "" "DEFAULT" "" ${ARGN} )
+
+    if(DEFINED ARG_DEFAULT)
+        cmut__lang__set_in_parent_scope(
+            __cmut__lang__function__multi_param_default__${multi_param_name}
+            "${ARG_DEFAULT}")
+    endif()
+
     list(APPEND __cmut__lang__function__multi_param_list ${multi_param_name} )
     cmut__lang__forward_in_parent_scope( __cmut__lang__function__multi_param_list )
 
     cmut__log__debug_if( cmut__lang__function__add_multi_param
-                         "add multi-values parameter \"${multi_param_name}\"."
-                         CMUT__LANG__FUNCTION__DEBUG )
+        "add multi-values parameter \"${multi_param_name}\", (default:${ARG_DEFAULT})."
+        CMUT__LANG__FUNCTION__DEBUG
+    )
 
 endfunction()
 
@@ -96,27 +107,38 @@ macro( cmut__lang__function__parse_arguments )
             string( APPEND MESSAGE "\n--    ${v} = ${${__cmut__lang__function__arg_prefix}_${v}}")
         endforeach()
 
-        cmut__log__debug_if( cmut__lang__function__parse_arguments
-                             "${MESSAGE}"
-                             CMUT__LANG__FUNCTION__DEBUG )
+        cmut__log__debug_if( cmut__lang__function__parse_arguments "${MESSAGE}" CMUT__LANG__FUNCTION__DEBUG)
     endif()
 
     foreach(param IN LISTS __cmut__lang__function__param_list)
         if(DEFINED __cmut__lang__function__param_default__${param})
             if(NOT DEFINED ${__cmut__lang__function__arg_prefix}_${param})
                 set( ${__cmut__lang__function__arg_prefix}_${param} "${__cmut__lang__function__param_default__${param}}" )
+                cmut__log__debug_if( cmut__lang__function__parse_arguments
+                    "set ${param} to default value (${__cmut__lang__function__param_default__${param}})"
+                    CMUT__LANG__FUNCTION__DEBUG)
             endif()
         endif()
     endforeach()
 
+    foreach(param IN LISTS __cmut__lang__function__multi_param_list)
+        if(DEFINED __cmut__lang__function__multi_param_default__${param})
+            if(NOT DEFINED ${__cmut__lang__function__arg_prefix}_${param})
+                set( ${__cmut__lang__function__arg_prefix}_${param} "${__cmut__lang__function__multi_param_default__${param}}" )
+                cmut__log__debug_if( cmut__lang__function__parse_arguments
+                    "set ${param} to default value (${__cmut__lang__function__multi_param_default__${param}})"
+                    CMUT__LANG__FUNCTION__DEBUG)
+            endif()
+        endif()
+    endforeach()
 
 
     if( ${__cmut__lang__function__exclusive_option_list} )
         foreach( name IN LISTS __cmut__lang__function__exclusive_option_list )
             foreach( option IN LISTS __cmut__lang__function__exclusive_option_list__${name} )
                 if( DEFINED ARG_${option} )
-                    if( NOT__cmut__lang__function__exclusive_option_defined__${name} )
-                        set( __cmut__lang__function__exclusive_option_defined__${name} )
+                    if( NOT __cmut__lang__function__exclusive_option_defined__${name} )
+                        set( __cmut__lang__function__exclusive_option_defined__${name} 1)
                     else()
                         cmut__log__error( $(__cmut__lang__function__function_name) "exclusive option \"${__cmut__lang__function__exclusive_option_list__${name}}\" define multiple times." )
                     endif()
@@ -130,6 +152,7 @@ macro( cmut__lang__function__parse_arguments )
         string(APPEND message "in function ${__cmut__lang__function__function_name}\n")
         string(APPEND message "invalid argument(s): ${${__cmut__lang__function__arg_prefix}_UNPARSED_ARGUMENTS}\n")
         string(APPEND message "available parameters are:\n")
+
         string(APPEND message "options:\n")
         foreach(v ${options})
             string(APPEND message "  - ${v}\n")
