@@ -31,7 +31,7 @@ find_package_handle_standard_args(date DEFAULT_MSG date_INCLUDE_DIR date_LIBRARY
 
 mark_as_advanced(date_INCLUDE_DIR date_LIBRARY)
 
-if(date_FOUND)
+if(date_FOUND AND (NOT TARGET date::date))
 
     add_library(date::date UNKNOWN IMPORTED)
 
