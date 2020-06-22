@@ -15,7 +15,7 @@ macro( cmut__dependency__build_with_conan )
 
     if( CONAN_EXPORTED )
         include( "${PROJECT_BINARY_DIR}/conanbuildinfo.cmake" )
-        conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
+        conan_basic_setup(TARGETS NO_OUTPUT_DIRS KEEP_RPATHS)
     endif()
 
     if( BUILD_DEPENDENCIES OR CONAN_EXPORTED )
