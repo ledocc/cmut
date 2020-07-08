@@ -46,6 +46,12 @@ function( cmut__conan__download_cmake_conan )
         ${ARG_OUTPUT_PATH}
         ${expected_hash_opt}
         TLS_VERIFY ON
+        STATUS status
         )
+    list(GET status 0 result)
+    if (result)
+        list(GET status 1 error)
+        cmut__log__error(cmut__conan__download_cmake_conan "fail to download conan.cmake: ${error}")
+    endif()
 
 endfunction()
