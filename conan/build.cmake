@@ -32,6 +32,17 @@ function( __cmut__conan__get_options_opt result options )
 
 endfunction()
 
+function( __cmut__conan__get_settings_opt result settings )
+    set(CMUT__CONAN__SETTINGS "" CACHE STRING "conan settings list to use when build dependencies")
+
+    set(opt)
+    foreach( option IN LISTS CMUT__CONAN__SETTINGS settings )
+        list( APPEND opt SETTINGS ${option} )
+    endforeach()
+    cmut__lang__return( opt )
+
+endfunction()
+
 
 
 
@@ -45,6 +56,7 @@ function( cmut__conan__build )
     cmut__lang__function__add_multi_param(BUILD_POLICY DEFAULT outdated)
     cmut__lang__function__add_multi_param(PROFILE)
     cmut__lang__function__add_multi_param(OPTIONS)
+    cmut__lang__function__add_multi_param(SETTINGS)
     cmut__lang__function__parse_arguments(${ARGN})
 
     set(cmake_conan_path "${PROJECT_BINARY_DIR}/conan.cmake")
@@ -55,6 +67,7 @@ function( cmut__conan__build )
     __cmut__conan__get_profiles_opt( profiles_opt "${ARG_PROFILE}" )
     __cmut__conan__get_build_policies_opt( build_policies_opt "${ARG_BUILD_POLICY}" )
     __cmut__conan__get_options_opt( options_opt "${ARG_OPTIONS}" )
+    __cmut__conan__get_settings_opt( settings_opt "${ARG_SETTINGS}" )
 
     set(CONAN_BUILD_TYPES Debug Release RelWithDebInfo MinSizeRel)
     if(NOT CMAKE_BUILD_TYPE IN_LIST CONAN_BUILD_TYPES)
@@ -66,6 +79,7 @@ function( cmut__conan__build )
         CONANFILE ${ARG_CONANFILE}
         ${build_policies_opt}
         ${profiles_opt}
+        ${settings_opt}
         ${options_opt}
         ${build_type_opt}
         PROFILE_AUTO ALL
