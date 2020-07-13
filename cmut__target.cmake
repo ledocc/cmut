@@ -11,6 +11,7 @@ include( "${CMAKE_CURRENT_LIST_DIR}/target/cmut__target__generate_version_source
 include( "${CMAKE_CURRENT_LIST_DIR}/target/cmut__target__get_generated_output_directory.cmake" )
 include( "${CMAKE_CURRENT_LIST_DIR}/target/cmut__target__get_header_directories.cmake" )
 include( "${CMAKE_CURRENT_LIST_DIR}/target/cmut__target__get_header_directory_prefix.cmake" )
+include( "${CMAKE_CURRENT_LIST_DIR}/target/cmut__target__get_property_prefix.cmake" )
 include( "${CMAKE_CURRENT_LIST_DIR}/target/cmut__target__get_internal_dependencies.cmake" )
 include( "${CMAKE_CURRENT_LIST_DIR}/target/cmut__target__print_info.cmake" )
 include( "${CMAKE_CURRENT_LIST_DIR}/target/cmut__target__set_header_directories.cmake" )

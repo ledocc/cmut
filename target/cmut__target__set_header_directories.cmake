@@ -26,10 +26,10 @@ endfunction()
 
 
 function( __cmut__target__set_header_directory target scope header_directory )
-
+    cmut__target__get_property_prefix(prefix ${target})
     set_property( TARGET ${target}
         APPEND
-        PROPERTY CMUT__TARGET__${scope}__HEADER_DIRECTORIES
+        PROPERTY ${prefix}CMUT__TARGET__${scope}__HEADER_DIRECTORIES
         "${header_directory}"
         )
 
