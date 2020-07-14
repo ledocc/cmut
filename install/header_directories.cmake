@@ -9,12 +9,12 @@ function(cmut__install__header_directories target)
 
 
     set( header_scopes INTERFACE )
-    
-    get_target_property(target_type ${target} TYPE)    
+
+    get_target_property(target_type ${target} TYPE)
     if ( NOT target_type STREQUAL INTERFACE_LIBRARY )
         list( APPEND header_scopes PUBLIC )
     endif()
-    
+
     foreach( scope IN LISTS header_scopes )
         cmut__target__get_header_directories( header_directories ${target} ${scope})
         if( header_directories )
