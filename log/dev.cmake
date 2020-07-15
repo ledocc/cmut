@@ -8,6 +8,14 @@ function( cmut__log__dev origin message )
 
     cmut__log__function_name_to_scope_name( scope_name ${origin} )
 
-    cmut_message(STATUS "dev" "${scope_name} :\n${message}")
+    cmut_message(STATUS "dev" "${scope_name} : ${message}")
 
 endfunction()
+
+macro( cmut__log__var )
+
+    foreach(var ${ARGN})
+        cmut__log__dev(${CMAKE_CURRENT_FUNCTION} "${var} = ${${var}}")
+    endforeach()
+
+endmacro()
