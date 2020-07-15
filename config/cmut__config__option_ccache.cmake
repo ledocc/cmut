@@ -16,23 +16,27 @@ function(cmut__config__option_ccache defaultValue)
     endif()
 
     option(CMUT__CONFIG__CCACHE "Set to OFF to not use ccache." ${defaultValue})
-    cmut_info("[cmut][config] - ccache mode is ${CMUT__CONFIG__CCACHE}")
-
+    cmut__log__info(cmut__config__option_ccache "ccache mode is ${CMUT__CONFIG__CCACHE}")
 
     if(CMUT__CONFIG__CCACHE)
 
-        __cmut__config__set_compiler_launcher_if_not_defined(CMAKE_C_COMPILER_LAUNCHER)
-        __cmut__config__set_compiler_launcher_if_not_defined(CMAKE_CXX_COMPILER_LAUNCHER)
+        macro(set_compiler_launcher_to_ccache_if_not_defined lang)
+            get_filename_component(compiler_path ${CMAKE_${lang}_COMPILER} REALPATH)
+            if ("${compiler_path}" STREQUAL "${CCache_COMMAND}")
+                cmut__log__info(cmut__config__option_ccache "${lang} compiler is already a link to ccache.")
+            else()
+                if(DEFINED CMAKE_${lang}_COMPILER_LAUNCHER)
+                    cmut__log__error(cmut__config__option_ccache "already defined on \"${${var}}\. Can't use ccache")
+                else()
+                    set(CMAKE_${lang}_COMPILER_LAUNCHER "${CCache_COMMAND}" PARENT_SCOPE)
+                endif()
+            endif()
+        endmacro()
 
+        set_compiler_launcher_to_ccache_if_not_defined(C)
+        set_compiler_launcher_to_ccache_if_not_defined(CXX)
     endif()
 
 endfunction()
 
 
-macro(__cmut__config__set_compiler_launcher_if_not_defined var)
-    if (${var})
-        cmut_error("[cmut][config][ccache] - ${var} already defined on \"${${var}}\. Can't use ccache")
-    endif()
-
-    set(${var}   "${CCache_COMMAND}" PARENT_SCOPE)
-endmacro()
