@@ -106,7 +106,7 @@ function(cmut__qt5__install_angle)
     endif()
 
     list(APPEND CMAKE_MODULE_PATH "${CMUT_ROOT}/find")
-    find_package(D3Dcompiler)
+    find_package(WindowsSDK REQUIRED)
 
     cmut__qt5__get_qmake_property(QT5_INSTALL_PREFIX INSTALL_PREFIX)
 
@@ -129,7 +129,7 @@ function(cmut__qt5__install_angle)
     install(
         FILES
             ${files_to_install}
-            ${D3DCOMPILER}
+            ${D3DCOMPILER_DLL}
         DESTINATION "${ARG_DESTINATION}"
         COMPONENT "${ARG_COMPONENT}"
         )
