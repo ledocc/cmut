@@ -26,12 +26,13 @@ find_file(
     D3DCOMPILER_DLL
     d3dcompiler_47.dll
     PATH "${WINSDK_DIR}/Redist/D3D/${ARCH_PREFIX}"
+    NO_DEFAULT_PATH
     )
 
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-    WINSDK
+    WindowsSDK
     DEFAULT_MSG
     WINSDK_DIR D3DCOMPILER_DLL
     )
