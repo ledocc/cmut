@@ -108,7 +108,7 @@ function(cmut__install__install_dependencies name)
 
         if(DEFINED ARG_COMPONENT)
             # add this executable to component's dependencies
-            cmut__install__add_component_dependency(${ARG_COMPONENT} ${target})
+            cmut__install__add_component_dependencies(${ARG_COMPONENT} ${target})
         endif()
 
     endif()
