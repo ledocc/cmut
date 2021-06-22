@@ -76,7 +76,7 @@ function(cmut__install__target target)
         INCLUDES DESTINATION "${ARG_INCLUDES_DESTINATION}"
         )
 
-    
+
     # install header directories
     if( target_type IN_LIST library_target_type )
         cmut__install__header_directories( ${target} )
