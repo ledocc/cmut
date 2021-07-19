@@ -224,6 +224,7 @@ function(cmut__build__add_coverage_target)
         HTML_DETAIL_OUTPUT coverage/index.html
         SORT_BY PERCENTAGE
         EXCLUDE_REGEX "${PROJECT_SOURCE_DIR}/test/"
+	${ARGN}
         )
 
 endfunction()
