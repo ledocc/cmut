@@ -10,7 +10,7 @@ macro( cmut__dependency__build_with_conan )
     option(BUILD_DEPENDENCIES "use conan to install dependencies." OFF)
 
     if( BUILD_DEPENDENCIES )
-        cmut__conan__build()
+        cmut__conan__build(${ARGN})
     endif()
 
     if( CONAN_EXPORTED )

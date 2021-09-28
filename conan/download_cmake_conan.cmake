@@ -11,6 +11,7 @@ function( cmut__conan__get_cmake_conan_sha256 result version )
 
     set( CMUT__CONAN__CMAKE_CONAN_SHA256__0_14 "c9c8dfaf21fb071aa1cd2a2e250b73476405705052096e4cdfd5f1192b007dd0" )
     set( CMUT__CONAN__CMAKE_CONAN_SHA256__0_15 "75c92be7d739ab69c3c9a1cd0bf4728cd08da143a18776eb43f8e2af16accace" )
+    set( CMUT__CONAN__CMAKE_CONAN_SHA256__0_16_1 "396e16d0f5eabdc6a14afddbcfff62a54a7ee75c6da23f32f7a31bc85db23484" )
 
     string(REPLACE "." "_" version_with_underscore ${version} )
     cmut__lang__return( SHA256__${version_with_underscore} )
