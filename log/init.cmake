@@ -26,6 +26,8 @@ function(cmut__log__init)
             set(CMUT__LOG__LEVEL ${CMUT__LOG__DEFAULT_LEVEL} PARENT_SCOPE)
         endif()
     endif()
+
+    cmut_info("[cmut][log] - log level initialized to \"${CMUT__LOG__LEVEL}\".")
 endfunction()
 
 
