@@ -27,12 +27,16 @@ foreach(library "" "stdc++fs" "c++fs")
     endif()
 endforeach()
 
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(
-    StdFilesystem
-    FOUND_VAR StdFilesystem_FOUND
-    REQUIRED_VARS StdFilesystem_LIBRARY
-)
+if(StdFilesystem_LIBRARY)
+    include(FindPackageHandleStandardArgs)
+    find_package_handle_standard_args(
+        StdFilesystem
+        FOUND_VAR StdFilesystem_FOUND
+        REQUIRED_VARS StdFilesystem_LIBRARY
+    )
+else()
+    set(StdFilesystem_FOUND TRUE)
+endif()
 
 mark_as_advanced(StdFilesystem_LIBRARY)
 
