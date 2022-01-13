@@ -21,10 +21,12 @@ endfunction()
 
 function(cmut__utils__get_header_guard result input_file)
 
-    string(REGEX REPLACE "[/\\]" "__" header_guard "${input_file}")
+    string(REGEX REPLACE "[/\\]" "_" header_guard "${input_file}")
     string(REGEX REPLACE "[^a-zA-Z0-9_]" "_" header_guard "${header_guard}")
 
-    set(${result} "${header_guard}" PARENT_SCOPE)
+    string(TOUPPER "${header_guard}" header_guard )
+
+    cmut__lang__return(header_guard)
 
 endfunction()
 
