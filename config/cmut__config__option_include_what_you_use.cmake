@@ -29,18 +29,19 @@ function(cmut__config__option_include_what_you_use defaultValue)
         find_package(IncludeWhatYouUse)
     endif()
 
-    if(NOT IncludeWhatYouUse_FOUND)
-        return()
-    endif()
     set(IncludeWhatYouUse_ARGS "${iwyu_ARGS}" CACHE STRING "L;st of arguments passed to includeWhatYouUse command.")
 
-
     option(CMUT__CONFIG__IWYU "Set to ON to use iwyu (include_what_you_use)."  ${defaultValue})
-    cmut_info("[cmut][config] - IWYU (include what you use) mode is ${CMUT__CONFIG__IWYU}")
+    cmut__log__info("cmut__config" "IWYU (include what you use) mode is ${CMUT__CONFIG__IWYU}")
 
     if(CMUT__CONFIG__IWYU)
-        set(CMAKE_C_INCLUDE_WHAT_YOU_USE   "${IncludeWhatYouUse_COMMAND};${IncludeWhatYouUse_ARGS}" PARENT_SCOPE)
-        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IncludeWhatYouUse_COMMAND};${IncludeWhatYouUse_ARGS}" PARENT_SCOPE)
+        if( NOT IncludeWhatYouUse_FOUND )
+            cmut__log__warn("cmut__config__option_include_what_you_use" "include-what-you-use executable not found")
+        else()
+            set(CMAKE_C_INCLUDE_WHAT_YOU_USE   "${IncludeWhatYouUse_COMMAND};${IncludeWhatYouUse_ARGS}" PARENT_SCOPE)
+            set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IncludeWhatYouUse_COMMAND};${IncludeWhatYouUse_ARGS}" PARENT_SCOPE)
+        endif()
     endif()
+
 
 endfunction()
