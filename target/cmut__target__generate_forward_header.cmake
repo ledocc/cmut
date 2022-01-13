@@ -37,6 +37,7 @@ function(cmut__target__create_forward_header target)
 
     cmut__target__get_generated_header_output_directory( output_dir )
 
+    unset(header_dir)
     foreach(namespace IN LISTS ARG_NAMESPACE)
 
         string(APPEND header_dir "${namespace}/")
