@@ -11,8 +11,8 @@ ${namespaces_begin}
 
 class ${class_name};
 
-using ${class_name}Ptr = std::shared_ptr<${class_name}>;
-using ${class_name}ConstPtr = std::shared_ptr<const ${class_name}>;
+using ${class_name}SPtr = std::shared_ptr<${class_name}>;
+using ${class_name}SConstPtr = std::shared_ptr<const ${class_name}>;
 
 using ${class_name}WPtr = std::weak_ptr<${class_name}>;
 using ${class_name}WConstPtr = std::weak_ptr<const ${class_name}>;
