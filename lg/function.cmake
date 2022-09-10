@@ -1,6 +1,17 @@
 #set(CMUT__LANG__FUNCTION__DEBUG 1)
 
 
+# func_add_option( name )
+# func_add_exclusive_option( name )
+# func_add_param( name DEFAULT default_value)
+# func_add_multi_param( name DEFAULT default_value)
+# func_parse_args()
+
+
+
+
+
+
 macro( cmut__lang__function__get_current_function result )
     if( DEFINED CMAKE_CURRENT_FUNCTION )
         set( ${result} ${CMAKE_CURRENT_FUNCTION} )
