@@ -23,7 +23,7 @@ function(cmut__config__option_cppcheck defaultValue)
 
     if(CMUT__CONFIG__CPPCHECK)
 
-        cmut__utils__parse_arguments(cmut__config__option_clang_tidy
+        cmut__utils__parse_arguments(cmut__config__option_cppcheck
             __PARAM
             ""
             ""
