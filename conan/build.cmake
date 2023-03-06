@@ -148,7 +148,12 @@ function( cmut__conan__build )
     __cmut__conan__select_opt(settings_opt "${settings_opt}" "${settings_build_opt}" "${settings_host_opt}")
     __cmut__conan__select_opt(options_opt  "${options_opt}"  "${options_build_opt}"  "${options_host_opt}")
 
-    conan_cmake_autodetect(autodetected_settings)
+    if (DEFINED CMUT__CONFIG__OPTION_NO_AUTODETECT AND CMUT__CONFIG__OPTION_NO_AUTODETECT)
+        set(extra_settings_opt "")
+    else ()
+        conan_cmake_autodetect(autodetected_settings)
+        set(extra_settings_opt SETTINGS ${autodetected_settings})
+    endif ()
 
     cmut__log__debug(${CMAKE_CURRENT_FUNCTION}
 "
@@ -159,7 +164,8 @@ conan_cmake_install(
     ${settings_opt}
     ${options_opt}
     ${build_type_opt}
-    SETTINGS ${autodetected_settings})"
+    ${extra_settings_opt}
+    )"
 )
     conan_cmake_install(
         PATH_OR_REFERENCE ${ARG_CONANFILE}
@@ -168,7 +174,7 @@ conan_cmake_install(
         ${settings_opt}
         ${options_opt}
         ${build_type_opt}
-        SETTINGS ${autodetected_settings}
+        ${extra_settings_opt}
         )
 
 endfunction()
