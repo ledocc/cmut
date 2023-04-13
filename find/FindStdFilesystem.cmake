@@ -2,7 +2,7 @@ set(_find_std_filesystem_src ${CMAKE_CURRENT_LIST_DIR}/FindStdFilesystem.cpp)
 
 function(try_compile_std_filesystem result library)
 
-    set(compile_arg CXX_STANDARD 17)
+    set(compile_arg CXX_STANDARD 20)
     if(library)
         list(
             APPEND
