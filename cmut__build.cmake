@@ -1,4 +1,5 @@
 
+include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__asan.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__coverage.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__define_output_dir.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/build/cmut__build__enable_color_with_ninja.cmake")

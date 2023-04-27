@@ -65,7 +65,7 @@ function(__cmut__qtcreator__get_dependency_install_directory dependency_install_
 
     if( NOT _dependency_location )
         cmut_error("[cmut][qtcreator][import_qml] - We can't find your dependency location.
-                    Verify your build type (Release, Debug, Coverage)")
+                    Verify your build type (Release, Debug, Asan, Coverage)")
     endif()
 
     get_filename_component(_dependency_directory ${_dependency_location} DIRECTORY)
