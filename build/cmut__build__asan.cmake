@@ -8,7 +8,7 @@ function(cmut__build__add_asan_profile)
             list(APPEND CMAKE_CONFIGURATION_TYPES Asan)
         endif()
     else()
-        set(allowedBuildTypes Asan Debug Release RelWithDebInfo MinSizeRel)
+        set(allowedBuildTypes Asan Debug Release Coverage)
         set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${allowedBuildTypes}")
 
         if(CMAKE_BUILD_TYPE AND NOT CMAKE_BUILD_TYPE IN_LIST allowedBuildTypes)
