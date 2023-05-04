@@ -1,6 +1,11 @@
 
 function(cmut__target__generate_export_header target)
 
+    if (ARGC GREATER 1)
+        set(export_macro_name "${ARGV2}_export")
+        string(TOUPPER "${export_macro_name}" export_macro_name)
+    endif()
+
     if(ARGC GREATER 0)
         set(export_filename "${ARGV1}")
     else()
@@ -12,9 +17,16 @@ function(cmut__target__generate_export_header target)
     cmut__target__get_generated_header_output_directory( output_dir )
 
     include(GenerateExportHeader)
-    generate_export_header( ${target}
-        EXPORT_FILE_NAME "${output_dir}/${export_filename}"
-    )
+    if (DEFINED export_macro_name)
+        generate_export_header( ${target}
+            EXPORT_FILE_NAME "${output_dir}/${export_filename}"
+            EXPORT_MACRO_NAME ${export_macro_name}
+        )
+    else()
+        generate_export_header( ${target}
+            EXPORT_FILE_NAME "${output_dir}/${export_filename}"
+        )
+    endif()
 
     cmut__target__get_property_prefix(prefix ${target})
     set_target_properties( ${target}

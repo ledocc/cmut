@@ -24,12 +24,13 @@ function(cmut__project__setup_library target)
         cmut__project__setup_library
         ARG
         "CXX_EXTENSIONS;CXX_STANDARD_REQUIRED"
-        "DEBUG_POSTFIX;OUTPUT_PREFIX;VERSION;WINNT_VERSION"
+        "NAMESPACE;DEBUG_POSTFIX;OUTPUT_PREFIX;VERSION;WINNT_VERSION"
         "CXX_FEATURES"
         ${ARGN}
     )
 
 
+    cmut__utils__set_default_argument( ARG_NAMESPACE "${target}" )
     cmut__utils__set_default_argument( ARG_DEBUG_POSTFIX "d" )
     cmut__utils__set_default_argument( ARG_OUTPUT_PREFIX "${PROJECT_BINARY_DIR}" )
     cmut__utils__set_default_argument( ARG_VERSION ${PROJECT_VERSION} )
@@ -47,7 +48,7 @@ function(cmut__project__setup_library target)
         cmut__target__define_debug_postfix( ${target} ${ARG_DEBUG_POSTFIX} )
         cmut__target__define_output_directory( ${target} PREFIX "${ARG_OUTPUT_PREFIX}" )
         if( target_type MATCHES "^(SHARED|STATIC)_LIBRARY$")
-                cmut__target__generate_export_header( ${target} "${target}/export.h" )
+                cmut__target__generate_export_header( ${target} "${ARG_NAMESPACE}/export.h" ${ARG_NAMESPACE} )
                 cmut__target__set_library_version( ${target} ${ARG_VERSION} )
 	      endif()
     endif()
